@@ -1,9 +1,10 @@
+import Hero from '../components/Hero';
 
 export default function HomeSection() {
   return (
     <div>
       <div>
-        <p>Aqui Mid</p>
+        <Hero />
       </div>
     </div>
   );

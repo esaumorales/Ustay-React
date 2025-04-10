@@ -1,6 +1,18 @@
 :root {
-  margin: 0;
-  padding: 0; 
+  margin  : 0;
+  padding : 0;
+  overflow: auto;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width   : none;
+  /* Firefox */
 }
 
 @import "tailwindcss";
@@ -10,6 +22,8 @@
 
 @theme {
   /* Colores Personalizados */
+  --color-secondary     : #1E1127;
+  --color-secondary-dark: #070A13;
 }
 
 /* @font-face {
