@@ -8,12 +8,12 @@ export default function Hero() {
         <img
           src={BACKGROUND}
           alt='Background'
-          className='w-full h-full object-cover'
+          className='w-full h-full object-fill'
         />
       </div>
-      <div className='relative z-10 flex flex-col items-center justify-center pt-24 text-center px-4'>
-        <div className='max-w-2xl'>
-          <h1 className='text-5xl font-bold mb-4'>
+      <div className='relative z-10 flex flex-col items-center justify-center h-fit text-center pt-16  sm:px-6 lg:px-8'>
+        <div className='max-w-xs sm:max-w-lg md:max-w-2xl mx-auto'>
+          <h1 className='text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-black'>
             Asegura tu cuarto, asegura tu seguridad con UStay
           </h1>
           <div className='mb-6'>
@@ -24,9 +24,9 @@ export default function Hero() {
             </p>
           </div>
           <div className='flex justify-center'>
-            <button className='bg-gradient-to-r from-secondary to-secondary-dark text-white px-6 py-2 rounded-full flex items-center gap-2'>
-              Busca ahora
-              <RightArrowIcon />
+            <button className='bg-gradient-to-r from-secondary to-secondary-dark text-white px-4 sm:px-6 py-2 rounded-full flex items-center gap-2 hover:shadow-lg transition-all duration-300'>
+              <span className='text-sm sm:text-base'>Busca ahora</span>
+              <RightArrowIcon className='w-4 h-4 sm:w-5 sm:h-5' />
             </button>
           </div>
         </div>
