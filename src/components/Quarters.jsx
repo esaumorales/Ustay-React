@@ -1,3 +1,5 @@
+import Carousel from './Carousel';
+
 export default function Quarters() {
   return (
     <div className='flex justify-center text-center '>
@@ -6,7 +8,7 @@ export default function Quarters() {
           <h1 className='text-4xl font-semibold'>Inmobiliarias del momento</h1>
         </div>
         <div>
-        Cuarto diseño
+        <Carousel />
         </div>
       </div>
     </div>
