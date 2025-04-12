@@ -77,25 +77,25 @@ export default function Header() {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className='md:hidden mt-4 pb-4'>
-          <nav className='flex flex-col gap-4 bg-secondary rounded-xl p-4'>
+          <nav className='flex flex-col gap-4 bg-white rounded-xl p-4'>
             <Link
               to='/home'
-              className='text-white hover:bg-white hover:text-black px-2 py-1 rounded-lg transition-colors'>
+              className='text-secondary px-2 py-1 '>
               Home
             </Link>
             <Link
               to='/home'
-              className='text-white hover:bg-white hover:text-black px-2 py-1 rounded-lg transition-colors'>
+              className='text-secondary   px-2 py-1 '>
               Encuentra Tu cuarto
             </Link>
             <Link
               to='/room'
-              className='text-white hover:bg-white hover:text-black px-2 py-1 rounded-lg transition-colors'>
+              className='text-secondary  px-2 py-1 '>
               Nosotros
             </Link>
             <Link
               to='/contact'
-              className='text-white hover:bg-white hover:text-black px-2 py-1 rounded-lg transition-colors'>
+              className='text-secondary   px-2 py-1 '>
               Asociados
             </Link>
           </nav>
