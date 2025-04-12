@@ -15,31 +15,52 @@ export default function Header() {
         </div>
 
         {/* Mobile Menu Button */}
-        <button 
+        <button
           className='md:hidden'
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <svg
+            className='w-6 h-6'
+            fill='none'
+            stroke='currentColor'
+            viewBox='0 0 24 24'>
             {isMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth={2}
+                d='M6 18L18 6M6 6l12 12'
+              />
             ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth={2}
+                d='M4 6h16M4 12h16M4 18h16'
+              />
             )}
           </svg>
         </button>
 
         {/* Navigation Links - Desktop */}
-        <nav className='hidden md:flex gap-4 px-4 py-3 rounded-3xl bg-secondary mr-0 md:-mr-28'>
-          <Link to='/home' className='text-white transition-colors duration-200 hover:text-black hover:bg-white px-2 rounded-xl'>
+        <nav className='hidden md:flex gap-4 px-4 py-1 rounded-3xl bg-secondary mr-0 md:-mr-28'>
+          <Link
+            to='/home'
+            className='text-white transition-colors duration-200 hover:text-black hover:bg-white px-4 py-[4px] rounded-2xl'>
             Home
           </Link>
-          <Link to='/room' className='text-white transition-colors duration-200 hover:text-black hover:bg-white px-2 rounded-xl'>
+          <Link
+            to='/room'
+            className='text-white transition-colors duration-200 hover:text-black hover:bg-white px-4 py-[4px]  rounded-2xl'>
             Encuentra Tu cuarto
           </Link>
-          <Link to='/contact' className='text-white transition-colors duration-200 hover:text-black hover:bg-white px-2 rounded-xl'>
+          <Link
+            to='/contact'
+            className='text-white transition-colors duration-200 hover:text-black hover:bg-white px-4 py-[4px] rounded-2xl'>
             Nosotros
           </Link>
-          <Link to='/home' className='text-white transition-colors duration-200 hover:text-black hover:bg-white px-2 rounded-xl'>
+          <Link
+            to='/home'
+            className='text-white transition-colors duration-200 hover:text-black hover:bg-white px-4 py-[4px] rounded-2xl'>
             Asociados
           </Link>
         </nav>
@@ -57,16 +78,24 @@ export default function Header() {
       {isMenuOpen && (
         <div className='md:hidden mt-4 pb-4'>
           <nav className='flex flex-col gap-4 bg-secondary rounded-xl p-4'>
-            <Link to='/home' className='text-white hover:bg-white hover:text-black px-2 py-1 rounded-lg transition-colors'>
+            <Link
+              to='/home'
+              className='text-white hover:bg-white hover:text-black px-2 py-1 rounded-lg transition-colors'>
               Home
             </Link>
-            <Link to='/home' className='text-white hover:bg-white hover:text-black px-2 py-1 rounded-lg transition-colors'>
+            <Link
+              to='/home'
+              className='text-white hover:bg-white hover:text-black px-2 py-1 rounded-lg transition-colors'>
               Encuentra Tu cuarto
             </Link>
-            <Link to='/room' className='text-white hover:bg-white hover:text-black px-2 py-1 rounded-lg transition-colors'>
+            <Link
+              to='/room'
+              className='text-white hover:bg-white hover:text-black px-2 py-1 rounded-lg transition-colors'>
               Nosotros
             </Link>
-            <Link to='/contact' className='text-white hover:bg-white hover:text-black px-2 py-1 rounded-lg transition-colors'>
+            <Link
+              to='/contact'
+              className='text-white hover:bg-white hover:text-black px-2 py-1 rounded-lg transition-colors'>
               Asociados
             </Link>
           </nav>

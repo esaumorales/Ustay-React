@@ -3,8 +3,8 @@ import BACKGROUND from '../assets/img/background.webp';
 
 export default function Hero() {
   return (
-    <main className='relative h-screen'>
-      <div className='absolute inset-0 z-0'>
+    <main className='relative h-screen '>
+      <div className='absolute inset-0 z-0 '>
         <img
           src={BACKGROUND}
           alt='Background'

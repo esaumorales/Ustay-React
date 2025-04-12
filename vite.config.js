@@ -3,7 +3,9 @@ import {
 } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import tailwindcss from '@tailwindcss/vite'
-import path from 'path'
+import {
+  resolve
+} from 'path'
 import {
   fileURLToPath
 } from 'url'
@@ -19,12 +21,13 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@components': path.resolve(__dirname, './src/components'),
-      '@pages': path.resolve(__dirname, './src/pages'),
-      '@assets/': path.resolve(__dirname, './src/assets'),
-      '@assets/*': path.resolve(__dirname, './src/assets/*'),
-      '@utils': path.resolve(__dirname, './src/utils'),
+      '@': resolve(__dirname, './src'),
+      '@assets/*': resolve(__dirname, './src/assets/*'),
+      '@assets/': resolve(__dirname, './src/assets'),
+      '@components': resolve(__dirname, './src/components'),
+      '@pages': resolve(__dirname, './src/pages'),
+      '@utils': resolve(__dirname, './src/utils'),
+      '@hooks': resolve(__dirname, './src/hooks')
     }
   }
 })
