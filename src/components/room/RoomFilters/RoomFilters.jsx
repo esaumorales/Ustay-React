@@ -4,7 +4,7 @@ import { CARDS_DATA } from '../../../models/cards';
 export const RoomFilters = ({ onFilterChange }) => {
     const [filters, setFilters] = useState({
         propertyType: '',
-        priceRange: 500,
+        priceRange: 0,
         zona: '',
         rating: 0
     });

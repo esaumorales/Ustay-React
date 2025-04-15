@@ -8,10 +8,9 @@ const RoomList = () => {
     const [filteredRooms, setFilteredRooms] = useState(CARDS_DATA);
     const roomsPerPage = 9;
 
-    // Add the missing handlePageChange function
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-        window.scrollTo(0, 0); // Optional: scroll to top when page changes
+        window.scrollTo(0, 0); 
     };
 
     const indexOfLastRoom = currentPage * roomsPerPage;
