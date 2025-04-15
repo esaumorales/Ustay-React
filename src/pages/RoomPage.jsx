@@ -1,6 +1,6 @@
 import Footer from '@components/Footer'
 import Header from '@components/Header'
-import RoomSection from '../sections/RoomSection';
+import RoomSection from '../sections/roomsection';
 
 export default function RoomPage() {
   return (
