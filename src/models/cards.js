@@ -10,6 +10,29 @@ export const CARDS_DATA = [
     price: '450',
     rating: 4,
     destacado: true,
+    dimensions: '2.5 x 3.5m',
+    capacity: '1-2 personas',
+    description: 'Cuarto amoblado, confortable con servicios básicos, ideal para estudiantes o personas que busquen un ambiente tranquilo.',
+    additionalInfo: {
+      checkIn: '2:00 PM',
+      checkOut: '12:00 PM',
+      deposit: 'S/. 500',
+      minStay: '6 meses',
+      utilities: 'Incluidos en el precio'
+    },
+    houseRules: [
+      'No mascotas',
+      'No fumar',
+      'No fiestas o eventos',
+      'Silencio de 10 PM a 7 AM',
+      'Visitas hasta las 9 PM'
+    ],
+    services: {
+      internet: 'WiFi 100Mbps',
+      cleaning: 'Áreas comunes',
+      security: '24/7',
+      maintenance: 'Incluido'
+    },
     amenities: {
       wifi: true,
       parking: true,

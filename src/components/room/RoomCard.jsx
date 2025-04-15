@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { IconBath } from '../../assets/icons/icon-bath';
 import { IconBed } from '../../assets/icons/icon-bed';
 import { IconLocation } from '../../assets/icons/icon-location';
@@ -5,6 +6,7 @@ import { IconParking } from '../../assets/icons/icon-parking';
 import { IconWifi } from '../../assets/icons/icon-wifi';
 
 export const RoomCard = ({ 
+  id,
   image, 
   type, 
   location, 
@@ -19,8 +21,17 @@ export const RoomCard = ({
     location: true
   }
 }) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/room/${id}`);
+  };
+
   return (
-    <div className='bg-white border border-gray-200 shadow-lg transition-all duration-500 ease-out transform w-full'>
+    <div 
+      onClick={handleCardClick}
+      className='bg-white border border-gray-200 shadow-lg transition-all duration-500 ease-out transform w-full cursor-pointer hover:scale-[1.02]'
+    >
       <div className='relative h-56 overflow-hidden'>
         {destacado && (
           <div className='absolute top-2 left-2 z-10'>
