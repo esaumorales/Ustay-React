@@ -8,14 +8,36 @@ import useCarousel from '../hooks/useCarousel';
 import { CARDS_DATA } from '../models/cards';
 
 export default function Carousel() {
-  const [items] = useState(CARDS_DATA);
+  const [items] = useState(CARDS_DATA || []);
 
   const { currentIndex, nextSlide, prevSlide, goToSlide } = useCarousel(items);
 
+  // More thorough safety checks
+  if (!items || !Array.isArray(items) || items.length < 3) {
+    console.log('Not enough items for carousel:', items);
+    return null;
+  }
+
+  // Ensure all required properties exist
+  const validItems = items.filter(item => 
+    item && 
+    typeof item === 'object' && 
+    'id' in item && 
+    'image' in item &&
+    'type' in item &&
+    'homeOwner' in item &&
+    'price' in item
+  );
+
+  if (validItems.length < 3) {
+    console.log('Not enough valid items for carousel');
+    return null;
+  }
+
   const visibleItems = [
-    items[currentIndex],
-    items[(currentIndex + 1) % items.length],
-    items[(currentIndex + 2) % items.length],
+    validItems[currentIndex % validItems.length],
+    validItems[(currentIndex + 1) % validItems.length],
+    validItems[(currentIndex + 2) % validItems.length],
   ];
 
   return (
@@ -47,7 +69,7 @@ export default function Carousel() {
                   <h3 className='font-semibold text-lg text-gray-900'>
                     {item.type}
                   </h3>
-                  <p className='text-sm text-gray-600'>{item.location}</p>
+                  <p className='text-sm text-gray-600'>{item.homeOwner}</p>
                 </div>
                 <div className='text-right'>
                   <div className='flex items-baseline gap-0.5'>

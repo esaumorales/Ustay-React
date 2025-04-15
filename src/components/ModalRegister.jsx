@@ -22,7 +22,8 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
                     <button onClick={onClose} className='absolute top-2 right-2 text-gray-400 hover:text-gray-600'>
                         ✕
                     </button>
-                    <h2 className='text-xl font-semibold mb-4 text-center'>Registrarse</h2>
+                    <h1 className='font-semibold'>Registrarse</h1>
+                    <h2 className='text-2xl font-semibold mb-4 text-center'>Registrarse con su Correo</h2>
                     <form className='space-y-4'>
                         <div>
                             <input

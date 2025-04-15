@@ -20,7 +20,7 @@ const ModalLogin = ({ isOpen, onClose, onSwitchToRegister }) => {
                     <img
                         src={BACKGROUNDMODAL}
                         alt='fotoModal'
-                        className='w-full h-[370px] object-cover object-center'
+                        className='w-full h-[400px] object-cover object-center'
                     />
                 </div>
                 {/* Right side - Form */}
@@ -28,7 +28,8 @@ const ModalLogin = ({ isOpen, onClose, onSwitchToRegister }) => {
                     <button onClick={onClose} className='absolute top-2 right-2 text-gray-400 hover:text-gray-600'>
                         ✕
                     </button>
-                    <h2 className='text-xl font-semibold mb-4 text-center'>Iniciar Sesión</h2>
+                    <h1 className='font-semibold'>Iniciar Sesion</h1>
+                    <h2 className='text-2xl font-semibold mb-4 text-center'>Ingresar</h2>
                     <form className='space-y-3'>
                         <div>
                             <input

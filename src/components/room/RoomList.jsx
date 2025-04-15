@@ -5,28 +5,50 @@ import { RoomFilters } from './RoomFilters/RoomFilters';
 
 const RoomList = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [rooms] = useState(CARDS_DATA);
+    const [filteredRooms, setFilteredRooms] = useState(CARDS_DATA);
     const roomsPerPage = 9;
 
-    // Calculate rooms for current page
-    const indexOfLastRoom = currentPage * roomsPerPage;
-    const indexOfFirstRoom = indexOfLastRoom - roomsPerPage;
-    const currentRooms = rooms.slice(indexOfFirstRoom, indexOfLastRoom);
-
-    // Calculate total pages
-    const totalPages = Math.ceil(rooms.length / roomsPerPage);
-
+    // Add the missing handlePageChange function
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
+        window.scrollTo(0, 0); // Optional: scroll to top when page changes
+    };
+
+    const indexOfLastRoom = currentPage * roomsPerPage;
+    const indexOfFirstRoom = indexOfLastRoom - roomsPerPage;
+    const currentRooms = filteredRooms.slice(indexOfFirstRoom, indexOfLastRoom);
+
+    const totalPages = Math.ceil(filteredRooms.length / roomsPerPage);
+
+    const handleFilterChange = (filters) => {
+        let result = [...CARDS_DATA];
+
+        if (filters.propertyType) {
+            result = result.filter(card => card.type === filters.propertyType);
+        }
+
+        if (filters.priceRange) {
+            result = result.filter(card => parseInt(card.price) <= filters.priceRange);
+        }
+
+        if (filters.zona) {
+            result = result.filter(card => card.location === filters.zona);
+        }
+
+        if (filters.rating > 0) {
+            result = result.filter(card => card.rating === filters.rating);
+        }
+
+        setFilteredRooms(result);
+        setCurrentPage(1);
     };
 
     return (
         <div className='flex gap-8 px-32'>
-            {/* Left Column - Filters */}
             <aside className='w-64 flex-shrink-0'>
                 <h2 className='text-2xl font-bold mb-4'>Nuestras Inmobiliarias</h2>
                 <p className='font-semibold mb-4'>Filtrar por</p>
-                <RoomFilters />
+                <RoomFilters onFilterChange={handleFilterChange} />
             </aside>
 
             {/* Right Column - Cards */}
@@ -73,5 +95,4 @@ const RoomList = () => {
         </div>
     );
 };
-
 export default RoomList;
