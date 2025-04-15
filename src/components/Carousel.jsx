@@ -5,81 +5,10 @@ import { IconLocation } from '../assets/icons/icon-location';
 import { IconParking } from '../assets/icons/icon-parking';
 import { IconWifi } from '../assets/icons/icon-wifi';
 import useCarousel from '../hooks/useCarousel';
-import FotoEjemplo from '../assets/img/room.png';
+import { CARDS_DATA } from '../models/cards';
 
 export default function Carousel() {
-  const [items] = useState([
-    {
-      id: 1,
-      image: FotoEjemplo,
-      type: 'Departamento',
-      location: 'Pnr. Raul ',
-      price: '230',
-    },
-    {
-      id: 2,
-      image: FotoEjemplo,
-      type: 'Departamento',
-      location: 'Pnr.  Gonzales',
-      price: '230',
-    },
-    {
-      id: 3,
-      image: FotoEjemplo,
-      type: 'Departamento',
-      location: ' Raul Gonzales',
-      price: '230',
-    },
-    {
-      id: 4,
-      image: FotoEjemplo,
-      type: 'Departamento',
-      location: 'Pnr. Raul Gonzales',
-      price: '23',
-    },
-    {
-      id: 5,
-      image: FotoEjemplo,
-      type: 'Departamento',
-      location: 'Pnr. Raul Gonzales',
-      price: '20',
-    },
-    {
-      id: 6,
-      image: FotoEjemplo,
-      type: 'Departamento',
-      location: 'Pnr. Raul Gonzales',
-      price: '30',
-    },
-    {
-      id: 8,
-      image: FotoEjemplo,
-      type: 'Departamento',
-      location: 'Pnr. Raul Gonzales',
-      price: '30',
-    },
-    {
-      id: 5,
-      image: FotoEjemplo,
-      type: 'Departamento',
-      location: 'Pnr. Raul Gonzales',
-      price: '20',
-    },
-    {
-      id: 6,
-      image: FotoEjemplo,
-      type: 'Departamento',
-      location: 'Pnr. Raul Gonzales',
-      price: '30',
-    },
-    {
-      id: 8,
-      image: FotoEjemplo,
-      type: 'Departamento',
-      location: 'Pnr. Raul Gonzales',
-      price: '30',
-    },
-  ]);
+  const [items] = useState(CARDS_DATA);
 
   const { currentIndex, nextSlide, prevSlide, goToSlide } = useCarousel(items);
 
@@ -96,16 +25,14 @@ export default function Carousel() {
           <div
             key={item.id}
             className={`bg-white border border-gray-200 shadow-lg transition-all duration-500 ease-out transform
-              ${
-                idx === 1
-                  ? 'w-96 scale-105 z-10'  // Aumentado de w-80 a w-96
-                  : 'w-80 opacity-90 border border-b-amber-600 border-b-3'  // Aumentado de w-72 a w-80
+              ${idx === 1
+                ? 'w-96 scale-105 z-10'
+                : 'w-80 opacity-90 border border-b-amber-600 border-b-3'
               }
               hover:opacity-100`}>
             <div
-              className={`relative ${
-                idx === 1 ? 'h-72' : 'h-56'  // Aumentado de h-56 a h-72 para el medio, y h-52 a h-56 para los lados
-              } overflow-hidden`}>
+              className={`relative ${idx === 1 ? 'h-72' : 'h-56'
+                } overflow-hidden`}>
               <img
                 src={item.image}
                 alt={`Room ${item.id}`}
@@ -179,11 +106,10 @@ export default function Carousel() {
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`transition-all duration-300 ${
-              index === 2
+            className={`transition-all duration-300 ${index === 2
                 ? 'rotate-45 bg-secondary w-2 h-2'
                 : 'bg-gray-300 hover:bg-gray-400 w-1.5 h-1.5 rounded-full'
-            }`}
+              }`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}
