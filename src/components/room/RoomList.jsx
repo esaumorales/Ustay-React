@@ -43,9 +43,11 @@ const RoomList = () => {
     };
 
     return (
-        <div className='flex gap-8 px-32'>
-            <aside className='w-64 flex-shrink-0'>
-                <h2 className='text-2xl font-bold mb-4'>Nuestras Inmobiliarias</h2>
+        // Update the main container to be responsive
+        <div className='flex flex-col lg:flex-row gap-8 px-4 md:px-8 lg:px-32'>
+            {/* Make aside responsive */}
+            <aside className='w-full lg:w-64 lg:flex-shrink-0'>
+                <h2 className='text-xl lg:text-2xl font-bold mb-4'>Nuestras Inmobiliarias</h2>
                 <p className='font-semibold mb-4'>Filtrar por</p>
                 <RoomFilters onFilterChange={handleFilterChange} />
             </aside>
@@ -54,30 +56,33 @@ const RoomList = () => {
             <div className='flex-1'>
                 <div className='flex justify-start mb-4 flex-col gap-4'>
                     <div>
-                        <span className='font-semibold text-xl'>Ordenar por:</span>
+                        <span className='font-semibold text-lg lg:text-xl'>Ordenar por:</span>
                     </div>
-                    <div className='flex items-center gap-2'>
-                        <button className='px-4 py-1.5 rounded-full bg-white border border-gray-300 text-sm flex items-center gap-1'>
+                    {/* Make buttons container responsive */}
+                    <div className='flex flex-wrap items-center gap-2'>
+                        <button className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
                             Precio Alto <span className='text-xs'>↑</span>
                         </button>
-                        <button className='px-4 py-1.5 rounded-full bg-white border border-gray-300 text-sm flex items-center gap-1'>
+                        <button className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
                             Precio Bajo <span className='text-xs'>↓</span>
                         </button>
-                        <button className='px-4 py-1.5 rounded-full bg-white border border-gray-300 text-sm flex items-center gap-1'>
+                        <button className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
                             Valoración Alta <span className='text-xs'>↑</span>
                         </button>
-                        <button className='px-4 py-1.5 rounded-full bg-white border border-gray-300 text-sm flex items-center gap-1'>
+                        <button className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
                             Valoración Baja <span className='text-xs'>↓</span>
                         </button>
                     </div>
                 </div>
 
-                <div className='grid grid-cols-3 gap-6'>
+                {/* Make grid responsive */}
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6'>
                     {currentRooms.map((room) => (
                         <RoomCard key={room.id} {...room} />
                     ))}
                 </div>
 
+                {/* Pagination remains centered */}
                 <div className='flex justify-center mt-8 gap-2'>
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                         <button

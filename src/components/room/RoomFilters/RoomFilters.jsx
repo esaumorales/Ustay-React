@@ -19,64 +19,64 @@ export const RoomFilters = ({ onFilterChange }) => {
     };
 
     return (
-        <div>
-            <div className='space-y-6'>
+        <div className='w-full'>
+            <div className='space-y-4 lg:space-y-6'>
                 {/* Property Type Filter */}
-                <div>
-                    <h3 className='font-medium mb-2'>Tipo de Propiedad</h3>
-                    <div className='space-y-2'>
-                        <label className='flex items-center'>
+                <div className='bg-white p-4 rounded-lg shadow-sm'>
+                    <h3 className='font-medium mb-2 text-sm lg:text-base'>Tipo de Propiedad</h3>
+                    <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-1 gap-2'>
+                        <label className='flex items-center p-2 hover:bg-gray-50 rounded'>
                             <input
                                 type='checkbox'
                                 className='mr-2'
                                 checked={filters.propertyType === 'Cuartos'}
                                 onChange={(e) => handleFilterChange('propertyType', e.target.checked ? 'Cuartos' : '')}
                             />
-                            <span>Cuartos</span>
+                            <span className='text-sm'>Cuartos</span>
                         </label>
-                        <label className='flex items-center'>
+                        <label className='flex items-center p-2 hover:bg-gray-50 rounded'>
                             <input
                                 type='checkbox'
                                 className='mr-2'
                                 checked={filters.propertyType === 'Departamento'}
                                 onChange={(e) => handleFilterChange('propertyType', e.target.checked ? 'Departamento' : '')}
                             />
-                            <span>Departamento</span>
+                            <span className='text-sm'>Departamento</span>
                         </label>
                     </div>
                 </div>
 
                 {/* Zona Filter */}
-                <div>
-                    <h3 className='font-medium mb-2'>Zona</h3>
-                    <div className='space-y-2'>
+                <div className='bg-white p-4 rounded-lg shadow-sm'>
+                    <h3 className='font-medium mb-2 text-sm lg:text-base'>Zona</h3>
+                    <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-1 gap-2'>
                         {['La Era', 'El Inti', 'San Francisco', 'La Alameda'].map((zona) => (
-                            <label key={zona} className='flex items-center'>
+                            <label key={zona} className='flex items-center p-2 hover:bg-gray-50 rounded'>
                                 <input
                                     type='checkbox'
                                     className='mr-2'
                                     checked={filters.zona === zona}
                                     onChange={(e) => handleFilterChange('zona', e.target.checked ? zona : '')}
                                 />
-                                <span>{zona}</span>
+                                <span className='text-sm'>{zona}</span>
                             </label>
                         ))}
                     </div>
                 </div>
 
                 {/* Rating Filter */}
-                <div>
-                    <h3 className='font-medium mb-2'>Valoración</h3>
-                    <div className='space-y-2'>
+                <div className='bg-white p-4 rounded-lg shadow-sm'>
+                    <h3 className='font-medium mb-2 text-sm lg:text-base'>Valoración</h3>
+                    <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-1 gap-2'>
                         {[4, 3, 2, 1].map((rating) => (
-                            <label key={rating} className='flex items-center'>
+                            <label key={rating} className='flex items-center p-2 hover:bg-gray-50 rounded'>
                                 <input
                                     type='checkbox'
                                     className='mr-2'
                                     checked={filters.rating === rating}
                                     onChange={(e) => handleFilterChange('rating', e.target.checked ? rating : 0)}
                                 />
-                                <span className='flex'>
+                                <span className='flex text-sm'>
                                     {[...Array(rating)].map((_, i) => (
                                         <span key={i} className='text-yellow-400'>★</span>
                                     ))}
@@ -87,8 +87,8 @@ export const RoomFilters = ({ onFilterChange }) => {
                 </div>
 
                 {/* Price Filter */}
-                <div>
-                    <h3 className='font-medium mb-2'>Precios</h3>
+                <div className='bg-white p-4 rounded-lg shadow-sm'>
+                    <h3 className='font-medium mb-2 text-sm lg:text-base'>Precios</h3>
                     <div className='space-y-4'>
                         <input
                             type='range'
