@@ -7,8 +7,8 @@ import { IconPlayStore } from '../assets/icons/icon-play-store';
 export default function Footer() {
   return (
     <footer className='bg-secondary-dark'>
-      <div className='container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12'>
-        <div className='flex flex-wrap justify-around gap-8 text-white'>
+      <div className='container mx-auto px-2 sm:px-3 lg:px-6 py-6 md:py-8'>
+        <div className='flex flex-wrap justify-between px-18 gap-8 text-white'>
           {/* Company Info */}
           <div className='w-[45%] lg:w-auto space-y-6'>
             <div className='space-y-2'>
@@ -104,8 +104,8 @@ export default function Footer() {
       </div>
 
       {/* Footer Bottom */}
-      <div className='mx-30 border-t border-white/10'>
-        <div className='container mx-auto px-4 sm:px-6 lg:px-8 py-6'>
+      <div className='mx-20 border-t border-white/10'>
+        <div className='container mx-auto px-2 sm:px-6 lg:px-4 py-6'>
           <div className='space-y-2 text-sm text-white/80'>
             <p className='font-semibold'>
               © 2025 U Stay. Todos los derechos reservados.

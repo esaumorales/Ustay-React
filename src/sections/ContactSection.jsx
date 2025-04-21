@@ -1,7 +1,9 @@
+import Contact from '@components/Contact';
+
 export default function ContactSection() {
-  return (
-    <div>
-        <p>Votame tu segundo GAAA</p>
-      </div>
-  );
+    return (
+        <div className='py-16'>
+            <Contact/>
+        </div>
+    );
 }

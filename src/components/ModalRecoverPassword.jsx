@@ -1,13 +1,12 @@
 import React from 'react';
 import {FcGoogle} from 'react-icons/fc';
-import {useModal} from '../hooks/useModal'
-import ModalRecoverPassword from './ModalRecoverPassword';
 import BACKGROUNDMODAL from '../assets/img/background-modal.webp';
 
-const ModalLogin = ({isOpen, onClose, onSwitchToRegister}) => {
-    if (!isOpen) return null;
+const ModalRecoverPassword = ({isOpen, onClose, onSwitchToRegister, onSwitchToLogin}) => {
+    if (!isOpen) 
+        return null;
     
-    const recoverModal = useModal();
+
 
     const handleBackdropClick = (e) => {
         if (e.target === e.currentTarget) {
@@ -15,27 +14,9 @@ const ModalLogin = ({isOpen, onClose, onSwitchToRegister}) => {
         }
     };
 
-    // If recover modal is open, don't show login modal
-    if (recoverModal.isOpen) {
-        return (
-            <ModalRecoverPassword 
-                isOpen={recoverModal.isOpen}
-                onClose={() => {
-                    recoverModal.closeModal();
-                    onClose();
-                }}
-                onSwitchToRegister={onSwitchToRegister}
-                onSwitchToLogin={() => {
-                    recoverModal.closeModal();
-                }}
-            />
-        );
-    }
-
     return (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-[2px] p-4'
             onClick={handleBackdropClick}>
-            {/* Rest of the login modal content */}
             <div className='bg-white shadow-md w-full max-w-3xl relative flex overflow-hidden'>
                 {/* Left side - Image */}
                 <div className='w-1/2 hidden md:block relative'>
@@ -47,42 +28,31 @@ const ModalLogin = ({isOpen, onClose, onSwitchToRegister}) => {
                 {/* Right side - Form */}
                 <div className='w-full md:w-1/2 p-8'>
                     <div className='flex justify-between items-center mb-6'>
-                        <h1 className='text-xl font-semibold'>Iniciar Sesión</h1>
-                        <button onClick={onClose}
-                            className='text-gray-400 hover:text-gray-600'>
-                            ✕
-                        </button>
+                        <div className="flex items-center flex-row-reverse w-full justify-between">
+                            <button onClick={
+                                    () => {
+                                        onClose();
+                                        onSwitchToLogin();
+                                    }
+                                }
+                                className="text-gray-400 hover:text-gray-600 text-2xl">
+                                ←
+                            </button>
+                            <h1 className='text-xl font-semibold'>Recuperar Contraseña</h1>
+                        </div>
                     </div>
 
-                    <h2 className='text-2xl font-medium text-center mb-6'>Ingresar</h2>
-
+                    <h2 className='text-lg font-medium mb-6  flex justify-center'>Ingrese correo</h2>
                     <form className='space-y-4'>
                         <div>
-                            <input type='email' placeholder='Correo E-mail' className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500'/>
-                        </div>
-                        <div>
-                            <input type='password' placeholder='Contraseña' className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500'/>
-                        </div>
-                        <div className='flex items-center justify-between'>
-                            <label className='flex items-center'>
-                                <input type='checkbox' className='mr-2 accent-blue-500'/>
-                                <span className='text-sm text-gray-600'>Recuérdame</span>
-                            </label>
-                            <button 
-                                type="button"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    recoverModal.openModal();
-                                }}
-                                className='text-orange-500 font-normal'
-                            >
-                                ¿Se te olvidó la contraseña?
-                            </button>
+                            <input type='email' placeholder='ejem: correo@gmail.com' className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500'/>
                         </div>
                         <button type='submit' className='w-full bg-[#1a1a1a] text-white py-3 rounded-lg hover:bg-[#333] transition-colors font-medium'>
-                            Ingresar
+                            Enviar
                         </button>
+
                     </form>
+
 
                     <div className='mt-6 text-center'>
                         <div className='flex items-center justify-center gap-4 mb-4'>
@@ -100,7 +70,8 @@ const ModalLogin = ({isOpen, onClose, onSwitchToRegister}) => {
                         <p className='text-sm text-gray-600'>
                             ¿No tienes una cuenta?{' '}
                             <button onClick={
-                                    () => {
+                                    (e) => {
+                                        e.preventDefault();
                                         onClose();
                                         onSwitchToRegister();
                                     }
@@ -116,4 +87,4 @@ const ModalLogin = ({isOpen, onClose, onSwitchToRegister}) => {
     );
 };
 
-export default ModalLogin;
+export default ModalRecoverPassword;
