@@ -5,7 +5,14 @@ import { RoomFilters } from './RoomFilters/RoomFilters';
 
 const RoomList = () => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [filteredRooms, setFilteredRooms] = useState(CARDS_DATA);
+    const [orderRooms] = useState(CARDS_DATA)
+    const [filteredRooms, setFilteredRooms] = useState(orderRooms);
+    const [objectFilter, setObjectFilter] = useState({
+        propertyType: '',
+        priceRange: 0,
+        zona: '',
+        rating: 0
+    })
     const roomsPerPage = 9;
 
     const handlePageChange = (pageNumber) => {
@@ -19,8 +26,9 @@ const RoomList = () => {
 
     const totalPages = Math.ceil(filteredRooms.length / roomsPerPage);
 
-    const handleFilterChange = (filters) => {
-        let result = [...CARDS_DATA];
+    const handleFilterChange = (filters = objectFilter) => {
+        let result = [...orderRooms];
+        setObjectFilter(filters)
 
         if (filters.propertyType) {
             result = result.filter(card => card.type === filters.propertyType);
@@ -42,6 +50,15 @@ const RoomList = () => {
         setCurrentPage(1);
     };
 
+    const handleOrderRoom = (category, value) => {
+        const multiA = value === 'asc' ? 1 : -1
+        const multiB = value === 'asc' ? -1 : 1
+        
+        orderRooms.sort((a,b) => (a[category] * multiA) + (b[category] * multiB))
+        
+        handleFilterChange()
+    }
+
     return (
         // Update the main container to be responsive
         <div className='flex flex-col lg:flex-row gap-8 px-4 md:px-8 lg:px-32'>
@@ -60,16 +77,20 @@ const RoomList = () => {
                     </div>
                     {/* Make buttons container responsive */}
                     <div className='flex flex-wrap items-center gap-2'>
-                        <button className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
+                        <button onClick={() => handleOrderRoom('price', 'des')}
+                        className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
                             Precio Alto <span className='text-xs'>↑</span>
                         </button>
-                        <button className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
+                        <button onClick={() => handleOrderRoom('price', 'asc')}
+                        className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
                             Precio Bajo <span className='text-xs'>↓</span>
                         </button>
-                        <button className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
+                        <button onClick={() => handleOrderRoom('rating', 'des')}
+                        className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
                             Valoración Alta <span className='text-xs'>↑</span>
                         </button>
-                        <button className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
+                        <button onClick={() => handleOrderRoom('rating', 'asc')}
+                        className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
                             Valoración Baja <span className='text-xs'>↓</span>
                         </button>
                     </div>
