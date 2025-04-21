@@ -1,4 +1,4 @@
-import FotoEjemplo from '../assets/img/room.png';
+import FotoEjemplo from '@/assets/img/room.png';
 
 export const CARDS_DATA = [
   {

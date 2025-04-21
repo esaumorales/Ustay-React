@@ -1,4 +1,4 @@
-import Favorite from '../components/favorite/Favorite';
+import Favorite from '@/components/favorite/Favorite';
 
 export function FavoriteSection() {
     return (

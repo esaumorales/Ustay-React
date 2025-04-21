@@ -1,6 +1,6 @@
-import Footer from '../components/Footer';
-import Header from '../components/Header';
-import { FavoriteSection } from '../sections/FavoriteSection';
+import Footer from '@/components/Footer.jsx';
+import Header from '@/components/Header.jsx';
+import { FavoriteSection } from '@/sections/FavoriteSection';
 
 
 export default function FavoritePage() {

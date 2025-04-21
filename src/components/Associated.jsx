@@ -1,5 +1,5 @@
 import { InView } from 'react-intersection-observer';
-import useCountAnimate from '../hooks/useCountAnimate';
+import useCountAnimate from '@/hooks/useCountAnimate';
 
 export default function Associated() {
   const partner = useCountAnimate(InView, 40, 2000);

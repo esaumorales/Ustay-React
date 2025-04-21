@@ -1,9 +1,9 @@
 import ModalLogin from './ModalLogin'
 import ModalRegister from './ModalRegister'
 import {Link} from 'react-router-dom'
-import {IconLogo} from '../assets/icons/icon-logo'
+import {IconLogo} from '@/assets/icons/icon-logo'
 import {useState} from 'react'
-import {useModal} from '../hooks/useModal'
+import {useModal} from '@/hooks/useModal'
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CARDS_DATA } from '../../models/cards';
+import { CARDS_DATA } from '@/models/cards';
 import { RoomCard } from './RoomCard';
 import { RoomFilters } from './RoomFilters/RoomFilters';
 

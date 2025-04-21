@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { IconBath } from '../../assets/icons/icon-bath';
-import { IconBed } from '../../assets/icons/icon-bed';
-import { IconLocation } from '../../assets/icons/icon-location';
-import { IconParking } from '../../assets/icons/icon-parking';
-import { IconWifi } from '../../assets/icons/icon-wifi';
+import { IconBath } from '@/assets/icons/icon-bath';
+import { IconBed } from '@/assets/icons/icon-bed';
+import { IconLocation } from '@/assets/icons/icon-location';
+import { IconParking } from '@/assets/icons/icon-parking';
+import { IconWifi } from '@/assets/icons/icon-wifi';
 
 export const RoomCard = ({
   id,

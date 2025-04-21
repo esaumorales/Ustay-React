@@ -1,8 +1,8 @@
-import { IconInstragram } from '../assets/icons/icon-instragram';
-import { IconWhatsapp } from '../assets/icons/icon-whatsapp';
-import { IconApple } from '../assets/icons/icon-apple';
-import { IconFacebook } from '../assets/icons/icon-facebook';
-import { IconPlayStore } from '../assets/icons/icon-play-store';
+import { IconInstragram } from '@/assets/icons/icon-instragram';
+import { IconWhatsapp } from '@/assets/icons/icon-whatsapp';
+import { IconApple } from '@/assets/icons/icon-apple';
+import { IconFacebook } from '@/assets/icons/icon-facebook';
+import { IconPlayStore } from '@/assets/icons/icon-play-store';
 
 export default function Footer() {
   return (

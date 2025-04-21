@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
-import RoomList from '../components/Room/RoomList';
-import { RoomDetail } from '../components/room/RoomDetail';
+import RoomList from '@/components/Room/RoomList';
+import { RoomDetail } from '@/components/room/RoomDetail';
 
 export default function RoomSection() {
   return (

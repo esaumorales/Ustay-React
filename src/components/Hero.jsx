@@ -1,5 +1,5 @@
-import { RightArrowIcon } from '../assets/icons/icon-rightArrow';
-import BACKGROUND from '../assets/img/background.webp';
+import { RightArrowIcon } from '@/assets/icons/icon-rightArrow';
+import BACKGROUND from '@/assets/img/background.webp';
 
 export default function Hero() {
   return (

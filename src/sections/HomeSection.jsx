@@ -1,7 +1,7 @@
-import Associated from '@components/Associated';
-import Hero from '@components/Hero';
-import Quarters from '@components/Quarters';
-import Contact from '@components/Contact';
+import Associated from '@/components/Associated';
+import Hero from '@/components/Hero';
+import Quarters from '@/components/Quarters';
+import Contact from '@/components/Contact';
 
 export default function HomeSection() {
   return (

@@ -1,8 +1,8 @@
 import React from 'react';
 import {FcGoogle} from 'react-icons/fc';
-import {useModal} from '../hooks/useModal'
+import {useModal} from '@/hooks/useModal'
 import ModalRecoverPassword from './ModalRecoverPassword';
-import BACKGROUNDMODAL from '../assets/img/background-modal.webp';
+import BACKGROUNDMODAL from '@/assets/img/background-modal.webp';
 
 const ModalLogin = ({isOpen, onClose, onSwitchToRegister}) => {
     if (!isOpen) return null;

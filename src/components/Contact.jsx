@@ -1,5 +1,5 @@
-import { RightArrowIcon } from '../assets/icons/icon-rightArrow';
-import BACKGROUNDPARTNER from '../assets/img/background-partner.webp';
+import { RightArrowIcon } from '@/assets/icons/icon-rightArrow';
+import BACKGROUNDPARTNER from '@/assets/img/background-partner.webp';
 
 export default function Contact() {
   return (

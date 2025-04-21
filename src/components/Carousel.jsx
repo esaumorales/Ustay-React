@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { IconBath } from '../assets/icons/icon-bath';
-import { IconBed } from '../assets/icons/icon-bed';
-import { IconLocation } from '../assets/icons/icon-location';
-import { IconParking } from '../assets/icons/icon-parking';
-import { IconWifi } from '../assets/icons/icon-wifi';
-import useCarousel from '../hooks/useCarousel';
-import { CARDS_DATA } from '../models/cards';
+import { IconBath } from '@/assets/icons/icon-bath';
+import { IconBed } from '@/assets/icons/icon-bed';
+import { IconLocation } from '@/assets/icons/icon-location';
+import { IconParking } from '@/assets/icons/icon-parking';
+import { IconWifi } from '@/assets/icons/icon-wifi';
+import useCarousel from '@/hooks/useCarousel';
+import { CARDS_DATA } from '@/models/cards';
 
 export default function Carousel() {
   const [items] = useState(CARDS_DATA || []);

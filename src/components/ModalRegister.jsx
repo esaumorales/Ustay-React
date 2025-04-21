@@ -1,6 +1,6 @@
 import React from 'react';
 import {FcGoogle} from 'react-icons/fc';
-import BACKGROUNDMODAL from '../assets/img/background-modal.webp';
+import BACKGROUNDMODAL from '@/assets/img/background-modal.webp';
 
 const ModalRegister = ({isOpen, onClose, onSwitchToLogin}) => {
     if (!isOpen) 
