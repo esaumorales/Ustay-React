@@ -1,12 +1,36 @@
 import ModalLogin from './ModalLogin'
 import ModalRegister from './ModalRegister'
-import {Link} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import {IconLogo} from '@/assets/icons/icon-logo'
 import {useState} from 'react'
 import {useModal} from '@/hooks/useModal'
 
+const LINKS = [
+    {
+        name: 'Home',
+        href: '/home',
+        label: 'home'
+    },
+    {
+        name: 'Encuentra Tu cuarto',
+        href: '/room',
+        label: 'cuarto'
+    },
+    {
+        name: 'Nosotros',
+        href: '/contact',
+        label: 'nosotros'
+    },
+    {
+        name: 'Favoritos',
+        href: '/favorite',
+        label: 'favoritos'
+    },
+]
+
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { pathname } = useLocation();
     const loginModal = useModal();
     const registerModal = useModal();
 
@@ -39,19 +63,15 @@ export default function Header() {
                 </button>
 
                 {/* Navigation Links - Desktop */}
-                <nav className='hidden md:flex gap-4 px-4 py-1 rounded-3xl bg-secondary mr-0 md:-mr-28'>
-                    <Link to='/home' className='text-white transition-colors duration-200 hover:text-black hover:bg-white px-4 py-[4px] rounded-2xl'>
-                        Home
-                    </Link>
-                    <Link to='/room' className='text-white transition-colors duration-200 hover:text-black hover:bg-white px-4 py-[4px]  rounded-2xl'>
-                        Encuentra Tu cuarto
-                    </Link>
-                    <Link to='/contact' className='text-white transition-colors duration-200 hover:text-black hover:bg-white px-4 py-[4px] rounded-2xl'>
-                        Nosotros
-                    </Link>
-                    <Link to='/favorite' className='text-white transition-colors duration-200 hover:text-black hover:bg-white px-4 py-[4px] rounded-2xl'>
-                        Favoritos
-                    </Link>
+                <nav className='hidden md:flex gap-2 px-1 py-1 rounded-3xl bg-secondary mr-0 md:-mr-28'>
+                    {
+                        LINKS.map(({name, label, href}) => 
+                            <Link to={href} aria-label={label} 
+                            className={`px-4 py-1 rounded-2xl ${pathname === href ? 'text-black bg-white' : 'text-white transition-colors duration-200 hover:text-black hover:bg-white active:scale-95'}`}>
+                                {name}
+                            </Link>
+                        )
+                    }
                 </nav>
 
                 {/* Auth Buttons - Desktop */}
@@ -76,18 +96,14 @@ export default function Header() {
             isMenuOpen && (
                 <div className='md:hidden mt-4 pb-4'>
                     <nav className='flex flex-col gap-4 bg-white rounded-xl p-4'>
-                        <Link to='/home' className='text-secondary px-2 py-1'>
-                            Home
-                        </Link>
-                        <Link to='/home' className='text-secondary px-2 py-1'>
-                            Encuentra Tu cuarto
-                        </Link>
-                        <Link to='/room' className='text-secondary px-2 py-1'>
-                            Nosotros
-                        </Link>
-                        <Link to='/favorite' className='text-secondary px-2 py-1'>
-                            Favoritos
-                        </Link>
+                    {
+                        LINKS.map(({name, label, href}) => 
+                            <Link to={href} aria-label={label} 
+                            className={`text-secondary px-2 py-1 ${pathname === href ? 'underline font-medium' : 'hover:underline'}`}>
+                                {name}
+                            </Link>
+                        )
+                    }
                     </nav>
                     <div className='flex flex-col gap-3 mt-4 items-center'>
                         <button onClick={
