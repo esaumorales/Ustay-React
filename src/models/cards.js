@@ -7,7 +7,7 @@ export const CARDS_DATA = [
     type: 'Cuartos',
     location: 'El Inti',
     homeOwner: 'Sarah Johnson',
-    price: '450',
+    price: 450,
     rating: 4,
     destacado: true,
     dimensions: '2.5 x 3.5m',
@@ -37,8 +37,6 @@ export const CARDS_DATA = [
       wifi: true,
       parking: true,
       bed: true,
-      bath: true,
-      location: true
     }
   },
   {
@@ -47,12 +45,10 @@ export const CARDS_DATA = [
     type: 'Departamento',
     location: 'La Alameda',
     homeOwner: 'Michael Brown',
-    price: '680',
+    price: 680,
     rating: 3,
     destacado: false,
     amenities: {
-      wifi: true,
-      parking: true,
       bed: true,
       bath: true,
       location: true
@@ -64,7 +60,7 @@ export const CARDS_DATA = [
     type: 'Cuartos',
     location: 'San Francisco',
     homeOwner: 'Emily Davis',
-    price: '320',
+    price: 320,
     rating: 4,
     destacado: true,
     amenities: {
@@ -72,7 +68,6 @@ export const CARDS_DATA = [
       parking: true,
       bed: true,
       bath: true,
-      location: true
     }
   },
   {
@@ -81,15 +76,12 @@ export const CARDS_DATA = [
     type: 'Departamento',
     location: 'La Era',
     homeOwner: 'David Wilson',
-    price: '890',
+    price: 890,
     rating: 4,
     destacado: true,
     amenities: {
-      wifi: true,
-      parking: true,
       bed: true,
       bath: true,
-      location: true
     }
   },
   {
@@ -98,15 +90,11 @@ export const CARDS_DATA = [
     type: 'Cuartos',
     location: 'El Inti',
     homeOwner: 'Jennifer Taylor',
-    price: '250',
+    price: 250,
     rating: 3,
     destacado: false,
     amenities: {
-      wifi: true,
-      parking: true,
       bed: true,
-      bath: true,
-      location: true
     }
   },
   {
@@ -115,12 +103,10 @@ export const CARDS_DATA = [
     type: 'Departamento',
     location: 'La Alameda',
     homeOwner: 'Robert Miller',
-    price: '750',
+    price: 750,
     rating: 4,
     destacado: true,
     amenities: {
-      wifi: true,
-      parking: true,
       bed: true,
       bath: true,
       location: true
@@ -132,11 +118,10 @@ export const CARDS_DATA = [
     type: 'Cuartos',
     location: 'San Francisco',
     homeOwner: 'Lisa Anderson',
-    price: '420',
+    price: 420,
     rating: 3,
     destacado: false,
     amenities: {
-      wifi: true,
       parking: true,
       bed: true,
       bath: true,
@@ -149,7 +134,7 @@ export const CARDS_DATA = [
     type: 'Departamento',
     location: 'La Era',
     homeOwner: 'Carlos Rodriguez',
-    price: '950',
+    price: 950,
     rating: 4,
     destacado: true,
     amenities: {
@@ -157,7 +142,6 @@ export const CARDS_DATA = [
       parking: true,
       bed: true,
       bath: true,
-      location: true
     }
   },
   {
@@ -166,7 +150,7 @@ export const CARDS_DATA = [
     type: 'Cuartos',
     location: 'El Inti',
     homeOwner: 'Maria Garcia',
-    price: '280',
+    price: 280,
     rating: 3,
     destacado: false,
     amenities: {
@@ -183,7 +167,7 @@ export const CARDS_DATA = [
     type: 'Departamento',
     location: 'La Alameda',
     homeOwner: 'James Wilson',
-    price: '820',
+    price: 820,
     rating: 4,
     destacado: true,
     amenities: {
@@ -200,7 +184,7 @@ export const CARDS_DATA = [
     type: 'Cuartos',
     location: 'San Francisco',
     homeOwner: 'Emma Thompson',
-    price: '350',
+    price: 350,
     rating: 3,
     destacado: false,
     amenities: {
@@ -217,7 +201,7 @@ export const CARDS_DATA = [
     type: 'Departamento',
     location: 'La Era',
     homeOwner: 'Daniel Martinez',
-    price: '780',
+    price: 780,
     rating: 4,
     destacado: true,
     amenities: {
@@ -234,7 +218,7 @@ export const CARDS_DATA = [
     type: 'Cuartos',
     location: 'El Inti',
     homeOwner: 'Sophia Lee',
-    price: '290',
+    price: 290,
     rating: 3,
     destacado: false,
     amenities: {
@@ -251,7 +235,7 @@ export const CARDS_DATA = [
     type: 'Departamento',
     location: 'La Alameda',
     homeOwner: 'William Clark',
-    price: '920',
+    price: 920,
     rating: 4,
     destacado: true,
     amenities: {
@@ -268,7 +252,7 @@ export const CARDS_DATA = [
     type: 'Cuartos',
     location: 'San Francisco',
     homeOwner: 'Isabella Rodriguez',
-    price: '380',
+    price: 380,
     rating: 3,
     destacado: false,
     amenities: {
@@ -285,7 +269,7 @@ export const CARDS_DATA = [
     type: 'Departamento',
     location: 'La Era',
     homeOwner: 'Alexander White',
-    price: '850',
+    price: 850,
     rating: 4,
     destacado: true,
     amenities: {
@@ -302,7 +286,7 @@ export const CARDS_DATA = [
     type: 'Cuartos',
     location: 'El Inti',
     homeOwner: 'Victoria Adams',
-    price: '270',
+    price: 270,
     rating: 3,
     destacado: false,
     amenities: {
@@ -319,7 +303,7 @@ export const CARDS_DATA = [
     type: 'Departamento',
     location: 'La Alameda',
     homeOwner: 'Benjamin Moore',
-    price: '980',
+    price: 980,
     rating: 4,
     destacado: true,
     amenities: {
@@ -336,7 +320,7 @@ export const CARDS_DATA = [
     type: 'Cuartos',
     location: 'San Francisco',
     homeOwner: 'Olivia Taylor',
-    price: '340',
+    price: 340,
     rating: 3,
     destacado: false,
     amenities: {
@@ -353,7 +337,7 @@ export const CARDS_DATA = [
     type: 'Departamento',
     location: 'La Era',
     homeOwner: 'Lucas Martin',
-    price: '720',
+    price: 720,
     rating: 4,
     destacado: true,
     amenities: {
@@ -370,7 +354,7 @@ export const CARDS_DATA = [
     type: 'Cuartos',
     location: 'El Inti',
     homeOwner: 'Ava Wilson',
-    price: '260',
+    price: 260,
     rating: 3,
     destacado: false,
     amenities: {
@@ -387,7 +371,7 @@ export const CARDS_DATA = [
     type: 'Departamento',
     location: 'La Alameda',
     homeOwner: 'Henry Johnson',
-    price: '880',
+    price: 880,
     rating: 4,
     destacado: true,
     amenities: {
@@ -404,7 +388,7 @@ export const CARDS_DATA = [
     type: 'Cuartos',
     location: 'San Francisco',
     homeOwner: 'Mia Brown',
-    price: '310',
+    price: 310,
     rating: 3,
     destacado: false,
     amenities: {
@@ -421,7 +405,7 @@ export const CARDS_DATA = [
     type: 'Departamento',
     location: 'La Era',
     homeOwner: 'Sebastian Lee',
-    price: '790',
+    price: 790,
     rating: 4,
     destacado: true,
     amenities: {
@@ -438,7 +422,7 @@ export const CARDS_DATA = [
     type: 'Cuartos',
     location: 'El Inti',
     homeOwner: 'Charlotte Davis',
-    price: '240',
+    price: 240,
     rating: 3,
     destacado: false,
     amenities: {
@@ -455,7 +439,7 @@ export const CARDS_DATA = [
     type: 'Departamento',
     location: 'La Alameda',
     homeOwner: 'Jack Thompson',
-    price: '960',
+    price: 960,
     rating: 4,
     destacado: true,
     amenities: {
@@ -472,7 +456,7 @@ export const CARDS_DATA = [
     type: 'Cuartos',
     location: 'San Francisco',
     homeOwner: 'Luna Martinez',
-    price: '330',
+    price: 330,
     rating: 3,
     destacado: false,
     amenities: {
@@ -489,7 +473,7 @@ export const CARDS_DATA = [
     type: 'Departamento',
     location: 'La Era',
     homeOwner: 'Gabriel White',
-    price: '840',
+    price: 840,
     rating: 4,
     destacado: true,
     amenities: {
@@ -506,7 +490,7 @@ export const CARDS_DATA = [
     type: 'Cuartos',
     location: 'El Inti',
     homeOwner: 'Sofia Clark',
-    price: '280',
+    price: 280,
     rating: 3,
     destacado: false,
     amenities: {
@@ -523,7 +507,7 @@ export const CARDS_DATA = [
     type: 'Departamento',
     location: 'La Alameda',
     homeOwner: 'Leo Rodriguez',
-    price: '990',
+    price: 990,
     rating: 4,
     destacado: true,
     amenities: {

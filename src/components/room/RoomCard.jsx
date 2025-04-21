@@ -12,13 +12,13 @@ export const RoomCard = ({
   location,
   price,
   rating = 4,
-  destacado = true,
+  destacado = false,
   amenities = {
-    wifi: true,
-    parking: true,
-    bed: true,
-    bath: true,
-    location: true
+    wifi: false,
+    parking: false,
+    bed: false,
+    bath: false,
+    location: false,
   }
 }) => {
   const navigate = useNavigate();
@@ -26,6 +26,19 @@ export const RoomCard = ({
   const handleCardClick = () => {
     navigate(`/room/${id}`);
   };
+
+  const getAmenities = (amenities) => {
+    const result = []
+    const { wifi, parking, bed, bath, location } = amenities
+    
+    if(wifi) result.push(IconWifi)
+    if(parking) result.push(IconParking)
+    if(bed) result.push(IconBed)
+    if(bath) result.push(IconBath)
+    if(location) result.push(IconLocation)
+    
+    return result
+  }
 
   return (
     <div
@@ -73,7 +86,7 @@ export const RoomCard = ({
 
           <div className='flex justify-between items-center'>
             <div className='flex gap-2'>
-              {[IconWifi, IconParking, IconBed, IconBath, IconLocation].map((Icon, index) => (
+              {getAmenities(amenities).map((Icon, index) => (
                 <div key={index} className='w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center'>
                   <Icon className='w-4 h-4 text-gray-600' />
                 </div>
