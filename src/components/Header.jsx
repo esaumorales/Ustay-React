@@ -66,7 +66,7 @@ export default function Header() {
                 <nav className='hidden md:flex gap-2 px-1 py-1 rounded-3xl bg-secondary mr-0 md:-mr-28'>
                     {
                         LINKS.map(({name, label, href}) => 
-                            <Link to={href} aria-label={label} 
+                            <Link to={href} aria-label={label} key={`header-${name}-1`}
                             className={`px-4 py-1 rounded-2xl ${pathname === href ? 'text-black bg-white' : 'text-white transition-colors duration-200 hover:text-black hover:bg-white active:scale-95'}`}>
                                 {name}
                             </Link>
@@ -98,7 +98,7 @@ export default function Header() {
                     <nav className='flex flex-col gap-4 bg-white rounded-xl p-4'>
                     {
                         LINKS.map(({name, label, href}) => 
-                            <Link to={href} aria-label={label} 
+                            <Link to={href} aria-label={label} key={`header-${name}-2`}
                             className={`text-secondary px-2 py-1 ${pathname === href ? 'underline font-medium' : 'hover:underline'}`}>
                                 {name}
                             </Link>
