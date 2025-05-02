@@ -1,4 +1,5 @@
-import Carousel from './Carousel';
+// import Carousel from './Carousel';
+import Carrousel from '@/components/NewCarrousel';
 
 export default function Quarters() {
   return (
@@ -8,7 +9,7 @@ export default function Quarters() {
           <h1 className='text-4xl font-semibold'>Inmobiliarias del momento</h1>
         </div>
         <div>
-        <Carousel />
+          <Carrousel />
         </div>
       </div>
     </div>

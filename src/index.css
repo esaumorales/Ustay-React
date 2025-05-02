@@ -24,21 +24,64 @@
     /* Colores Personalizados */
     --color-secondary: #111827;
     --color-secondary-dark: #070A13;
+    
+    /* Texto Personaliado */
+    --font-logo: "KadwaR";
+    --font-text: "QuicksandR";
 }
 
-/* @font-face {
-  font-family : FiraCode;
-  font-style  : normal;
+ @font-face {
+  font-family : KadwaR;
+  font-style  : regular;
   font-weight : 200 700;
   font-display: swap;
-  src         : url("@Assets/fonts/FiraCode-VariableFont.ttf") format("truetype");
+  src         : url('@/assets/fonts/Kadwa-Regular.ttf') format("truetype");
+}
+@font-face {
+    font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('@/assets/fonts/Quicksand-Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('@/assets/fonts/Quicksand-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('@/assets/fonts/Quicksand-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('@/assets/fonts/Quicksand-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('@/assets/fonts/Quicksand-Bold.ttf') format('truetype');
 }
 
 @layer base {
   html {
-      @apply transition-colors duration-300;
+      /* @apply transition-colors duration-300; */
 
-      font-family: "FiraCode", monospace;
+      font-family: "Quicksand", monospace;
 
   }
-} */
+}

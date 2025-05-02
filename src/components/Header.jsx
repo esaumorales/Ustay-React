@@ -40,7 +40,7 @@ export default function Header() {
                 {/* Logo */}
                 <div className='flex flex-wrap items-center'>
                     <IconLogo className='w-8 h-8 md:w-10 md:h-10'/>
-                    <p className='text-2xl md:text-3xl font-medium'>Stay</p>
+                    <p className='text-2xl md:text-3xl font-medium font-[KadwaR]'>Stay</p>
                 </div>
 
                 {/* Mobile Menu Button */}
@@ -67,7 +67,7 @@ export default function Header() {
                     {
                         LINKS.map(({name, label, href}) => 
                             <Link to={href} aria-label={label} key={`header-${name}-1`}
-                            className={`px-4 py-1 rounded-2xl ${pathname === href ? 'text-black bg-white' : 'text-white transition-colors duration-200 hover:text-black hover:bg-white active:scale-95'}`}>
+                            className={`px-4 py-1 rounded-2xl ${pathname === href ? 'text-black bg-white' : 'text-white transition-colors duration-200 hover:text-black  hover:bg-white active:scale-95'}`}>
                                 {name}
                             </Link>
                         )

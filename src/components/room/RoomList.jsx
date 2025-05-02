@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { CiSearch } from "react-icons/ci";
 import { CARDS_DATA } from '@/models/cards';
 import { RoomCard } from './RoomCard';
 import { RoomFilters } from './RoomFilters/RoomFilters';
+import { MdCompare } from 'react-icons/md';
 
 const RoomList = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -17,7 +19,7 @@ const RoomList = () => {
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-        window.scrollTo(0, 0); 
+        window.scrollTo(0, 0);
     };
 
     const indexOfLastRoom = currentPage * roomsPerPage;
@@ -53,9 +55,9 @@ const RoomList = () => {
     const handleOrderRoom = (category, value) => {
         const multiA = value === 'asc' ? 1 : -1
         const multiB = value === 'asc' ? -1 : 1
-        
-        orderRooms.sort((a,b) => (a[category] * multiA) + (b[category] * multiB))
-        
+
+        orderRooms.sort((a, b) => (a[category] * multiA) + (b[category] * multiB))
+
         handleFilterChange()
     }
 
@@ -71,29 +73,43 @@ const RoomList = () => {
 
             {/* Right Column - Cards */}
             <div className='flex-1'>
-                <div className='flex justify-start mb-4 flex-col gap-4'>
-                    <div>
-                        <span className='font-semibold text-lg lg:text-xl'>Ordenar por:</span>
+                <div className='flex justify-between '>
+                    <div className=' mb-4 flex flex-col gap-4'>
+                        <div>
+                            <span className='font-semibold text-lg lg:text-xl'>Ordenar por:</span>
+                        </div>
+                        {/* Make buttons container responsive */}
+                        <div className='flex flex-wrap items-center gap-2'>
+                            <button onClick={() => handleOrderRoom('price', 'des')}
+                                className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
+                                Precio Alto <span className='text-xs'>↑</span>
+                            </button>
+                            <button onClick={() => handleOrderRoom('price', 'asc')}
+                                className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
+                                Precio Bajo <span className='text-xs'>↓</span>
+                            </button>
+                            <button onClick={() => handleOrderRoom('rating', 'des')}
+                                className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
+                                Valoración Alta <span className='text-xs'>↑</span>
+                            </button>
+                            <button onClick={() => handleOrderRoom('rating', 'asc')}
+                                className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
+                                Valoración Baja <span className='text-xs'>↓</span>
+                            </button>
+                        </div>
                     </div>
-                    {/* Make buttons container responsive */}
-                    <div className='flex flex-wrap items-center gap-2'>
-                        <button onClick={() => handleOrderRoom('price', 'des')}
-                        className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
-                            Precio Alto <span className='text-xs'>↑</span>
-                        </button>
-                        <button onClick={() => handleOrderRoom('price', 'asc')}
-                        className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
-                            Precio Bajo <span className='text-xs'>↓</span>
-                        </button>
-                        <button onClick={() => handleOrderRoom('rating', 'des')}
-                        className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
-                            Valoración Alta <span className='text-xs'>↑</span>
-                        </button>
-                        <button onClick={() => handleOrderRoom('rating', 'asc')}
-                        className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
-                            Valoración Baja <span className='text-xs'>↓</span>
-                        </button>
+                    <div className='flex justify-end flex-col mb-4 gap-4'>
+                        <div>
+                            <button className='flex items-center border rounded-sm p-[1px]'>
+                                <p>Comparar</p>
+                                <MdCompare />
+                            </button>
+                        </div>
+                        <div>
+                            <CiSearch className='w-5 h-5' />
+                        </div>
                     </div>
+
                 </div>
 
                 {/* Make grid responsive */}

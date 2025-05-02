@@ -7,7 +7,7 @@ import { IconWifi } from '@/assets/icons/icon-wifi';
 import useCarousel from '@/hooks/useCarousel';
 import { CARDS_DATA } from '@/models/cards';
 
-export default function Carousel() {
+export default function NewCarousel() {
   const [items] = useState(CARDS_DATA || []);
 
   const { currentIndex, nextSlide, prevSlide, goToSlide } = useCarousel(items);
