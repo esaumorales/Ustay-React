@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { CARDS_DATA } from '@/models/cards';
 
 export const RoomFilters = ({ onFilterChange }) => {
     const [filters, setFilters] = useState({

@@ -8,7 +8,7 @@ export default function useCarousel(items, autoPlayTime = 3000) {
     let interval;
     if (isAutoPlaying) {
       interval = setInterval(() => {
-        setCurrentIndex((prevIndex) => 
+        setCurrentIndex((prevIndex) =>
           prevIndex === items.length - 1 ? 0 : prevIndex + 1
         );
       }, autoPlayTime);
@@ -17,13 +17,13 @@ export default function useCarousel(items, autoPlayTime = 3000) {
   }, [isAutoPlaying, items.length, autoPlayTime]);
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => 
+    setCurrentIndex((prevIndex) =>
       prevIndex === items.length - 1 ? 0 : prevIndex + 1
     );
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => 
+    setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? items.length - 1 : prevIndex - 1
     );
   };
@@ -38,6 +38,6 @@ export default function useCarousel(items, autoPlayTime = 3000) {
     prevSlide,
     goToSlide,
     isAutoPlaying,
-    setIsAutoPlaying
+    setIsAutoPlaying,
   };
 }

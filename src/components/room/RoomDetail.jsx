@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 import { CARDS_DATA } from '@/models/cards';
-import { MdHomeWork } from "react-icons/md";
 import { IoLocationSharp, IoPersonCircleOutline } from "react-icons/io5";
 import { PiHouseLineLight } from "react-icons/pi";
 import { MdOutlinePhone } from "react-icons/md";
@@ -11,6 +10,11 @@ import { Link } from 'react-router-dom';
 import { RoomCard } from './RoomCard';
 import MAP from '@/assets/img/background-map.png';
 
+
+import 'swiper/css';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { useState } from 'react';
+import { Autoplay, EffectCoverflow } from 'swiper/modules';
 
 const SPECS = [
   {
@@ -36,17 +40,30 @@ export const RoomDetail = () => {
 
   // Get 6 similar rooms
   const similarRooms = CARDS_DATA.filter(r => r.id !== parseInt(id)).slice(0, 6);
+  const [items] = useState(CARDS_DATA || []);
 
   if (!room) return <div>Room not found</div>;
 
   return (
     <div>
-      <div className="flex gap-2 mb-8 h-96">
+      <div className="flex gap-2 mb-8 h-108">
         {/* Image Gallery */}
-        <div className="flex flex-row w-full relative gap-4">
-          <img src={room.image} alt={room.type} className="w-full h-full object-cover" />
-          <img src={room.image} alt="" className="w-full h-full object-cover" />
-          <img src={room.image} alt="" className="w-full h-full  object-cover " />
+        <div className="flex flex-row w-full">
+          <Swiper
+            effect={'coverflow'}
+            grabCursor={true}
+            autoplay={{
+              delay: 3000,
+            }}
+            slidesPerView={3}
+            modules={[EffectCoverflow, Autoplay]}
+            className='flex justify-center items-center'>
+            {items.map((item) =>
+              <SwiperSlide key={item.id}>
+                <img src={item.image} alt={item.type} className="h-full w-full block object-cover " />
+              </SwiperSlide>
+            )}
+          </Swiper> 
         </div>
       </div>
       {/* Two Colum */}
@@ -139,34 +156,28 @@ export const RoomDetail = () => {
             </div>
           </div>
 
-          {/* Map */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">Ubicación</h2>
-            <div className="h-64 bg-gray-200 rounded-lg">
-              <img src={MAP} alt="" />
+          <div className='flex flex-col gap-4'>
+            {/* Map */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <h2 className="text-xl font-semibold mb-4">Ubicación</h2>
+              <div className="h-64 bg-gray-200 rounded-lg ">
+                <img src={MAP} alt="" className='w-full h-full object-cover rounded-xl' />
+              </div>
             </div>
-          </div>
-          {/* House Rules */}
-          <div className="bg-white rounded-lg shadow p-6 mb-8">
-            <h2 className="text-xl font-semibold mb-4">Reglas de la casa</h2>
-            <ul className="space-y-2">
-              {room.houseRules?.map((rule, index) => (
-                <li key={index} className="flex items-center gap-2 text-gray-600">
-                  <span className="w-2 h-2 bg-gray-400 rounded-full"></span>
-                  {rule}
-                </li>
-              ))}
-            </ul>
+            {/* House Rules */}
+            <div className="bg-white rounded-lg shadow p-6 mb-8">
+              <h2 className="text-xl font-semibold mb-4">Reglas de la casa</h2>
+              <ul className="space-y-2">
+                {room.houseRules?.map((rule, index) => (
+                  <li key={index} className="flex items-center gap-2 text-gray-600">
+                    <span className="w-2 h-2 bg-gray-400 rounded-full"></span>
+                    {rule}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
           {/* Similar Rooms Section */}
-          <div className="mt-12">
-            <h2 className="text-2xl font-semibold mb-6">Recomendaciones similares</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {similarRooms.map(similarRoom => (
-                <RoomCard key={similarRoom.id} {...similarRoom} />
-              ))}
-            </div>
-          </div>
         </div>
 
         <div>
@@ -215,7 +226,14 @@ export const RoomDetail = () => {
           </div>
         </div>
       </div>
-
+      <div className="mx-37">
+        <h2 className="text-2xl font-semibold mb-6">Recomendaciones similares</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {similarRooms.map(similarRoom => (
+            <RoomCard key={similarRoom.id} {...similarRoom} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

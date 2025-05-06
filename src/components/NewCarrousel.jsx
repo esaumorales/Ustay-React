@@ -106,9 +106,9 @@ const Carrousel = () => {
                         </div>
                     </SwiperSlide>
                 ))}
-                    <div className='mt-8'>
-                        <div className='swiper-pagination'></div>
-                    </div>
+                <div className='mt-8'>
+                    <div className='swiper-pagination'></div>
+                </div>
             </Swiper>
         </div>
     );

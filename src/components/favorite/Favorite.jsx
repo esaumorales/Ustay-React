@@ -1,6 +1,6 @@
 import React from 'react';
-import {BsThreeDotsVertical, BsInfoCircle} from 'react-icons/bs';
-import {TbArrowsExchange2} from 'react-icons/tb';
+import { BsInfoCircle } from 'react-icons/bs';
+import { TbArrowsExchange2 } from 'react-icons/tb';
 
 const Favorite = () => {
     return (
@@ -9,7 +9,7 @@ const Favorite = () => {
                 <h2 className="text-xl font-medium">Favoritos</h2>
                 <button className="px-3 py-1.5 text-sm text-gray-400 border rounded-lg hover:bg-gray-50 flex items-center gap-2">
                     Comparar
-                    <TbArrowsExchange2 className="text-lg rotate-90"/>
+                    <TbArrowsExchange2 className="text-lg rotate-90" />
                 </button>
             </div>
 
@@ -31,7 +31,7 @@ const Favorite = () => {
                         <tr>
                             <td colSpan="6" className="py-16 text-center text-gray-500">
                                 <div className="flex flex-col items-center justify-center gap-2">
-                                    <BsInfoCircle className="text-2xl text-gray-400"/>
+                                    <BsInfoCircle className="text-2xl text-gray-400" />
                                     <span className="text-sm">No hay favoritos</span>
                                 </div>
                             </td>

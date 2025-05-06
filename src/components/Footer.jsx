@@ -4,6 +4,8 @@ import { IconApple } from '@/assets/icons/icon-apple';
 import { IconFacebook } from '@/assets/icons/icon-facebook';
 import { IconPlayStore } from '@/assets/icons/icon-play-store';
 
+import QrAplication from '@/assets/img/qr-aplication.png';
+
 export default function Footer() {
   return (
     <footer className='bg-secondary-dark'>
@@ -96,7 +98,7 @@ export default function Footer() {
               </div>
               <div>
                 {/* Add your QR code or app preview image here */}
-                IMG
+                <img src={QrAplication} alt="" className='w-28 h-28' />
               </div>
             </div>
           </div>
