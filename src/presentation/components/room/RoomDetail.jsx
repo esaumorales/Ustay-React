@@ -1,7 +1,7 @@
 import { Navigate, useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { fetchRoomById, fetchRooms } from '@/infrastructure/services/room.service';
-import { addFavorite } from '@/infrastructure/services/favorite.service'; // Importa el servicio
+import { addFavorite, getFavorites } from '@/infrastructure/services/favorite.service'; // Importa también getFavorites
 import { IoLocationSharp, IoPersonCircleOutline } from "react-icons/io5";
 import { PiHouseLineLight } from "react-icons/pi";
 import { MdOutlinePhone } from "react-icons/md";
@@ -42,6 +42,9 @@ export const RoomDetail = () => {
   const [room, setRoom] = useState(null);
   const [similarRooms, setSimilarRooms] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
+  const [notificationMsg, setNotificationMsg] = useState(""); // Nuevo estado para el mensaje
+  const [notificationType, setNotificationType] = useState("success"); // <--- AGREGA ESTA LÍNEA
+  const [userFavorites, setUserFavorites] = useState([]);
 
   useEffect(() => {
     const loadRoom = async () => {
@@ -64,19 +67,44 @@ export const RoomDetail = () => {
       }
     };
 
+    const fetchUserFavorites = async () => {
+      const userId = localStorage.getItem('userId');
+      if (userId) {
+        try {
+          const favoritesData = await getFavorites(userId);
+          setUserFavorites(favoritesData.favoritos || []);
+        } catch (error) {
+          console.error('Error fetching user favorites:', error);
+        }
+      }
+    };
+
     loadRoom();
+    fetchUserFavorites();
   }, [id]);
+
   const handleAddFavorite = async () => {
-    const userId = localStorage.getItem('userId'); // Asegúrate de que el userId esté almacenado en localStorage
-    console.log('userId:', userId); // Agrega este log para verificar el valor de userId
+    const userId = localStorage.getItem('userId');
     if (!userId) {
         console.error('User not logged in');
         return;
     }
 
+    const alreadyFavorite = userFavorites.some(fav => fav.cuarto_id === parseInt(id));
+    if (alreadyFavorite) {
+        setNotificationMsg("Este cuarto ya está en tus favoritos.");
+        setNotificationType("warning");
+        setShowNotification(true);
+        return;
+    }
+
     try {
-        await addFavorite(userId, id); // Cambia para pasar userId y cuartoId directamente
-        setShowNotification(true); // Muestra la notificación
+        await addFavorite(userId, id);
+        setNotificationMsg("Añadido a favoritos"); // <-- Agrega el mensaje aquí
+        setNotificationType("success");
+        setShowNotification(true);
+        const favoritesData = await getFavorites(userId);
+        setUserFavorites(favoritesData.favoritos || []);
     } catch (error) {
         console.error('Error adding favorite:', error);
     }
@@ -87,7 +115,7 @@ export const RoomDetail = () => {
   return (
     <div>
       {showNotification && (
-        <Alert message="Añadido a favoritos" onClose={() => setShowNotification(false)} />
+        <Alert message={notificationMsg} onClose={() => setShowNotification(false)} type={notificationType} />
       )}
       <div className="flex gap-2 mb-8 h-108">
         {/* Image Gallery */}

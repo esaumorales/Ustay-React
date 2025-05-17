@@ -29,3 +29,18 @@ export const fetchRoomById = async (id) => {
     }
     return response.json();
 };
+
+// Añadir la función para comparar cuartos
+export const compareRooms = async (ids) => {
+    const token = localStorage.getItem('authToken');
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+
+    const response = await fetch(`${API_URL}/cuarto/compare?ids=${ids.join(',')}`, { headers });
+    if (!response.ok) {
+        throw new Error('No se pudo comparar los cuartos');
+    }
+    return response.json();
+};

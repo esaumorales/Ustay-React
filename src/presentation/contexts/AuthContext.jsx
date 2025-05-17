@@ -1,9 +1,12 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { AuthService } from '@/infrastructure/services/auth.service';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
+    const navigate = useNavigate();
+
     const [user, setUser] = useState(() => {
         try {
             const savedUser = localStorage.getItem('user');
@@ -85,6 +88,8 @@ export function AuthProvider({ children }) {
         setIsAuthenticated(false);
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        localStorage.removeItem('userId');
+        navigate('/login');
     };
 
     const register = async (userData) => {
@@ -120,7 +125,6 @@ export function AuthProvider({ children }) {
     );
 }
 
-// Cambiar la exportación del hook useAuth
 const useAuth = () => {
     const context = useContext(AuthContext);
     if (!context) {
