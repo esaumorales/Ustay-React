@@ -35,14 +35,14 @@
   font-style  : regular;
   font-weight : 200 700;
   font-display: swap;
-  src         : url('@/assets/fonts/Kadwa-Regular.ttf') format("truetype");
+  src         : url('@/presentation/assets/fonts/Kadwa-Regular.ttf') format("truetype");
 }
 @font-face {
     font-family: 'Quicksand';
     font-style: normal;
     font-weight: 300;
     font-display: swap;
-    src: url('@/assets/fonts/Quicksand-Light.ttf') format('truetype');
+    src: url('@/presentation/assets/fonts/Quicksand-Light.ttf') format('truetype');
 }
 
 @font-face {
@@ -50,7 +50,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('@/assets/fonts/Quicksand-Regular.ttf') format('truetype');
+    src: url('@/presentation/assets/fonts/Quicksand-Regular.ttf') format('truetype');
 }
 
 @font-face {
@@ -58,7 +58,7 @@
     font-style: normal;
     font-weight: 500;
     font-display: swap;
-    src: url('@/assets/fonts/Quicksand-Medium.ttf') format('truetype');
+    src: url('@/presentation/assets/fonts/Quicksand-Medium.ttf') format('truetype');
 }
 
 @font-face {
@@ -66,7 +66,7 @@
     font-style: normal;
     font-weight: 600;
     font-display: swap;
-    src: url('@/assets/fonts/Quicksand-SemiBold.ttf') format('truetype');
+    src: url('@/presentation/assets/fonts/Quicksand-SemiBold.ttf') format('truetype');
 }
 
 @font-face {
@@ -74,7 +74,7 @@
     font-style: normal;
     font-weight: 700;
     font-display: swap;
-    src: url('@/assets/fonts/Quicksand-Bold.ttf') format('truetype');
+    src: url('@/presentation/assets/fonts/Quicksand-Bold.ttf') format('truetype');
 }
 
 @layer base {

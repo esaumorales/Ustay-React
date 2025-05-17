@@ -1,16 +1,17 @@
 import './App.css';
-import HomePage from './pages/HomePage';
+import HomePage from './presentation/pages/HomePage';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import RoomPage from './pages/RoomPage';
-import ContactPage from './pages/ContacPage';
-import FavoritePage from './pages/FavoritePage';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Error404Page from './pages/Error404Page';
+import RoomPage from './presentation/pages/RoomPage';
+import ContactPage from './presentation/pages/ContacPage';
+import FavoritePage from './presentation/pages/FavoritePage';
+import Header from './presentation/components/Header';
+import Footer from './presentation/components/Footer';
+import Error404Page from './presentation/pages/Error404Page';
+import { AuthProvider } from '@/presentation/contexts/AuthContext';
 
 function App() {
     return (
-        <>
+        <AuthProvider>
             <Header />
             <Routes>
                 <Route path='/'
@@ -30,7 +31,7 @@ function App() {
                     element={<Error404Page />} />
             </Routes>
             <Footer className='mt-auto' />
-        </>
+        </AuthProvider>
     );
 }
 
