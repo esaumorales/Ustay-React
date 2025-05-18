@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import RoomList from '@/presentation/components/Room/RoomList';
+import RoomList from '@/presentation/components/room/RoomList';
 import { RoomDetail } from '@/presentation/components/room/RoomDetail';
 import { useAuth } from '@/presentation/contexts/AuthContext';
 import { useModal } from '@/presentation/hooks/useModal';
