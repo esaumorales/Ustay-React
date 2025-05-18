@@ -1,4 +1,4 @@
-import RoomSection from '@/presentation/sections/RoomSection';
+import RoomSection from '../sections/RoomSection';
 
 export default function RoomPage() {
   return (
