@@ -15,12 +15,10 @@ function ProtectedRoomDetail() {
 
   if (!isAuthenticated) {
     return (
-      <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-          Acceso Denegado
-        </h2>
+      <div className="flex flex-col items-center justify-center p-8 bg-white rounded-lg max-w-md mx-auto mt-20">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Acceso Denegado</h2>
         <p className="text-gray-600 text-center mb-6">
-          Para ver los detalles de este cuarto, necesitas iniciar sesión primero o iniciar sesion.
+          Para ver los detalles de este cuarto, necesitas iniciar sesión.
         </p>
         <button
           onClick={loginModal.openModal}
@@ -28,11 +26,8 @@ function ProtectedRoomDetail() {
         >
           Iniciar Sesión
         </button>
-        
-        <ModalLogin 
-          isOpen={loginModal.isOpen}
-          onClose={loginModal.closeModal}
-        />
+
+        <ModalLogin isOpen={loginModal.isOpen} onClose={loginModal.closeModal} />
       </div>
     );
   }
@@ -56,16 +51,20 @@ function CompareRoomPage() {
     setLoading(true);
     Promise.all(ids.map(id => fetchRoomById(id).then(data => data.cuarto)))
       .then(setRooms)
+      .catch(err => {
+        console.error('Error al cargar cuartos para comparar:', err);
+        setRooms([]);
+      })
       .finally(() => setLoading(false));
   }, [location.search]);
 
-  if (loading) return <div>Cargando comparación...</div>;
+  if (loading) return <div className="text-center p-4">Cargando comparación...</div>;
   return <CompareRoom rooms={rooms} />;
 }
 
 export default function RoomSection() {
   return (
-    <section className='min-h-screen my-8'>
+    <section className="min-h-screen my-8 px-4 md:px-8">
       <Routes>
         <Route index element={<RoomList />} />
         <Route path=":id" element={<ProtectedRoomDetail />} />

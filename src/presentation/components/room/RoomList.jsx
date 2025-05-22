@@ -20,14 +20,30 @@ const RoomList = () => {
     });
     const roomsPerPage = 9;
 
+    const [loading, setLoading] = useState(true); // Estado loading para mostrar animación
+    const [error, setError] = useState(false); // Estado para controlar error
+
     useEffect(() => {
         const loadRooms = async () => {
+            setLoading(true);
+            setError(false);
             try {
                 const rooms = await fetchRooms();
-                setOrderRooms(rooms.cuartos);
-                setFilteredRooms(rooms.cuartos);
+                if (!rooms?.cuartos?.length) {
+                  setError(true);
+                  setOrderRooms([]);
+                  setFilteredRooms([]);
+                } else {
+                  setOrderRooms(rooms.cuartos);
+                  setFilteredRooms(rooms.cuartos);
+                }
             } catch (error) {
                 console.error('Error fetching rooms:', error);
+                setError(true);
+                setOrderRooms([]);
+                setFilteredRooms([]);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -110,6 +126,11 @@ const RoomList = () => {
         }
     };
 
+    if (loading || error) {
+      // Mostrar animación si está cargando o hay error/no data
+      return  ;
+    }
+
     return (
         <div className='flex flex-col lg:flex-row gap-8 px-4 md:px-8 lg:px-32'>
             <aside className='w-full lg:w-64 lg:flex-shrink-0'>
@@ -156,7 +177,7 @@ const RoomList = () => {
                                 </div>
                                 <div className="border-l h-6 border-gray-300  mx-2"></div>
                                 <button
-                                    className={`flex items-center border rounded-sm px-3 py-1 gap-2 ${selectMode && selectedRooms.length === 2 ? 'bg-orange-500 text-white' : ''}`}
+                                    className={`flex items-center border rounded-sm px-3 py-1 gap-2 text-gray-500  ${selectMode && selectedRooms.length === 2 ? 'bg-orange-500 text-white' : ''}`}
                                     onClick={handleCompare}
                                     disabled={selectMode && selectedRooms.length !== 2}
                                 >
@@ -194,7 +215,7 @@ const RoomList = () => {
                                     type="checkbox"
                                     checked={selectedRooms.includes(room.cuarto_id)}
                                     onChange={() => handleSelectRoom(room.cuarto_id)}
-                                    className="absolute top-2 right-2 z-20 w-5 h-5 accent-orange-500"
+                                    className="absolute top-2 right-2 z-20 w-5 h-5  accent-orange-500"
                                     disabled={
                                         !selectedRooms.includes(room.cuarto_id) && selectedRooms.length === 2
                                     }

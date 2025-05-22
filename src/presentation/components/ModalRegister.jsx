@@ -4,7 +4,7 @@ import BACKGROUNDMODAL from '@/presentation//assets/img/background-modal.webp';
 import { useAuth } from '@/presentation/contexts/AuthContext';
 
 const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
-    const { register } = useAuth();
+    const { register, loginWithGoogle } = useAuth(); // Asegúrate de que loginWithGoogle esté disponible
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [acceptTerms, setAcceptTerms] = useState(false);
@@ -160,7 +160,10 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
                         </p>
                     </div>
                     <div className='mt-4'>
-                        <button className='w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-200 transition-colors'>
+                        <button 
+                            className='w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-200 transition-colors'
+                            onClick={loginWithGoogle} // Añadir el evento onClick
+                        >
                             <FcGoogle size={20} />
                             Acceder con Google
                         </button>

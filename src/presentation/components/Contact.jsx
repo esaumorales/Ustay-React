@@ -3,7 +3,7 @@ import BACKGROUNDPARTNER from '@/presentation/assets/img/background-partner.webp
 
 export default function Contact() {
   return (
-    <div className='relative w-full min-h-[83vh] bg-white my-4'>
+    <div className='relative w-full min-h-[83vh] my-4'>
       <div className='flex flex-col lg:flex-row items-center h-full'>
         <div className='w-full lg:w-[55%] h-[300px] lg:h-full'>
           <img

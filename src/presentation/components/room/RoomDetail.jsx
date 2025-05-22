@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { fetchRoomById, fetchRooms } from '@/infrastructure/services/room.service';
 import { addFavorite, getFavorites } from '@/infrastructure/services/favorite.service'; // Importa también getFavorites
 import { IoLocationSharp, IoPersonCircleOutline } from "react-icons/io5";
-import { PiHouseLineLight } from "react-icons/pi";
+import { PiHouseLineLight, PiStarThin } from "react-icons/pi";
 import { MdOutlinePhone } from "react-icons/md";
 import { CiAt } from "react-icons/ci";
 import { FaWhatsapp } from "react-icons/fa";
@@ -13,7 +13,7 @@ import MAP from '@/presentation/assets/img/background-map.png';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectCoverflow } from 'swiper/modules';
-import WideRoomCard from './WideRoomCard'; 
+import WideRoomCard from './WideRoomCard';
 import ROOM from '@/presentation/assets/img/room.png';
 import Alert from '@/presentation/components/common/Alert'; // Importa el componente Alert
 
@@ -86,29 +86,29 @@ export const RoomDetail = () => {
   const handleAddFavorite = async () => {
     const userId = localStorage.getItem('userId');
     if (!userId) {
-        console.error('User not logged in');
-        return;
+      console.error('User not logged in');
+      return;
     }
 
     const alreadyFavorite = userFavorites.some(fav => fav.cuarto_id === parseInt(id));
     if (alreadyFavorite) {
-        setNotificationMsg("Este cuarto ya está en tus favoritos.");
-        setNotificationType("warning");
-        setShowNotification(true);
-        return;
+      setNotificationMsg("Este cuarto ya está en tus favoritos.");
+      setNotificationType("warning");
+      setShowNotification(true);
+      return;
     }
 
     try {
-        await addFavorite(userId, id);
-        setNotificationMsg("Añadido a favoritos"); // <-- Agrega el mensaje aquí
-        setNotificationType("success");
-        setShowNotification(true);
-        const favoritesData = await getFavorites(userId);
-        setUserFavorites(favoritesData.favoritos || []);
+      await addFavorite(userId, id);
+      setNotificationMsg("Añadido a favoritos"); // <-- Agrega el mensaje aquí
+      setNotificationType("success");
+      setShowNotification(true);
+      const favoritesData = await getFavorites(userId);
+      setUserFavorites(favoritesData.favoritos || []);
     } catch (error) {
-        console.error('Error adding favorite:', error);
+      console.error('Error adding favorite:', error);
     }
-};
+  };
 
   if (!room) return <div>Room not found</div>;
 
@@ -140,50 +140,57 @@ export const RoomDetail = () => {
       {/* Two Column */}
       <div className='flex justify-between mx-12'>
         <div className="max-w-4xl mx-auto px-4 py-8">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm mb-4">
-            <Link to='/home'>
-              <span className="text-orange-500">Inicio</span>
-              <span>›</span>
-            </Link>
-            <Link to='/room'>
-              <span className="text-orange-500">Cuarto</span>
-              <span>›</span>
-            </Link>
-            <span className="text-gray-600">{room.tipo_cuarto} en {room.direccion_propiedad}</span>
-          </div>
+          <div className='bg-white rounded-lg p-2 mb-2'>
+            {/* Breadcrumb */}
+            <div className="flex items-center gap-2 text-sm mb-4 ">
+              <Link to='/home'>
+                <span className="text-orange-500">Inicio</span>
+                <span>›</span>
+              </Link>
+              <Link to='/room'>
+                <span className="text-orange-500">Cuarto</span>
+                <span>›</span>
+              </Link>
+              <span className="text-gray-600">{room.tipo_cuarto} en {room.direccion_propiedad}</span>
+            </div>
 
-          {/* Title and Price Section */}
-          <div className="flex justify-between items-start my-8">
-            <div className='space-y-4'>
-              <h1 className="text-2xl font-semibold mb-2">{room.tipo_cuarto} en {room.direccion_propiedad}</h1>
-              <p className="text-gray-600">{room.direccion_propiedad}</p>
-              <div className='flex flex-row justify-between text-gray-400'>
-                <div className='flex items-center '>
-                  <IoLocationSharp className='w-4 h-4' />
-                  <p>{room.direccion_propiedad}</p></div>
+            {/* Title and Price Section */}
+            <div className="flex my-4 w-full">
+              <div className='space-y-4'>
                 <div>
-                  <span className='text-sm'>{room.rating}</span>
-                  <span className='text-yellow-400'>★</span>
+                  <h1 className="text-2xl font-semibold mb-2">{room.tipo_cuarto} en {room.direccion_propiedad}</h1>
                 </div>
-              </div>
-              <hr className='text-gray-300' />
-              <div className='max-w-full text-gray-400'>
-                <p>{room.descripcion}</p>
+                <div className='flex flex-row justify-between text-gray-400'>
+                  <div className='flex items-center'>
+                    <IoLocationSharp className='w-4 h-4' />
+                    <p>{room.direccion_propiedad}</p>
+                  </div>
+                  <div>
+                    <span className='text-sm'>{room.rating}</span>
+                    <span className='text-yellow-400'>★</span>
+                  </div>
+                </div>
+                <hr className='text-gray-300 w-208' />
+                <div className='flex flex-wrap wrap-break-word'>
+                  <div className='w-208 text-gray-400'>
+                    <p>{room.descripcion}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+
           {/* Specs */}
-          <div className='grid grid-cols-4 gap-4 mb-8'>
+          <div className='grid grid-cols-4 gap-4 mb-2'>
             {SPECS.map(({ name, value }) => (
-              <div key={name} className="text-center item p-4 bg-white rounded-lg shadow">
+              <div key={name} className="text-center item p-4 bg-white rounded-lg ">
                 <p className="text-gray-600">{name}</p>
                 <p className="font-semibold">{value(room)}</p>
               </div>
             ))}
           </div>
           {/* Additional Information */}
-          <div className="flex bg-white rounded-lg shadow p-6 mb-8 gap-4">
+          <div className="flex bg-white  rounded-lg  p-6 mb-2 gap-4">
             <div className='flex gap-8'>
               <h2 className="text-xl font-semibold mb-4 text-gray-800 w-32">
                 Información adicional
@@ -199,7 +206,7 @@ export const RoomDetail = () => {
           </div>
 
           {/* Services */}
-          <div className="flex rounded-lg shadow p-6 mb-8 gap-4">
+          <div className="flex rounded-lg  p-6 mb-2 gap-4 bg-white">
             <div className='flex gap-8'>
               <h2 className="text-xl font-semibold mb-4 w-32">Servicios</h2>
               <span className='block w-[1px] h-full bg-gray-300'></span>
@@ -221,14 +228,14 @@ export const RoomDetail = () => {
 
           <div className='flex flex-col gap-4'>
             {/* Map */}
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg  p-6">
               <h2 className="text-xl font-semibold mb-4">Ubicación</h2>
               <div className="h-64 bg-gray-200 rounded-lg ">
                 <img src={MAP} alt="" className='w-full h-full object-cover rounded-xl' />
               </div>
             </div>
             {/* House Rules */}
-            <div className="bg-white rounded-lg shadow p-6 mb-8">
+            <div className="bg-white rounded-lg  p-6 mb-8">
               <h2 className="text-xl font-semibold mb-4">Reglas de la casa</h2>
               <ul className="space-y-2">
                 {room.reglas.split(',').map((rule, index) => (
@@ -243,8 +250,8 @@ export const RoomDetail = () => {
           {/* Similar Rooms Section */}
         </div>
 
-        <div>
-          <div>
+        <div className='bg-white h-fit'>
+          <div >
             {/* Send and Favorite */}
             <div className="text-start bg-secondary p-4">
               <div className="text-3xl font-normal text-white">
@@ -261,9 +268,9 @@ export const RoomDetail = () => {
           </div>
 
           {/* Property Details Grid and Owner */}
-          <div className='flex flex-col w-full h-full my-2 p-4 space-y-2 '>
+          <div className='flex flex-col w-full h-full my-2 p-4 space-y-2'>
             <div className='space-y-2 mx-3 '>
-              <div className='flex items-center gap-1 text-gray-600 after:content-["Verificado"] after:text-amber-300 after:m-2'>
+              <div className='flex items-center gap-1 text-gray-600 after:content-["Verificado"] after:text-amber-300 after:m-2 '>
                 <IoPersonCircleOutline className='w-5 h-5 text-gray-500' />
                 <p>
                   {room.partner.nombre}
@@ -271,23 +278,38 @@ export const RoomDetail = () => {
                 <p>{room.partner.apellido}</p>
               </div>
               <div className='text-gray-500 '>
-                <button className='flex  gap-2 border border-gray-500 rounded-sm items-center justify-center p-1 w-full '>
+                <button className='flex gap-2 border border-gray-500 rounded-sm items-center justify-center p-1 w-full '>
                   <PiHouseLineLight className='w-4 h-4' />
                   <p>Información de la casa</p>
                 </button>
               </div>
             </div>
-            <div className='flex items-center justify-center p-5 text-gray-500 bg-gray-100 gap-5'>
-              <a href="/"> <MdOutlinePhone className='w-5 h-5' /> </a>
-              <a href="/"> <FaWhatsapp className='w-5 h-5' /></a>
-              <a href="/"> <CiAt className='w-5 h-5' /></a>
+
+
+          </div>
+          <div className='flex items-center justify-center p-5 text-gray-500 bg-gray-100 gap-5'>
+            <a href="/"> <MdOutlinePhone className='w-5 h-5' /> </a>
+            <a href="/"> <FaWhatsapp className='w-5 h-5' /></a>
+            <a href="/"> <CiAt className='w-5 h-5' /></a>
+          </div>
+          <div className='py-2 bg-background'></div>
+          <div className='flex py-5 justify-around gap-4 items-center'>
+            <div>
+              <span>Tu reseña</span>
+            </div>
+            <div className='flex gap-1'>
+              <PiStarThin size={12} className='text-amber-500' />
+              <PiStarThin size={12} className='text-amber-500' />
+              <PiStarThin size={12} className='text-amber-500' />
+              <PiStarThin size={12} className='text-amber-500' />
+              <PiStarThin size={12} className='text-amber-500' />
             </div>
           </div>
         </div>
       </div>
-      <div className="mx-37">
+      <div className="mx-37 ">
         <h2 className="text-2xl font-semibold mb-6">Recomendaciones similares</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
           {similarRooms.map(similarRoom => (
             <WideRoomCard
               key={similarRoom.cuarto_id}

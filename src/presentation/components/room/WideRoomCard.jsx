@@ -12,7 +12,7 @@ const WideRoomCard = ({ image, title, location, price, periodo, rating, destacad
     };
 
     return (
-        <div className="flex overflow-hidden cursor-pointer" onClick={onClick}>
+        <div className="flex overflow-hidden cursor-pointer bg-white" onClick={onClick}>
             <div className="relative w-1/3">
                 {destacado && <span className="absolute top-0 left-0 bg-green-500 text-white px-2 py-1">DESTACADO</span>}
                 <img src={image || ROOM} alt={title} className="w-full h-full object-cover" />

@@ -1,10 +1,9 @@
-// const API_URL = 'http://localhost:3000/favorito'; 
-const API_URL = 'https://ustay-backend.up.railway.app/favorito'; 
-
+const API_URL = 'http://localhost:3000/favorito'; 
+// const API_URL = 'https://ustay-backend.up.railway.app/favorito'; 
 
 // Obtener favoritos del usuario
 export const getFavorites = async (userId) => {
-    const token = localStorage.getItem('authToken'); // O sessionStorage.getItem('authToken')
+    const token = localStorage.getItem('token'); // Cambiado aquí
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -24,7 +23,7 @@ export const getFavorites = async (userId) => {
 
 // Agregar un favorito
 export const addFavorite = async (userId, cuartoId) => { 
-    const token = localStorage.getItem('authToken'); // O sessionStorage.getItem('authToken')
+    const token = localStorage.getItem('token'); // Cambiado aquí
     const headers = { 
         'Content-Type': 'application/json', 
         'Authorization': `Bearer ${token}` 
@@ -53,7 +52,7 @@ export const addFavorite = async (userId, cuartoId) => {
 
 // Eliminar un favorito
 export const removeFavorite = async (favoriteId) => {
-    const token = localStorage.getItem('authToken'); // O sessionStorage.getItem('authToken')
+    const token = localStorage.getItem('token'); // Cambiado aquí
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`

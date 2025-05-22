@@ -24,6 +24,7 @@
     /* Colores Personalizados */
     --color-secondary: #111827;
     --color-secondary-dark: #070A13;
+    --color-background: #F9F9F9;
     
     /* Texto Personaliado */
     --font-logo: "KadwaR";
@@ -80,6 +81,7 @@
 @layer base {
   html {
       /* @apply transition-colors duration-300; */
+      background-color:  var(--color-background);
 
       font-family: "Quicksand", monospace;
 

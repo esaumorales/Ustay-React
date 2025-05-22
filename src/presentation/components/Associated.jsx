@@ -3,6 +3,7 @@ import useCountAnimate from '@/presentation/hooks/useCountAnimate';
 
 export default function Associated() {
   const partner = useCountAnimate(InView, 40, 2000);
+  const user = useCountAnimate(InView, 120, 2000);
   const avaible = useCountAnimate(InView, 30, 2000);
   const satisfied = useCountAnimate(InView, 100, 2000);
 
@@ -23,8 +24,8 @@ export default function Associated() {
         <p className='font-light'>Partners Satisfechos</p>
       </div>
       <div className='flex flex-col gap-2'>
-        <h1 className='font-semibold text-3xl'>{partner} +</h1>
-        <p className='font-light'>Partner Asociados</p>
+        <h1 className='font-semibold text-3xl'>{user} +</h1>
+        <p className='font-light'>Usuarios Satisfechos</p>
       </div>
     </div>
   );

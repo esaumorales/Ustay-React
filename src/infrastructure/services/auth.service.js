@@ -1,6 +1,46 @@
 import { API_URL, headers } from '../config/api.config';
 
 export class AuthService {
+  // Función para iniciar sesión con Google
+  static loginWithGoogle() {
+    window.location.href = `${API_URL}/auth/google`;
+  }
+
+  // Función para manejar el callback de Google
+  static async handleGoogleCallback() {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    if (!token) return null;
+  
+    localStorage.setItem('token', token);
+  
+    try {
+      const response = await fetch(`${API_URL}/usuario/perfil`, {
+        headers: {
+          ...headers,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (!response.ok) throw new Error('Error al obtener el perfil del usuario');
+  
+      const userData = await response.json();
+  
+      if (userData) {
+        localStorage.setItem('user', JSON.stringify(userData));
+        localStorage.setItem('userId', userData.id || userData.usuario_id);
+        localStorage.setItem('fotoGoogle', userData.foto_google);
+        return userData;
+      }
+  
+      return null;
+    } catch (error) {
+      console.error('Error al manejar el callback de Google:', error);
+      throw error;
+    }
+  }
+  
+
   static async login(credentials) {
     try {
       const formattedCredentials = {
@@ -8,7 +48,6 @@ export class AuthService {
         contrasena: credentials.password,
       };
 
-      console.log('Credenciales formateadas:', formattedCredentials);
 
       const response = await fetch(`${API_URL}/usuario/login`, {
         method: 'POST',
@@ -25,15 +64,9 @@ export class AuthService {
       const token = data.token;
       const userId = data.usuario.id; // Asegúrate de que esto esté correcto
 
-      localStorage.setItem('authToken', token);
+      localStorage.setItem('token', token);
       localStorage.setItem('userId', userId); // Almacena el userId
 
-      console.log(
-        'Inicio de sesión exitoso, token y userId guardados:',
-        token,
-        userId
-      );
-      console.log('USERID', userId);
 
       return data;
     } catch (error) {
@@ -54,7 +87,6 @@ export class AuthService {
         rol_id: 1, // Asumiendo que 1 es para usuarios normales
       };
 
-      console.log('Intentando registro con:', formattedUserData);
       const response = await fetch(`${API_URL}/usuario/register`, {
         method: 'POST',
         headers,
@@ -95,4 +127,5 @@ export class AuthService {
       throw error;
     }
   }
+
 }

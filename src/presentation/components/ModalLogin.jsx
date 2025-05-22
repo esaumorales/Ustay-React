@@ -9,7 +9,7 @@ import { useAuth } from '@/presentation/contexts/AuthContext';
 export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
-    const { login } = useAuth();
+    const { login, loginWithGoogle } = useAuth(); // Asegúrate de que loginWithGoogle esté disponible
     const [isLoading, setIsLoading] = useState(false);
     const recoverModal = useModal();
 
@@ -141,7 +141,10 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
                             <p className='text-sm text-gray-500 whitespace-nowrap'>Accede con</p>
                             <div className='h-[0.5px] w-full bg-gray-300'></div>
                         </div>
-                        <button className='w-full bg-gray-100 flex items-center justify-center gap-2 py-3 rounded-lg hover:bg-gray-200 transition-colors'>
+                        <button
+                            className='w-full bg-gray-100 flex items-center justify-center gap-2 py-3 rounded-lg hover:bg-gray-200 transition-colors'
+                            onClick={loginWithGoogle} // Añadir el evento onClick
+                        >
                             <FcGoogle size={20}/>
                             <span className='font-medium'>Google</span>
                         </button>
