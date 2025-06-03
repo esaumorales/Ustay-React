@@ -63,5 +63,29 @@ export const deleteRoom = async (id) => {
     }
   
     return response.json();
+
   };
+  export const createRoom = async (roomData) => {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No autorizado: token no encontrado');
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+
+    const response = await fetch(`${API_URL}/cuarto`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(roomData)
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al crear el cuarto');
+    }
+
+    return response.json(); // { message, cuarto_id }
+};
+
   

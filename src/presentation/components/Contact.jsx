@@ -1,5 +1,6 @@
 import { RightArrowIcon } from '@/presentation/assets/icons/icon-rightArrow';
 import BACKGROUNDPARTNER from '@/presentation/assets/img/background-partner.webp';
+import { Link } from 'react-router-dom';
 
 export default function Contact() {
   return (
@@ -32,10 +33,12 @@ export default function Contact() {
             </p>
           </div>
           <div>
-            <button className='w-full sm:w-auto bg-gradient-to-r from-secondary to-secondary-dark text-white px-6 md:px-8 py-2.5 md:py-3 rounded-full flex items-center justify-center sm:justify-start gap-3 hover:shadow-lg transition-all duration-300'>
-              <span>Conocer más</span>
-              <RightArrowIcon className='w-5 h-5' />
-            </button>
+            <Link to="/ascendPartner">
+              <button className='w-full sm:w-auto bg-gradient-to-r from-secondary to-secondary-dark text-white px-6 md:px-8 py-2.5 md:py-3 rounded-full flex items-center justify-center sm:justify-start gap-3 hover:shadow-lg transition-all duration-300'>
+                <span>Conocer más</span>
+                <RightArrowIcon className='w-5 h-5' />
+              </button>
+            </Link>
           </div>
         </div>
       </div>

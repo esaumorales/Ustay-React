@@ -21,6 +21,7 @@ import Support from '@/presentation/partner/content/SupportContent'
 // Add this import for EditProperty
 import EditProperty from '@/presentation/partner/components/property/EditProperty';
 import EditRoom from './presentation/partner/components/room/EditRoom';
+import AscendPartner from './presentation/components/AscendPartner';
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -53,6 +54,10 @@ function AppContent() {
         <Route path="/room/*" element={<RoomPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/favorite" element={<FavoritePage />} />
+
+        {/* Ascend Partner */}
+        <Route path="/ascendPartner" element={<AscendPartner />} />
+        
 
         {canAccessIMS ? (
           <>
