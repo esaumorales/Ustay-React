@@ -33,6 +33,19 @@ export const getPropertyById = async (id) => {
   }
 };
 
+export const getRoomsByPartner = async (partnerId) => {
+  try {
+    const headers = getTokenHeaders();
+    const response = await fetch(`${API_URL}/cuarto/partnerRoom/${partnerId}`, { headers });
+    if (!response.ok) throw new Error('Error al obtener cuartos del partner');
+    return await response.json();
+  } catch (error) {
+    console.error('Error al obtener cuartos del partner:', error);
+    throw error;
+  }
+};
+
+
 export const getPropertiesByPartner = async (partnerId) => {
   try {
     const headers = getTokenHeaders();
@@ -90,4 +103,26 @@ export const deleteProperty = async (id) => {
     console.error('Error al eliminar la propiedad:', error);
     throw error;
   }
+};
+
+export const updateRoom = async (id, roomData) => {
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('No autorizado: token no encontrado');
+
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  };
+
+  const response = await fetch(`${API_URL}/cuarto/${id}`, {
+    method: 'PUT',
+    headers,
+    body: JSON.stringify(roomData)
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al actualizar el cuarto');
+  }
+
+  return response.json();
 };

@@ -4,7 +4,7 @@ import { FaHouse } from "react-icons/fa6";
 
 export default function PropertyHeader({ title, descripcion }) {
     return (
-        <div className='bg-[#111827] shadow-sm border-t-4'>
+        <div className='bg-[#111827] shadow-sm'>
             <div className='flex justify-between items-center text-white'>
                 <div className='flex flex-col items-start gap-2 mx-6 my-2 w-240'>
                     <div className='flex items-center gap-4'>

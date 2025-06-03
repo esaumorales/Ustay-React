@@ -46,6 +46,7 @@ const PropertyRoomCard = ({
     id,
     foto = null,
     descripcion = "Propiedad 1",
+    nombre = "Cuarto 1",
     direccion_completa = "Bernard Balaguer 217, Ñaña, Provin...",
     n_pisos = 3,
     estado_verificacion = "no verificado",
@@ -53,47 +54,41 @@ const PropertyRoomCard = ({
     propertyData // <-- Opcional: para pasar todos los datos originales
 }) => {
     const [loading, setLoading] = useState(false);
-    const [showEdit, setShowEdit] = useState(false); // Nuevo estado
+    const [showEdit, setShowEdit] = useState(false); 
     const [property, setProperty] = useState({
         id,
         foto,
         descripcion,
+        nombre,
         direccion: direccion_completa,
         n_pisos,
         estado_verificacion,
         ...propertyData
     });
-    const [showAlert, setShowAlert] = useState(false); // <-- Agrega esta línea
-    const [showConfirm, setShowConfirm] = useState(false); // <-- Agrega esta línea
+    const [showAlert, setShowAlert] = useState(false); 
+    const [showConfirm, setShowConfirm] = useState(false); 
 
     const navigate = useNavigate(); 
 
-    const status = normalizeStatus(estado_verificacion);
+    const status = normalizeStatus(property.estado_verificacion);
 
-    // Agrega esta función para evitar el error
     const handleVerify = () => {
         alert('Funcionalidad de verificación aún no implementada.');
-        // Aquí puedes implementar la lógica real de verificación si tienes un endpoint en tu backend
     };
 
     const handleDelete = async () => {
-        
         setShowConfirm(false);
         setLoading(true);
         try {
-            await deleteProperty(id);
-            if (onDeleted) onDeleted(id);
-            setShowAlert(true); // Mostrar alerta de eliminado
+            await deleteProperty(property.id);
+            if (onDeleted) onDeleted(property.id);
+            setShowAlert(true);
             setTimeout(() => setShowAlert(false), 1800);
         } catch (error) {
             alert('Error al eliminar la propiedad', error);
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleEdit = () => {
-        navigate(`/IMS/property/editar-propiedad/${id}`);
     };
 
     const handleEditClose = () => {
@@ -103,11 +98,10 @@ const PropertyRoomCard = ({
     const handleEditSuccess = (updatedProperty) => {
         setShowEdit(false);
         setProperty(updatedProperty);
-        // Opcional: puedes recargar la lista de propiedades desde el padre
     };
 
     return (
-        <div className="bg-white rounded-lg overflow-hidden w-80 min-w-[20rem] max-w-[20rem] m-auto opacity-100">
+        <div className="bg-white rounded-lg overflow-hidden w-80 min-w-[20rem] max-w-[20rem] m-auto opacity-100 mb-4">
             {showAlert && (
                 <Alert
                     message="Propiedad eliminada correctamente"
@@ -139,24 +133,24 @@ const PropertyRoomCard = ({
                 </div>
             )}
             <img
-                src={foto || "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"}
-                alt={descripcion}
+                src={property.foto || "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"}
+                alt={property.descripcion || "Propiedad"}
                 className="w-full h-40 object-cover"
             />
             <div className="p-4">
-                <div className="font-semibold text-lg mb-1 flex justify-center">{getShortDescription(descripcion)}</div>
+                <div className="font-semibold text-lg mb-1 flex justify-center">{getShortDescription(property.descripcion)}</div>
                 <div className="text-sm mb-1">
-                    <span className="font-semibold">Dirección:</span> {direccion_completa}
+                    <span className="font-semibold">Dirección:</span> {property.direccion || property.direccion_completa}
                 </div>
                 <div className="text-sm mb-2">
-                    <span className="font-semibold">N° Pisos:</span> {n_pisos}
+                    <span className="font-semibold">N° Pisos:</span> {property.n_pisos}
                 </div>
                 <div className="flex gap-2 mb-2 justify-between items-center">
                     <div className='flex gap-3'>
                         <button
                             className="border px-2 py-1 rounded hover:bg-gray-100"
                             title="Editar"
-                            onClick={() => setShowEdit(true)}
+                            onClick={() => navigate(`/IMS/property/editar-propiedad/${property.id}`)}
                             disabled={loading || status === "Pendiente"}
                         >
                             <span role="img" aria-label="edit">

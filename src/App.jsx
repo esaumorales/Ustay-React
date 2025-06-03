@@ -19,7 +19,8 @@ import Promotion from '@/presentation/partner/content/PromotionContent'
 import Security from '@/presentation/partner/content/SecurityContent'
 import Support from '@/presentation/partner/content/SupportContent'
 // Add this import for EditProperty
-import EditProperty from '@/presentation/partner/components/room/EditProperty';
+import EditProperty from '@/presentation/partner/components/property/EditProperty';
+import EditRoom from './presentation/partner/components/room/EditRoom';
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -59,6 +60,7 @@ function AppContent() {
             <Route path="/IMS/dashboard" element={<Dashboard />} />
             <Route path="/IMS/property" element={<Property />} />
             <Route path="/IMS/property/editar-propiedad/:id" element={<EditProperty />} />
+            <Route path="/IMS/room/editar-cuarto/:id" element={<EditRoom />} />
             <Route path="/IMS/room" element={<Room />} />
             <Route path="/IMS/promotion" element={<Promotion />} />
             <Route path="/IMS/security" element={<Security />} />

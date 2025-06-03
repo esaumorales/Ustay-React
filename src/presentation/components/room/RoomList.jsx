@@ -223,7 +223,7 @@ const RoomList = () => {
                             )}
                             <RoomCard
                                 id={room.cuarto_id}
-                                image={room.image || ROOM}
+                                image={room.fotos && room.fotos.length > 0 ? room.fotos[0].url_imagen : ROOM}
                                 type={room.tipo_cuarto}
                                 location={room.direccion_propiedad}
                                 price={room.precio}

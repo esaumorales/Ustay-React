@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import PropertyHeader from '../components/PropertyHeader';
-import RegisterProperty from '../components/room/RegisterProperty';
-import PropertyRoomCard from '../components/room/PropertyRoomCard';
+import RegisterProperty from '../components/property/RegisterProperty';
+import PropertyRoomCard from '../components/property/PropertyRoomCard';
 import { getPropertiesByPartner } from '@/infrastructure/services/property.service';
 
 export default function PropertyContent() {
@@ -44,7 +44,7 @@ export default function PropertyContent() {
                         className="border px-4 py-2 rounded bg-white hover:bg-gray-100 shadow text-black font-semibold"
                         onClick={() => setShowRegister(true)}
                     >
-                        Registrar +
+                        Registrar Propiedad +
                     </button>
                 </div>
             )}
@@ -61,7 +61,7 @@ export default function PropertyContent() {
                         <PropertyRoomCard
                             key={property.propiedad_id || idx}
                             id={property.propiedad_id}
-                            image={property.imagen || undefined}
+                            foto={property.foto}
                             name={property.nombre || property.direccion || 'Propiedad'}
                             direccion_completa={property.direccion_completa}
                             n_pisos={property.n_pisos}

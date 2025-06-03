@@ -1,16 +1,19 @@
-const API_URL = 'http://localhost:3000/favorito'; 
+import { API_URL } from '@/infrastructure/config/api.config';
+ // Asegúrate de importar la URL correctamen
+
+// const API_URL = 'http://localhost:3000/favorito'; 
 // const API_URL = 'https://ustay-backend.up.railway.app/favorito'; 
 
 // Obtener favoritos del usuario
 export const getFavorites = async (userId) => {
-    const token = localStorage.getItem('token'); // Cambiado aquí
+    const token = localStorage.getItem('token'); 
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
     };
 
     try {
-        const response = await fetch(`${API_URL}/usuario/${userId}`, { headers });
+        const response = await fetch(`${API_URL}/favorito/usuario/${userId}`, { headers });
         if (!response.ok) {
             throw new Error('Error al obtener favoritos');
         }
@@ -23,7 +26,7 @@ export const getFavorites = async (userId) => {
 
 // Agregar un favorito
 export const addFavorite = async (userId, cuartoId) => { 
-    const token = localStorage.getItem('token'); // Cambiado aquí
+    const token = localStorage.getItem('token'); 
     const headers = { 
         'Content-Type': 'application/json', 
         'Authorization': `Bearer ${token}` 
@@ -35,7 +38,7 @@ export const addFavorite = async (userId, cuartoId) => {
     }; 
 
     try { 
-        const response = await fetch(`${API_URL}`, { 
+        const response = await fetch(`${API_URL}/favorito`, { 
             method: 'POST', 
             headers, 
             body: JSON.stringify(favoriteData),
@@ -52,14 +55,14 @@ export const addFavorite = async (userId, cuartoId) => {
 
 // Eliminar un favorito
 export const removeFavorite = async (favoriteId) => {
-    const token = localStorage.getItem('token'); // Cambiado aquí
+    const token = localStorage.getItem('token'); 
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
     };
 
     try {
-        const response = await fetch(`${API_URL}/${favoriteId}`, { // Cambia la URL si es necesario
+        const response = await fetch(`${API_URL}/favorito/${favoriteId}`, { 
             method: 'DELETE',
             headers,
         });

@@ -1,7 +1,7 @@
 import { Navigate, useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { fetchRoomById, fetchRooms } from '@/infrastructure/services/room.service';
-import { addFavorite, getFavorites } from '@/infrastructure/services/favorite.service'; // Importa también getFavorites
+import { addFavorite, getFavorites } from '@/infrastructure/services/favorite.service';
 import { IoLocationSharp, IoPersonCircleOutline } from "react-icons/io5";
 import { PiHouseLineLight, PiStarThin } from "react-icons/pi";
 import { MdOutlinePhone } from "react-icons/md";
@@ -15,7 +15,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectCoverflow } from 'swiper/modules';
 import WideRoomCard from './WideRoomCard';
 import ROOM from '@/presentation/assets/img/room.png';
-import Alert from '@/presentation/components/common/Alert'; // Importa el componente Alert
+import Alert from '@/presentation/components/common/Alert';
 
 const SPECS = [
   {
@@ -42,8 +42,8 @@ export const RoomDetail = () => {
   const [room, setRoom] = useState(null);
   const [similarRooms, setSimilarRooms] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
-  const [notificationMsg, setNotificationMsg] = useState(""); // Nuevo estado para el mensaje
-  const [notificationType, setNotificationType] = useState("success"); // <--- AGREGA ESTA LÍNEA
+  const [notificationMsg, setNotificationMsg] = useState("");
+  const [notificationType, setNotificationType] = useState("success");
   const [userFavorites, setUserFavorites] = useState([]);
 
   useEffect(() => {
@@ -52,7 +52,8 @@ export const RoomDetail = () => {
         const roomData = await fetchRoomById(id);
         setRoom({
           ...roomData.cuarto,
-          servicios: roomData.servicios
+          servicios: roomData.servicios,
+          fotos: roomData.fotos || [], // aseguramos que fotos sea array
         });
 
         const roomsData = await fetchRooms();
@@ -100,7 +101,7 @@ export const RoomDetail = () => {
 
     try {
       await addFavorite(userId, id);
-      setNotificationMsg("Añadido a favoritos"); // <-- Agrega el mensaje aquí
+      setNotificationMsg("Añadido a favoritos");
       setNotificationType("success");
       setShowNotification(true);
       const favoritesData = await getFavorites(userId);
@@ -123,20 +124,28 @@ export const RoomDetail = () => {
           <Swiper
             effect={'coverflow'}
             grabCursor={true}
-            autoplay={{
-              delay: 3000,
-            }}
+            autoplay={{ delay: 3000 }}
             slidesPerView={3}
             modules={[EffectCoverflow, Autoplay]}
-            className='flex justify-center items-center'>
-            {Array.isArray(room?.fotos) ? room.fotos.map((image, index) =>
-              <SwiperSlide key={index}>
-                <img src={image} alt={room.tipo_cuarto} className="h-full w-full block object-cover " />
-              </SwiperSlide>
-            ) : <p>No images available</p>}
+            className='flex justify-center items-center'
+          >
+            {Array.isArray(room.fotos) && room.fotos.length > 0 ? (
+              room.fotos.map((foto, index) => (
+                <SwiperSlide key={index}>
+                  <img
+                    src={foto.url_imagen}
+                    alt={room.tipo_cuarto}
+                    className="h-full w-full block object-cover"
+                  />
+                </SwiperSlide>
+              ))
+            ) : (
+              <p>No images available</p>
+            )}
           </Swiper>
         </div>
       </div>
+
       {/* Two Column */}
       <div className='flex justify-between mx-12'>
         <div className="max-w-4xl mx-auto px-4 py-8">
@@ -189,8 +198,9 @@ export const RoomDetail = () => {
               </div>
             ))}
           </div>
+
           {/* Additional Information */}
-          <div className="flex bg-white  rounded-lg  p-6 mb-2 gap-4">
+          <div className="flex bg-white rounded-lg p-6 mb-2 gap-4">
             <div className='flex gap-8'>
               <h2 className="text-xl font-semibold mb-4 text-gray-800 w-32">
                 Información adicional
@@ -200,21 +210,20 @@ export const RoomDetail = () => {
             <div className='text-gray-600 text-[14px]'>
               {room.informacion_adicional.split('\n').map((line, index) => (
                 <p key={index} className="mb-1">{line}</p>
-              ))
-              }
+              ))}
             </div>
           </div>
 
           {/* Services */}
-          <div className="flex rounded-lg  p-6 mb-2 gap-4 bg-white">
+          <div className="flex rounded-lg p-6 mb-2 gap-4 bg-white">
             <div className='flex gap-8'>
               <h2 className="text-xl font-semibold mb-4 w-32">Servicios</h2>
               <span className='block w-[1px] h-full bg-gray-300'></span>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-[14px] w-full">
-              {Array.isArray(room?.servicios) && room.servicios.length > 0 ? room.servicios.map(servicio => (
+              {Array.isArray(room.servicios) && room.servicios.length > 0 ? room.servicios.map(servicio => (
                 <div key={servicio.servicio_id} className="flex items-center gap-2">
-                  <span className="w-8 h-8  flex items-center justify-center">
+                  <span className="w-8 h-8 flex items-center justify-center">
                     <IconWifi className="w-4 h-4" />
                   </span>
                   <div>
@@ -226,33 +235,31 @@ export const RoomDetail = () => {
             </div>
           </div>
 
-          <div className='flex flex-col gap-4'>
-            {/* Map */}
-            <div className="bg-white rounded-lg  p-6">
-              <h2 className="text-xl font-semibold mb-4">Ubicación</h2>
-              <div className="h-64 bg-gray-200 rounded-lg ">
-                <img src={MAP} alt="" className='w-full h-full object-cover rounded-xl' />
-              </div>
-            </div>
-            {/* House Rules */}
-            <div className="bg-white rounded-lg  p-6 mb-8">
-              <h2 className="text-xl font-semibold mb-4">Reglas de la casa</h2>
-              <ul className="space-y-2">
-                {room.reglas.split(',').map((rule, index) => (
-                  <li key={index} className="flex items-center gap-2 text-gray-600">
-                    <span className="w-2 h-2 bg-gray-400 rounded-full"></span>
-                    {rule.trim()}
-                  </li>
-                ))}
-              </ul>
+          {/* Map */}
+          <div className="bg-white rounded-lg p-6 mb-2">
+            <h2 className="text-xl font-semibold mb-4">Ubicación</h2>
+            <div className="h-64 bg-gray-200 rounded-lg">
+              <img src={MAP} alt="" className='w-full h-full object-cover rounded-xl' />
             </div>
           </div>
-          {/* Similar Rooms Section */}
+
+          {/* House Rules */}
+          <div className="bg-white rounded-lg p-6 mb-8">
+            <h2 className="text-xl font-semibold mb-4">Reglas de la casa</h2>
+            <ul className="space-y-2">
+              {room.reglas.split(',').map((rule, index) => (
+                <li key={index} className="flex items-center gap-2 text-gray-600">
+                  <span className="w-2 h-2 bg-gray-400 rounded-full"></span>
+                  {rule.trim()}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
+        {/* Right side panel */}
         <div className='bg-white h-fit'>
-          <div >
-            {/* Send and Favorite */}
+          <div>
             <div className="text-start bg-secondary p-4">
               <div className="text-3xl font-normal text-white">
                 <span className="text-lg">S/</span>{room.precio}
@@ -267,31 +274,28 @@ export const RoomDetail = () => {
             </div>
           </div>
 
-          {/* Property Details Grid and Owner */}
           <div className='flex flex-col w-full h-full my-2 p-4 space-y-2'>
-            <div className='space-y-2 mx-3 '>
+            <div className='space-y-2 mx-3'>
               <div className='flex items-center gap-1 text-gray-600 after:content-["Verificado"] after:text-amber-300 after:m-2 '>
                 <IoPersonCircleOutline className='w-5 h-5 text-gray-500' />
-                <p>
-                  {room.partner.nombre}
-                </p>
+                <p>{room.partner.nombre}</p>
                 <p>{room.partner.apellido}</p>
               </div>
-              <div className='text-gray-500 '>
-                <button className='flex gap-2 border border-gray-500 rounded-sm items-center justify-center p-1 w-full '>
+              <div className='text-gray-500'>
+                <button className='flex gap-2 border border-gray-500 rounded-sm items-center justify-center p-1 w-full'>
                   <PiHouseLineLight className='w-4 h-4' />
                   <p>Información de la casa</p>
                 </button>
               </div>
             </div>
-
-
           </div>
+
           <div className='flex items-center justify-center p-5 text-gray-500 bg-gray-100 gap-5'>
-            <a href="/"> <MdOutlinePhone className='w-5 h-5' /> </a>
-            <a href="/"> <FaWhatsapp className='w-5 h-5' /></a>
-            <a href="/"> <CiAt className='w-5 h-5' /></a>
+            <a href="/"><MdOutlinePhone className='w-5 h-5' /></a>
+            <a href="/"><FaWhatsapp className='w-5 h-5' /></a>
+            <a href="/"><CiAt className='w-5 h-5' /></a>
           </div>
+
           <div className='py-2 bg-background'></div>
           <div className='flex py-5 justify-around gap-4 items-center'>
             <div>
@@ -307,13 +311,15 @@ export const RoomDetail = () => {
           </div>
         </div>
       </div>
-      <div className="mx-37 ">
+
+      {/* Similar Rooms Section */}
+      <div className="mx-37">
         <h2 className="text-2xl font-semibold mb-6">Recomendaciones similares</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
           {similarRooms.map(similarRoom => (
             <WideRoomCard
               key={similarRoom.cuarto_id}
-              image={similarRoom.fotos && similarRoom.fotos.length > 0 ? similarRoom.fotos[0] : ROOM} // Use a default image if none are available
+              image={similarRoom.fotos && similarRoom.fotos.length > 0 ? similarRoom.fotos[0].url_imagen : ROOM} // Default image if none
               title={similarRoom.nombre}
               location={similarRoom.direccion_propiedad}
               price={similarRoom.precio}
@@ -328,7 +334,7 @@ export const RoomDetail = () => {
                 location: true
               }}
               publisher={`${similarRoom.partner ? `${similarRoom.partner.nombre} ${similarRoom.partner.apellido}` : 'Unknown Publisher'}`}
-              onClick={() => navigate(`/room/${similarRoom.cuarto_id}`)} // Use navigate to redirect
+              onClick={() => navigate(`/room/${similarRoom.cuarto_id}`)}
             />
           ))}
         </div>

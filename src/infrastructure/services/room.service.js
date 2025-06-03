@@ -43,3 +43,25 @@ export const compareRooms = async (ids) => {
     }
     return response.json();
 };
+
+export const deleteRoom = async (id) => {
+    const token = localStorage.getItem('token');
+    if (!token) throw new Error('No autorizado: token no encontrado');
+  
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+  
+    const response = await fetch(`${API_URL}/cuarto/${id}`, {
+      method: 'DELETE',
+      headers
+    });
+  
+    if (!response.ok) {
+      throw new Error('No se pudo eliminar el cuarto');
+    }
+  
+    return response.json();
+  };
+  

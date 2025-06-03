@@ -1,5 +1,5 @@
 // import Carousel from './Carousel';
-import Carrousel from '@/presentation/components/NewCarrousel';
+import Carrousel from '@/presentation/user/components/NewCarrousel';
 
 export default function Quarters() {
   return (

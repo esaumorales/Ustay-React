@@ -5,7 +5,7 @@ import { IconLocation } from '@/presentation/assets/icons/icon-location';
 import { IconParking } from '@/presentation/assets/icons/icon-parking';
 import { IconWifi } from '@/presentation/assets/icons/icon-wifi';
 
-import ROOM from '@/presentation/assets/img/room.png'
+import ROOM from '@/presentation/assets/img/room.png';
 
 export const RoomCard = ({
   id,
@@ -16,7 +16,6 @@ export const RoomCard = ({
   periodo,
   rating = 4,
   destacado = false,
-  // disponibilidad,
   amenities = {
     wifi: false,
     parking: false,
@@ -59,7 +58,7 @@ export const RoomCard = ({
             </div>
           )}
           <img
-            src={image || ROOM}
+            src={image || ROOM}  // IMPORTANTE: image debe ser string URL válida o undefined
             alt={type}
             className='w-full h-full object-cover transition-transform duration-500 ease-out'
           />
@@ -100,3 +99,34 @@ export const RoomCard = ({
     </div>
   );
 };
+
+// --- Ejemplo de uso ---
+// const exampleRoom = {
+//   cuarto_id: 1,
+//   fotos: [{ url_imagen: 'https://ejemplo.com/imagen1.jpg' }],
+//   tipo_cuarto: 'Doble',
+//   direccion_propiedad: 'Av. Siempre Viva 123',
+//   precio: 120,
+//   periodo: 'noche',
+//   rating: 4.5,
+//   destacado: true,
+//   servicios: [{ servicio: 'WiFi' }, { servicio: 'Parking' }],
+// };
+
+// <RoomCard
+//   id={exampleRoom.cuarto_id}
+//   image={exampleRoom.fotos && exampleRoom.fotos.length > 0 ? exampleRoom.fotos[0].url_imagen : undefined}
+//   type={exampleRoom.tipo_cuarto}
+//   location={exampleRoom.direccion_propiedad}
+//   price={exampleRoom.precio}
+//   periodo={exampleRoom.periodo}
+//   rating={exampleRoom.rating}
+//   destacado={exampleRoom.destacado}
+//   amenities={{
+//     wifi: exampleRoom.servicios.some(s => s.servicio === 'WiFi'),
+//     parking: exampleRoom.servicios.some(s => s.servicio === 'Parking'),
+//     bed: true,
+//     bath: true,
+//     location: true,
+//   }}
+// />
