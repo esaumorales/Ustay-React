@@ -9,7 +9,6 @@ const Alert = ({ message, onClose, type = "success" }) => {
         return () => clearTimeout(timer);
     }, [onClose]);
 
-    // Define los colores según el tipo de alerta
     const bgColor = type === "success"
         ? "bg-green-400"
         : type === "warning"

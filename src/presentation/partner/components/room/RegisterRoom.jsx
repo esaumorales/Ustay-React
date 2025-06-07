@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createRoom } from '@/infrastructure/services/room.service';
 import { FaBolt, FaTint, FaWifi, FaLock } from 'react-icons/fa';
 
+
 const CLOUDINARY_UPLOAD_PRESET = 'cgfucclq';
 const CLOUDINARY_CLOUD_NAME = 'djasvvxs9';
 
@@ -15,14 +16,16 @@ const RegisterRoom = () => {
     const [floor, setFloor] = useState('');
     const [roomNumber, setRoomNumber] = useState('');
     const [extraInfo, setExtraInfo] = useState('');
-    const [services, setServices] = useState([]);
+    const [services, setServices] = useState([]); // Estado para los servicios
     const [serviceDetails, setServiceDetails] = useState({ luz: '', agua: '', wifi: '', seguridad: '' });
     const [images, setImages] = useState([]);
     const [registering, setRegistering] = useState(false);
+    const [precio, setPrecio] = useState('');
+    const [periodo, setPeriodo] = useState('Mensual');  // Valor predeterminado como 'Mensual'
 
     const handleNext = () => {
         if (step === 1 && !termsAccepted) return;
-        setStep((prev) => Math.min(prev + 1, 7));
+        setStep((prev) => Math.min(prev + 1, 9));
     };
 
     const handleBack = () => {
@@ -58,6 +61,16 @@ const RegisterRoom = () => {
     const handleSubmit = async () => {
         setRegistering(true);
         try {
+
+            // Mapeo de periodo a periodo_id
+            const periodoMap = {
+                'Mensual': 1,
+                'Semestral': 2,
+                'Anual': 3
+            };
+
+            const periodo_id = periodoMap[periodo];
+
             const imageUrls = [];
             for (const img of images) {
                 const url = await uploadImageToCloudinary(img);
@@ -67,19 +80,20 @@ const RegisterRoom = () => {
             const cuartoData = {
                 propiedad_id: 3,
                 tipo_cuarto_id: parseInt(roomType),
-                precio: '500.00',
+                precio: precio,
                 nombre: title,
                 dimensiones: dimensions,
                 n_piso: parseInt(floor),
                 n_cuarto: parseInt(roomNumber),
+                periodo_id: periodo_id,  // Ahora pasamos periodo_id
                 descripcion: description,
                 disponibilidad: 1,
                 informacion_adicional: extraInfo,
                 fotos: imageUrls
             };
 
-            await createRoom(cuartoData);
-            setStep(7);
+            await createRoom(cuartoData);  // Este valor será mapeado a un periodo_id en el backend
+            setStep(9);
         } catch (error) {
             console.error('Error al registrar el cuarto:', error);
         } finally {
@@ -87,17 +101,18 @@ const RegisterRoom = () => {
         }
     };
 
+
     return (
         <div className="max-w-4xl mx-auto p-4 bg-white rounded shadow">
             <div className="flex gap-2 mb-4">
-                {[1, 2, 3, 4, 5, 6].map((n) => (
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
                     <div
                         key={n}
                         className={`flex-1 h-1 rounded ${step >= n ? 'bg-orange-500' : 'bg-gray-200'}`}
                     />
                 ))}
             </div>
-            {step <= 6 && <div className="text-sm text-orange-600 mb-4">{step} de 6</div>}
+            {step <= 9 && <div className="text-sm text-orange-600 mb-4">{step} de 9</div>}
 
             {step === 1 && (
                 <>
@@ -185,6 +200,67 @@ const RegisterRoom = () => {
 
             {step === 3 && (
                 <>
+                    <h2 className="text-2xl font-semibold text-center mb-4">Subir imágenes</h2>
+                    <p className="text-center mb-4 text-sm">
+                        Asegúrate de que las imágenes muestren bien los espacios del cuarto. Las fotos son importantes para que los interesados puedan conocer mejor el inmueble.
+                    </p>
+
+                    {/* Contenedor para las imágenes seleccionadas */}
+                    <div className="space-y-4 mb-4">
+                        {images.length > 0 &&
+                            images.map((img, idx) => (
+                                <div key={idx} className="flex items-center justify-between border p-2 rounded shadow-sm">
+                                    <div className="flex items-center gap-2">
+                                        <img
+                                            src={URL.createObjectURL(img)}
+                                            alt={`Vista previa ${idx + 1}`}
+                                            className="w-8 h-8 object-cover rounded"
+                                        />
+                                        <span className="text-sm">{img.name}</span>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => setImages(images.filter((_, i) => i !== idx))}
+                                        className="text-gray-600 hover:text-red-600"
+                                    >
+                                        X
+                                    </button>
+                                </div>
+                            ))}
+                    </div>
+
+                    {/* Input para seleccionar archivos */}
+                    <div className="mt-4">
+                        <label className="block text-sm font-medium mb-2">Selecciona las imágenes para tu cuarto:</label>
+                        <input
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            className="w-full border px-3 py-2 rounded"
+                        />
+                    </div>
+
+                    {/* Botones de navegación */}
+                    <div className="flex justify-between mt-6">
+                        <button
+                            className="border px-4 py-2 rounded hover:bg-gray-100"
+                            onClick={handleBack}
+                        >
+                            Anterior
+                        </button>
+                        <button
+                            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+                            onClick={handleNext}
+                            disabled={images.length === 0}
+                        >
+                            Siguiente
+                        </button>
+                    </div>
+                </>
+            )}
+            {step === 4 && (
+                <>
                     <h2 className="text-2xl font-semibold text-center mb-4">Detalles del cuarto</h2>
                     <p className="text-center mb-4 text-sm">
                         Indica el tipo de cuarto, sus dimensiones, el piso donde se encuentra y el número asignado. Esta información es clave para que los inquilinos conozcan bien las características físicas y la ubicación dentro de la propiedad.
@@ -252,7 +328,53 @@ const RegisterRoom = () => {
                     </div>
                 </>
             )}
-            {step === 4 && (
+            {step === 5 && (
+                <>
+                    <h2 className="text-2xl font-semibold text-center mb-4">Detalles de costo</h2>
+                    <p className="text-center mb-4 text-sm">
+                        Detalle la cantidad y el periodo en el que se debe pagar el inmueble.
+                    </p>
+
+                    <div className="mb-4">
+                        <label className="block mb-1 font-medium">Precio:</label>
+                        <input
+                            type="number"
+                            className="w-full border rounded px-3 py-2"
+                            placeholder="Ingrese precio"
+                            value={precio}
+                            onChange={(e) => setPrecio(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label className="block mb-1 font-medium">Periodo:</label>
+                        <select
+                            className="w-full border rounded px-3 py-2"
+                            value={periodo}
+                            onChange={(e) => setPeriodo(e.target.value)}
+                        >
+                            <option value="Mensual">Mensual</option>
+                            <option value="Semestral">Semestral</option>
+                            <option value="Anual">Anual</option>
+                        </select>
+                    </div>
+
+                    <div className="flex justify-center gap-4 mt-6">
+                        <button className="border px-4 py-2 rounded hover:bg-gray-100" onClick={handleBack}>
+                            Anterior
+                        </button>
+                        <button
+                            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+                            onClick={handleNext}
+                            disabled={!precio || !periodo}
+                        >
+                            Siguiente
+                        </button>
+                    </div>
+                </>
+            )}
+
+            {step === 6 && (
                 <>
                     <h2 className="text-2xl font-semibold text-center mb-4">Información extra</h2>
                     <p className="text-center mb-4 text-sm">
@@ -287,7 +409,7 @@ const RegisterRoom = () => {
                     </div>
                 </>
             )}
-            {step === 5 && (
+            {step === 7 && (
                 <>
                     <h2 className="text-2xl font-semibold text-center mb-4">Selección de servicios</h2>
                     <p className="text-center mb-4 text-sm">
@@ -326,7 +448,7 @@ const RegisterRoom = () => {
                 </>
             )}
 
-            {step === 6 && (
+            {step === 8 && (
                 <>
                     <h2 className="text-2xl font-semibold text-center mb-4">Detalles de los servicios</h2>
                     <p className="text-center mb-4 text-sm">
@@ -361,7 +483,7 @@ const RegisterRoom = () => {
                 </>
             )}
 
-            {step === 7 && (
+            {step === 9 && (
                 <div className="text-center">
                     <img
                         src="https://cdn-icons-png.flaticon.com/512/190/190411.png"

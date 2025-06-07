@@ -28,11 +28,11 @@ export default function Footer() {
             <div className='space-y-2'>
               <div className='flex gap-2'>
                 <p className='font-semibold'>Tel:</p>
-                <p className='text-white/80'>+123 456 7890</p>
+                <p className='text-white/80'>+51 918 955 833</p>
               </div>
               <div className='flex gap-2'>
                 <p className='font-semibold'>Email:</p>
-                <p className='text-white/80'>contacto@ustay.com</p>
+                <p className='text-white/80'>ustayalquileres@gmail.com</p>
               </div>
             </div>
             <div className='space-y-1'>

@@ -42,8 +42,6 @@ const RoomCard = ({
     const [loading, setLoading] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
-    // Si usas showEdit, defínelo aquí, si no, elimina handleEdit y handleEditSuccess
-    // const [showEdit, setShowEdit] = useState(false);
 
     const [room] = useState({ // [room , setRoom]
         id,
@@ -59,7 +57,8 @@ const RoomCard = ({
 
     const navigate = useNavigate();
 
-    const handleDelete = async () => {
+    const handleDelete = async (e) => {
+        e.preventDefault(); // Prevenir el comportamiento predeterminado del formulario (en caso de estar dentro de uno)
         setShowConfirm(false);
         setLoading(true);
         try {
@@ -73,15 +72,6 @@ const RoomCard = ({
             setLoading(false);
         }
     };
-
-    // Si no usas editar inline, elimina estas funciones:
-    // const handleEdit = () => {
-    //     setShowEdit(false);
-    // };
-    // const handleEditSuccess = (updatedRoom) => {
-    //     setShowEdit(false);
-    //     setRoom(updatedRoom);
-    // };
 
     return (
         <div className="bg-white rounded-lg overflow-hidden w-80 min-w-[20rem] max-w-[20rem] m-auto opacity-100 mb-4">

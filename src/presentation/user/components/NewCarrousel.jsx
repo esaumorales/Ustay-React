@@ -6,7 +6,7 @@ import { IconBed } from '@/presentation/assets/icons/icon-bed';
 import { IconLocation } from '@/presentation/assets/icons/icon-location';
 import { IconParking } from '@/presentation/assets/icons/icon-parking';
 import { IconWifi } from '@/presentation/assets/icons/icon-wifi';
-import  ROOM  from '@/presentation/assets/img/room.png'
+import ROOM from '@/presentation/assets/img/room.png'; // Imagen por defecto
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -22,7 +22,7 @@ const Carrousel = () => {
         const loadRooms = async () => {
             try {
                 const rooms = await fetchRooms();
-                setItems(rooms.cuartos); 
+                setItems(rooms.cuartos);
             } catch (error) {
                 console.error('Error fetching rooms:', error);
             }
@@ -67,7 +67,7 @@ const Carrousel = () => {
                         <div className='bg-white border border-gray-200 shadow-lg transition-all duration-500 ease-out transform hover:opacity-100 mx-auto w-100'>
                             <div className='relative h-80 overflow-hidden'>
                                 <img
-                                    src={item.image || ROOM} // Usa una imagen por defecto si no hay imagen
+                                    src={item.fotos.length > 0 ? item.fotos[0] : ROOM}  // Si no hay fotos, usa la imagen predeterminada
                                     alt={`Cuarto ${item.nombre}`}
                                     className='w-full h-full object-cover transition-transform duration-500 ease-out'
                                 />

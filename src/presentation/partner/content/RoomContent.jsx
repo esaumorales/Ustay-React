@@ -31,6 +31,12 @@ export default function RoomContent() {
     fetchRooms();
   }, []);
 
+  // Función para manejar la eliminación de un cuarto
+  const handleDelete = (id) => {
+    // Filtrar el cuarto eliminado de la lista
+    setRooms(rooms.filter(room => room.cuarto_id !== id));
+  };
+
   return (
     <div>
       <PropertyHeader
@@ -65,14 +71,15 @@ export default function RoomContent() {
               <RoomCard
                 key={cuarto.cuarto_id || idx}
                 id={cuarto.cuarto_id}
-                foto={cuarto.foto || cuarto.foto_propiedad || ''}
+                foto={cuarto.foto || cuarto.foto_propiedad } // Asegúrate de que `foto` o `foto_propiedad` sea válida
                 nombre={cuarto.nombre}
                 descripcion={cuarto.descripcion}
                 tipo_cuarto={cuarto.tipo_cuarto}
-                periodo={cuarto.propiedad?.periodo || ''}
+                periodo={cuarto.propiedad?.periodo || 'No especificado'}
                 estado={cuarto.disponibilidad === 1 ? 'Disponible' : 'No disponible'}
                 precio={cuarto.precio}
-                estado_verificacion={cuarto.propiedad?.estado_verificacion || ''}
+                estado_verificacion={cuarto.propiedad?.estado_verificacion || 'No disponible'}
+                onDeleted={handleDelete}  // Pasa la función onDeleted
               />
             ))}
           </div>

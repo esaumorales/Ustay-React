@@ -3,6 +3,7 @@ import { FaRegEye } from 'react-icons/fa';
 import { IoCloseSharp } from 'react-icons/io5';
 import { createProperty } from '@/infrastructure/services/property.service';
 import { useAuth } from '@/presentation/contexts/AuthContext';
+import { Link } from 'react-router-dom';
 
 const CLOUDINARY_CLOUD_NAME = 'djasvvxs9'; // reemplaza con tu cloud name real
 const CLOUDINARY_UPLOAD_PRESET = 'cgfucclq'; // tu upload preset sin firma
@@ -141,9 +142,13 @@ const RegisterProperty = ({ onClose, hasProperties }) => {
             </label>
           </div>
           <div className="flex justify-center gap-4 mt-6">
+            <Link
+            to='/IMS/property'
+            >
             <button className="border px-4 py-2 rounded hover:bg-gray-100" onClick={handleBack} disabled={step === 1}>
               Volver
             </button>
+            </Link>
             <button className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 flex items-center gap-2" onClick={handleNext} disabled={!termsAccepted}>
               Iniciar registro
             </button>

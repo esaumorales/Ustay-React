@@ -13,41 +13,41 @@ const EditRoom = ({ room: roomFromProps = {}, onClose, onSuccess }) => {
 
   // Estados para inputs
   const [nombre, setNombre] = useState('');
-  const [tipoCuarto, setTipoCuarto] = useState('');
+  const [tipoCuarto, setTipoCuarto] = useState(1); // Asignamos un valor inicial
   const [precio, setPrecio] = useState('');
-  const [periodo, setPeriodo] = useState('');
+  const [periodo, setPeriodo] = useState('Mensual'); // Valor predeterminado
   const [estado, setEstado] = useState('Disponible');
   const [imagenes, setImagenes] = useState([]); // URLs existentes
-  const [nuevasImagenes, setNuevasImagenes] = useState([]); // archivos nuevos
+  const [nuevasImagenes, setNuevasImagenes] = useState([]); // Archivos nuevos
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showAlert, setShowAlert] = useState(false);
 
+  // Mapeo de periodo a periodo_id
+  const periodoMap = {
+    'Mensual': 1,
+    'Semestral': 2,
+    'Anual': 3
+  };
+
+
   // Cargar datos del cuarto desde props o backend
   useEffect(() => {
-    if (!roomFromProps.cuarto_id && id) {
+    if (id) {
       fetchRoomById(id)
         .then(data => {
-          console.log('Datos recibidos:', data); // Para depurar estructura
           const cuarto = data.cuarto || {};
           setNombre(cuarto.nombre || '');
-          setTipoCuarto(cuarto.tipo_cuarto || '');
+          setTipoCuarto(cuarto.tipo_cuarto_id || 1); // Asignar valor de tipo_cuarto_id
           setPrecio(cuarto.precio || '');
-          setPeriodo(cuarto.periodo || '');
+          setPeriodo(cuarto.periodo || 'Mensual'); // Asegurarse de que se tenga un valor para el periodo
           setEstado(cuarto.disponibilidad === 1 ? 'Disponible' : 'No disponible');
           setImagenes(data.fotos?.map(f => f.url_imagen) || []);
         })
         .catch(() => setError('Error cargando datos del cuarto'));
-    } else {
-      setNombre(roomFromProps.nombre || '');
-      setTipoCuarto(roomFromProps.tipo_cuarto || '');
-      setPrecio(roomFromProps.precio || '');
-      setPeriodo(roomFromProps.periodo || '');
-      setEstado(roomFromProps.disponibilidad === 1 ? 'Disponible' : 'No disponible');
-      setImagenes(roomFromProps.fotos || []);
     }
-  }, [id, roomFromProps]);
+  }, [id]);
 
   // Manejo imágenes nuevas (archivos)
   const handleImageChange = (e) => {
@@ -84,30 +84,45 @@ const EditRoom = ({ room: roomFromProps = {}, onClose, onSuccess }) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-
+  
     try {
-      const newImageUrls = await Promise.all(nuevasImagenes.map(uploadImageToCloudinary));
+      // Subir nuevas imágenes a Cloudinary
+      const newImageUrls = nuevasImagenes.length > 0 ? await Promise.all(nuevasImagenes.map(uploadImageToCloudinary)) : [];
+      
+      // Combinar las imágenes existentes con las nuevas
       const todasLasImagenes = [...imagenes, ...newImageUrls];
+  
+      // Asegúrate de que 'estado' es mapeado correctamente a 1 o 0
       const disponibilidad = (estado === 'Disponible') ? 1 : 0;
-
+  
+      // Crear el objeto actualizado
       const updated = {
-        nombre,
-        tipo_cuarto: tipoCuarto,
-        precio,
-        periodo,
-        disponibilidad,
-        fotos: todasLasImagenes,
+        nombre: nombre || roomFromProps.nombre,  // Si no se proporciona nombre, usamos el nombre actual
+        tipo_cuarto_id: tipoCuarto || roomFromProps.tipo_cuarto_id,  // Asignar tipo_cuarto_id
+        precio: precio || roomFromProps.precio,  // Si no se proporciona precio, usamos el actual
+        periodo_id: periodoMap[periodo] || roomFromProps.periodo_id, // Mapear el periodo a periodo_id
+        disponibilidad,  // Asegurarse de que disponibilidad sea 1 o 0
       };
-
+  
+      // Si hay nuevas imágenes, actualizar el campo fotos
+      if (newImageUrls.length > 0) {
+        updated.fotos = todasLasImagenes;  // Asignar todas las imágenes, tanto existentes como nuevas
+      } else {
+        updated.fotos = imagenes;  // Si no hay nuevas imágenes, solo usamos las existentes
+      }
+      console.log(updated);  // Verifica el objeto actualizado
       await updateRoom(id || roomFromProps.cuarto_id, updated);
-
+  
+      // Mostrar la alerta de éxito
       setShowAlert(true);
       setTimeout(() => {
         setShowAlert(false);
-        navigate('/IMS/room');
+        navigate('/IMS/room');  // Redirigir después de un corto tiempo
       }, 1800);
-
+  
+      // Callback para cuando la actualización es exitosa
       if (onSuccess) onSuccess({ ...roomFromProps, ...updated });
+  
     } catch (error) {
       setError('Error al actualizar el cuarto');
       console.error(error);
@@ -115,13 +130,14 @@ const EditRoom = ({ room: roomFromProps = {}, onClose, onSuccess }) => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="max-w-6xl mx-auto bg-white p-6 rounded flex gap-8">
-      {/* Columna principal */}
       <div className="w-2/3">
         <h1 className="text-2xl font-bold mb-4 text-center">Editar Cuarto</h1>
         <form id="edit-room-form" onSubmit={handleSubmit} className="space-y-4">
+          {/* Inputs para Nombre, Tipo de Cuarto, Precio, Periodo y Estado */}
           <div>
             <label className="block mb-1 font-semibold">Nombre</label>
             <input
@@ -134,13 +150,16 @@ const EditRoom = ({ room: roomFromProps = {}, onClose, onSuccess }) => {
           </div>
           <div>
             <label className="block mb-1 font-semibold">Tipo de cuarto</label>
-            <input
-              type="text"
+            <select
               className="w-full border rounded px-3 py-2"
               value={tipoCuarto}
-              onChange={e => setTipoCuarto(e.target.value)}
+              onChange={e => setTipoCuarto(parseInt(e.target.value))}
               required
-            />
+            >
+              <option value="1">Departamento</option>
+              <option value="2">Cuartos</option>
+              <option value="3">Casa</option>
+            </select>
           </div>
           <div>
             <label className="block mb-1 font-semibold">Precio</label>
@@ -154,13 +173,16 @@ const EditRoom = ({ room: roomFromProps = {}, onClose, onSuccess }) => {
           </div>
           <div>
             <label className="block mb-1 font-semibold">Periodo</label>
-            <input
-              type="text"
+            <select
               className="w-full border rounded px-3 py-2"
               value={periodo}
               onChange={e => setPeriodo(e.target.value)}
               required
-            />
+            >
+              <option value="Mensual">Mensual</option>
+              <option value="Semestral">Semestral</option>
+              <option value="Anual">Anual</option>
+            </select>
           </div>
           <div>
             <label className="block mb-1 font-semibold">Estado</label>
@@ -174,6 +196,8 @@ const EditRoom = ({ room: roomFromProps = {}, onClose, onSuccess }) => {
               <option value="No disponible">No disponible</option>
             </select>
           </div>
+
+          {/* Agregar nuevas fotos */}
           <div>
             <label className="block mb-1 font-semibold">Agregar nuevas fotos</label>
             <input
@@ -233,16 +257,13 @@ const EditRoom = ({ room: roomFromProps = {}, onClose, onSuccess }) => {
         </form>
       </div>
 
-      {/* Columna lateral */}
+      {/* Panel lateral */}
       <div className="w-1/3 bg-gray-50 rounded p-4 h-fit">
         <div className="mb-4">
           <span className="font-semibold">Estado:</span>{' '}
           <span className={estado === 'Disponible' ? 'text-green-600' : 'text-red-600'}>
             {estado}
           </span>
-        </div>
-        <div className="mb-4">
-          <span className="font-semibold">Última Edición:</span> 12/05/2025 05:25 p.m.
         </div>
         <button
           type="button"
