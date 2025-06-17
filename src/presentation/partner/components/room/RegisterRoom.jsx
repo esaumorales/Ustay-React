@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { createRoom } from '@/infrastructure/services/room.service';
-import { FaBolt, FaTint, FaWifi, FaLock } from 'react-icons/fa';
-
+import { FaBolt, FaTint, FaWifi, FaLock, FaFire, FaBroom, FaCar } from 'react-icons/fa';  // Agregar íconos para los nuevos servicios
 
 const CLOUDINARY_UPLOAD_PRESET = 'cgfucclq';
 const CLOUDINARY_CLOUD_NAME = 'djasvvxs9';
@@ -17,7 +16,7 @@ const RegisterRoom = () => {
     const [roomNumber, setRoomNumber] = useState('');
     const [extraInfo, setExtraInfo] = useState('');
     const [services, setServices] = useState([]); // Estado para los servicios
-    const [serviceDetails, setServiceDetails] = useState({ luz: '', agua: '', wifi: '', seguridad: '' });
+    const [serviceDetails, setServiceDetails] = useState({ luz: '', agua: '', wifi: '', seguridad: '', calefaccion: '', limpieza: '', garage: '' });
     const [images, setImages] = useState([]);
     const [registering, setRegistering] = useState(false);
     const [precio, setPrecio] = useState('');
@@ -58,50 +57,64 @@ const RegisterRoom = () => {
         setImages((prev) => [...prev, ...files]);
     };
 
+    const handleServiceDetailsChange = (service, value) => {
+        setServiceDetails((prev) => ({
+            ...prev,
+            [service]: value
+        }));
+    };
     const handleSubmit = async () => {
         setRegistering(true);
         try {
-
-            // Mapeo de periodo a periodo_id
-            const periodoMap = {
-                'Mensual': 1,
-                'Semestral': 2,
-                'Anual': 3
-            };
-
-            const periodo_id = periodoMap[periodo];
-
-            const imageUrls = [];
-            for (const img of images) {
-                const url = await uploadImageToCloudinary(img);
-                imageUrls.push(url);
-            }
-
-            const cuartoData = {
-                propiedad_id: 3,
-                tipo_cuarto_id: parseInt(roomType),
-                precio: precio,
-                nombre: title,
-                dimensiones: dimensions,
-                n_piso: parseInt(floor),
-                n_cuarto: parseInt(roomNumber),
-                periodo_id: periodo_id,  // Ahora pasamos periodo_id
-                descripcion: description,
-                disponibilidad: 1,
-                informacion_adicional: extraInfo,
-                fotos: imageUrls
-            };
-
-            await createRoom(cuartoData);  // Este valor será mapeado a un periodo_id en el backend
-            setStep(9);
+          // Validación básica (opcional, ya la tienes)
+          if (!title || !description || !precio || !periodo || services.length === 0) {
+            console.error('Faltan datos necesarios');
+            return;
+          }
+      
+          // Subir imágenes a Cloudinary (si es necesario)
+          const imageUrls = [];
+          for (const img of images) {
+            const url = await uploadImageToCloudinary(img);
+            imageUrls.push(url);
+          }
+      
+          // Crear el objeto `serviceDetails` solo con los servicios seleccionados
+          const selectedServiceDetails = {};
+          services.forEach(service => {
+            selectedServiceDetails[service] = serviceDetails[service] || 'Sin descripción';
+          });
+      
+          // Datos para enviar al backend (ajustados al formato esperado)
+          const cuartoData = {
+            propiedad_id: 3, // Reemplazar con el valor dinámico si es necesario
+            tipo_cuarto_id: parseInt(roomType),
+            precio: precio,
+            nombre: title,
+            dimensiones: dimensions,
+            n_piso: parseInt(floor),
+            n_cuarto: parseInt(roomNumber),
+            periodo: periodo, // Enviar el string (ej: "Mensual"), no el ID
+            descripcion: description,
+            disponibilidad: 1,
+            informacion_adicional: extraInfo,
+            fotos: imageUrls,
+            servicios: services, // Enviar como arreglo de strings: ["luz", "agua"]
+            serviceDetails: selectedServiceDetails, // Enviar como objeto: { luz: "Descripción", agua: "..." }
+          };
+      
+          console.log("Datos a enviar al backend:", cuartoData); // Depuración
+      
+          // Llamar al backend
+          await createRoom(cuartoData);
+          setStep(9); // Éxito
         } catch (error) {
-            console.error('Error al registrar el cuarto:', error);
+          console.error('Error al registrar el cuarto:', error);
         } finally {
-            setRegistering(false);
+          setRegistering(false);
         }
-    };
-
-
+      };
+      
     return (
         <div className="max-w-4xl mx-auto p-4 bg-white rounded shadow">
             <div className="flex gap-2 mb-4">
@@ -273,9 +286,9 @@ const RegisterRoom = () => {
                             onChange={(e) => setRoomType(e.target.value)}
                         >
                             <option value="">Seleccionar</option>
-                            <option value="1">Habitación individual</option>
-                            <option value="2">Habitación compartida</option>
-                            <option value="3">Departamento</option>
+                            <option value="1">Cuarto</option>
+                            <option value="2">Departamento</option>
+                            <option value="3">Casa</option>
                             {/* Agrega más opciones si lo necesitas */}
                         </select>
                     </div>
@@ -309,7 +322,7 @@ const RegisterRoom = () => {
                         <input
                             type="text"
                             className="w-full border rounded px-3 py-2"
-                            placeholder="Ejem: 101"
+                            placeholder="Ejem: 10"
                             value={roomNumber}
                             onChange={(e) => setRoomNumber(e.target.value)}
                         />
@@ -421,7 +434,9 @@ const RegisterRoom = () => {
                             { id: 'agua', label: 'Agua', icon: <FaTint /> },
                             { id: 'wifi', label: 'WiFi', icon: <FaWifi /> },
                             { id: 'seguridad', label: 'Seguridad', icon: <FaLock /> },
-                            // Agrega más servicios aquí si los tienes definidos
+                            { id: 'calefaccion', label: 'Calefacción', icon: <FaFire /> },
+                            { id: 'limpieza', label: 'Limpieza', icon: <FaBroom /> },
+                            { id: 'garage', label: 'Garage', icon: <FaCar /> },
                         ].map(({ id, label, icon }) => (
                             <button
                                 key={id}
@@ -447,7 +462,6 @@ const RegisterRoom = () => {
                     </div>
                 </>
             )}
-
             {step === 8 && (
                 <>
                     <h2 className="text-2xl font-semibold text-center mb-4">Detalles de los servicios</h2>
@@ -455,15 +469,15 @@ const RegisterRoom = () => {
                         En esta sección podrás detallar los servicios que ofrece tu cuarto. Ya seleccionaste los servicios disponibles, ahora especifica si incluyen algún costo o son gratuitos.
                     </p>
                     <div className="space-y-4 mb-6">
-                        {services.map((s) => (
-                            <div key={s}>
-                                <label className="block mb-1 font-medium capitalize">{s}:</label>
+                        {services.map((service) => (
+                            <div key={service}>
+                                <label className="block mb-1 font-medium capitalize">{service}:</label>
                                 <input
                                     type="text"
                                     className="w-full border rounded px-3 py-2"
-                                    placeholder="Ejem: S/ 50"
-                                    value={serviceDetails[s] || ''}
-                                    onChange={(e) => setServiceDetails((prev) => ({ ...prev, [s]: e.target.value }))}
+                                    placeholder="Ejem: Incluye pero...."
+                                    value={serviceDetails[service] || ''}
+                                    onChange={(e) => handleServiceDetailsChange(service, e.target.value)}
                                 />
                             </div>
                         ))}

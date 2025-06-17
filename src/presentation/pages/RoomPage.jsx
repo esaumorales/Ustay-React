@@ -10,7 +10,6 @@ export default function RoomPage() {
   useEffect(() => {
     if (location.search.includes('token=')) {
       handleGoogleLogin();
-      // Opcional: limpiar la URL para no mostrar el token
       window.history.replaceState(null, '', '/room');
     }
   }, [location.search, handleGoogleLogin]);

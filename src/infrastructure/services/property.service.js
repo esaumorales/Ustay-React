@@ -21,6 +21,7 @@ export const getAllProperties = async () => {
   }
 };
 
+
 export const getPropertyById = async (id) => {
   try {
     const headers = getTokenHeaders();

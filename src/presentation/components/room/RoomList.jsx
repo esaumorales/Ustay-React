@@ -15,13 +15,14 @@ const RoomList = () => {
     const [objectFilter, setObjectFilter] = useState({
         propertyType: '',
         priceRange: 0,
-        zona: '',
-        rating: 0
+        zona: [],
+        valoracion: [],
     });
     const roomsPerPage = 9;
 
-    const [loading, setLoading] = useState(true); // Estado loading para mostrar animación
-    const [error, setError] = useState(false); // Estado para controlar error
+    const [loading, setLoading] = useState(true); 
+    const [error, setError] = useState(false); 
+    const [zones, setZones] = useState([]); // Almacenamos las zonas
 
     useEffect(() => {
         const loadRooms = async () => {
@@ -30,12 +31,12 @@ const RoomList = () => {
             try {
                 const rooms = await fetchRooms();
                 if (!rooms?.cuartos?.length) {
-                  setError(true);
-                  setOrderRooms([]);
-                  setFilteredRooms([]);
+                    setError(true);
+                    setOrderRooms([]);
+                    setFilteredRooms([]);
                 } else {
-                  setOrderRooms(rooms.cuartos);
-                  setFilteredRooms(rooms.cuartos);
+                    setOrderRooms(rooms.cuartos);
+                    setFilteredRooms(rooms.cuartos);
                 }
             } catch (error) {
                 console.error('Error fetching rooms:', error);
@@ -47,7 +48,21 @@ const RoomList = () => {
             }
         };
 
+        const loadZones = async () => {
+            try {
+                const rooms = await fetchRooms();
+                // Extraer zonas únicas de los cuartos
+                const uniqueZones = [...new Set(rooms.cuartos.map(room => room.zona))]
+                    .filter(zona => zona) // Filtrar zonas vacías
+                    .map(zona => ({ zona })); // Formatear como objeto con propiedad zona
+                setZones(uniqueZones);
+            } catch (error) {
+                console.error('Error fetching zones:', error);
+            }
+        };
+
         loadRooms();
+        loadZones();
     }, []);
 
     const handlePageChange = (pageNumber) => {
@@ -61,28 +76,33 @@ const RoomList = () => {
 
     const totalPages = Math.ceil(filteredRooms.length / roomsPerPage);
 
-    const handleFilterChange = (filters = objectFilter) => {
+    const handleFilterChange = (filters) => {
         let result = [...orderRooms];
-        setObjectFilter(filters)
-
+        setObjectFilter(filters);
+    
         if (filters.propertyType) {
             result = result.filter(card => card.tipo_cuarto === filters.propertyType);
         }
-
+    
         if (filters.priceRange) {
             result = result.filter(card => parseFloat(card.precio) <= filters.priceRange);
         }
-
-        if (filters.zona) {
-            result = result.filter(card => card.direccion_propiedad.includes(filters.zona));
+    
+        // Filtrar por zonas seleccionadas
+        if (filters.zona && filters.zona.length > 0) {
+            result = result.filter(card => 
+                card.zona && filters.zona.some(z => card.zona.includes(z))
+            );
         }
-
-        if (filters.rating > 0) {
-            result = result.filter(card => card.rating === filters.rating);
+    
+        if (filters.valoracion.length > 0) {
+            result = result.filter(card => 
+                filters.valoracion.some(val => Math.floor(card.valoracion) === val) // Filtrar por valoraciones
+            );
         }
-
+    
         setFilteredRooms(result);
-        setCurrentPage(1);
+        setCurrentPage(1);  // Restablecer la página cuando se cambian los filtros
     };
 
     const handleOrderRoom = (category, value) => {
@@ -91,7 +111,7 @@ const RoomList = () => {
 
         orderRooms.sort((a, b) => (a[category] * multiA) + (b[category] * multiB));
 
-        handleFilterChange();
+        handleFilterChange(objectFilter);
     };
 
     const [showSearch, setShowSearch] = useState(false);
@@ -102,7 +122,11 @@ const RoomList = () => {
 
     const handleSearchChange = (e) => {
         setSearchValue(e.target.value);
-        // Aquí puedes filtrar los rooms según el valor de búsqueda si lo deseas
+        const filtered = orderRooms.filter(room =>
+            room.tipo_cuarto.toLowerCase().includes(e.target.value.toLowerCase()) ||
+            room.direccion_propiedad.toLowerCase().includes(e.target.value.toLowerCase())
+        );
+        setFilteredRooms(filtered);
     };
 
     const handleSelectRoom = (roomId) => {
@@ -127,8 +151,7 @@ const RoomList = () => {
     };
 
     if (loading || error) {
-      // Mostrar animación si está cargando o hay error/no data
-      return  ;
+        return <div>Loading...</div>;
     }
 
     return (
@@ -136,34 +159,34 @@ const RoomList = () => {
             <aside className='w-full lg:w-64 lg:flex-shrink-0'>
                 <h2 className='text-xl lg:text-2xl font-bold mb-4'>Nuestras Inmobiliarias</h2>
                 <p className='font-semibold mb-4'>Filtrar por</p>
-                <RoomFilters onFilterChange={handleFilterChange} />
+                <RoomFilters
+                    onFilterChange={handleFilterChange}
+                    zona={zones}
+                />
             </aside>
 
             <div className='flex-1'>
-                <div className='flex justify-between '>
-                    <div className=' mb-4 flex flex-col gap-4'>
+                <div className='flex justify-between'>
+                    <div className='mb-4 flex flex-col gap-4'>
                         <div>
                             <span className='font-semibold text-lg lg:text-xl'>Ordenar por:</span>
                         </div>
                         <div className='flex flex-wrap items-center gap-2'>
-                            <button onClick={() => handleOrderRoom('precio', 'des')}
-                                className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
+                            <button onClick={() => handleOrderRoom('precio', 'desc')} className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
                                 Precio Alto <span className='text-xs'>↑</span>
                             </button>
-                            <button onClick={() => handleOrderRoom('precio', 'asc')}
-                                className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
+                            <button onClick={() => handleOrderRoom('precio', 'asc')} className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
                                 Precio Bajo <span className='text-xs'>↓</span>
                             </button>
-                            <button onClick={() => handleOrderRoom('rating', 'des')}
-                                className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
+                            <button onClick={() => handleOrderRoom('valoracion', 'desc')} className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
                                 Valoración Alta <span className='text-xs'>↑</span>
                             </button>
-                            <button onClick={() => handleOrderRoom('rating', 'asc')}
-                                className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
+                            <button onClick={() => handleOrderRoom('valoracion', 'asc')} className='px-3 lg:px-4 py-1.5 rounded-full bg-white border border-gray-300 text-xs lg:text-sm flex items-center gap-1'>
                                 Valoración Baja <span className='text-xs'>↓</span>
                             </button>
                         </div>
                     </div>
+
                     <div className='flex justify-end flex-col mb-4 gap-4'>
                         <div className="flex items-center gap-6">
                             <div className='flex'>
@@ -175,12 +198,10 @@ const RoomList = () => {
                                         <MdOutlineMenu className="text-gray-700" size={16} />
                                     </button>
                                 </div>
-                                <div className="border-l h-6 border-gray-300  mx-2"></div>
-                                <button
-                                    className={`flex items-center border rounded-sm px-3 py-1 gap-2 text-gray-500  ${selectMode && selectedRooms.length === 2 ? 'bg-orange-500 text-white' : ''}`}
+                                <div className="border-l h-6 border-gray-300 mx-2"></div>
+                                <button className={`flex items-center border rounded-sm px-3 py-1 gap-2 text-gray-500  ${selectMode && selectedRooms.length === 2 ? 'bg-orange-500 text-white' : ''}`}
                                     onClick={handleCompare}
-                                    disabled={selectMode && selectedRooms.length !== 2}
-                                >
+                                    disabled={selectMode && selectedRooms.length !== 2}>
                                     <span>Comparar</span>
                                     <MdCompare size={16} />
                                 </button>
@@ -215,20 +236,18 @@ const RoomList = () => {
                                     type="checkbox"
                                     checked={selectedRooms.includes(room.cuarto_id)}
                                     onChange={() => handleSelectRoom(room.cuarto_id)}
-                                    className="absolute top-2 right-2 z-20 w-5 h-5  accent-orange-500"
-                                    disabled={
-                                        !selectedRooms.includes(room.cuarto_id) && selectedRooms.length === 2
-                                    }
+                                    className="absolute top-2 right-2 z-20 w-5 h-5 accent-orange-500"
+                                    disabled={!selectedRooms.includes(room.cuarto_id) && selectedRooms.length === 2}
                                 />
                             )}
                             <RoomCard
                                 id={room.cuarto_id}
-                                image={room.fotos.length > 0 ? room.fotos[0] : ROOM}  // Usamos la primera foto si existe
+                                image={room.fotos.length > 0 ? room.fotos[0] : ROOM}
                                 type={room.tipo_cuarto}
                                 location={room.direccion_propiedad}
                                 price={room.precio}
                                 periodo={room.periodo}
-                                rating={room.rating}
+                                valoracion={room.valoracion}
                                 destacado={room.destacado || false}
                                 amenities={{
                                     wifi: true,
@@ -247,8 +266,7 @@ const RoomList = () => {
                         <button
                             key={page}
                             onClick={() => handlePageChange(page)}
-                            className={`px-3 py-1 rounded ${page === currentPage ? 'bg-gray-200' : 'hover:bg-gray-100'
-                                }`}
+                            className={`px-3 py-1 rounded ${page === currentPage ? 'bg-gray-200' : 'hover:bg-gray-100'}`}
                         >
                             {page}
                         </button>

@@ -14,7 +14,8 @@ export const RoomCard = ({
   location,
   price,
   periodo,
-  rating = 4,
+  zona = [],
+  valoracion = [],
   destacado = false,
   amenities = {
     wifi: false,
@@ -77,11 +78,12 @@ export const RoomCard = ({
       <div className='p-4'>
         <h3 className='font-medium text-lg mb-1'>{type}</h3>
         <p className='text-gray-600 text-sm mb-2'>{location}</p>
+        <p className='hidden'>{zona}</p>
         {/* <p className='text-gray-600 text-sm mb-2'>Disponibilidad: {disponibilidad === 1 ? 'No Disponible' : 'Disponible'}</p> */}
 
         <div className='flex flex-wrap items-center justify-between'>
           <div className='flex items-center gap-1'>
-            <span className='text-sm'>{rating}</span>
+            <span className='text-sm'>{valoracion}</span>
             <span className='text-yellow-400'>★</span>
           </div>
 
@@ -99,34 +101,3 @@ export const RoomCard = ({
     </div>
   );
 };
-
-// --- Ejemplo de uso ---
-// const exampleRoom = {
-//   cuarto_id: 1,
-//   fotos: [{ url_imagen: 'https://ejemplo.com/imagen1.jpg' }],
-//   tipo_cuarto: 'Doble',
-//   direccion_propiedad: 'Av. Siempre Viva 123',
-//   precio: 120,
-//   periodo: 'noche',
-//   rating: 4.5,
-//   destacado: true,
-//   servicios: [{ servicio: 'WiFi' }, { servicio: 'Parking' }],
-// };
-
-// <RoomCard
-//   id={exampleRoom.cuarto_id}
-//   image={exampleRoom.fotos && exampleRoom.fotos.length > 0 ? exampleRoom.fotos[0].url_imagen : undefined}
-//   type={exampleRoom.tipo_cuarto}
-//   location={exampleRoom.direccion_propiedad}
-//   price={exampleRoom.precio}
-//   periodo={exampleRoom.periodo}
-//   rating={exampleRoom.rating}
-//   destacado={exampleRoom.destacado}
-//   amenities={{
-//     wifi: exampleRoom.servicios.some(s => s.servicio === 'WiFi'),
-//     parking: exampleRoom.servicios.some(s => s.servicio === 'Parking'),
-//     bed: true,
-//     bath: true,
-//     location: true,
-//   }}
-// />

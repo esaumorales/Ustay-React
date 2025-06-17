@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { FaWifi, FaCar, FaBed, FaBath, FaMapMarkerAlt, FaHeart, FaRegHeart } from "react-icons/fa"; // Importando iconos de react-icons
 
-const WideRoomCard = ({ image, title, location, price, periodo, rating, destacado, amenities, publisher, onClick }) => {
+const WideRoomCard = ({ image, title, location, price, periodo, valoracion, destacado, amenities, publisher, onClick }) => {
     const ROOM = '@/presentation/assets/img/room.png'; // Ruta de la imagen predeterminada
     const [isFavorite, setIsFavorite] = useState(false);
 
@@ -33,7 +33,7 @@ const WideRoomCard = ({ image, title, location, price, periodo, rating, destacad
                     </div>
                 </div>
                 <div className="flex items-center justify-between mt-4">
-                    <span className="text-yellow-500">{rating} ★</span>
+                    <span className="text-yellow-500">{valoracion} ★</span>
                 </div>
                 <div className='flex justify-between'>
                     <div className="flex items-center gap-2">

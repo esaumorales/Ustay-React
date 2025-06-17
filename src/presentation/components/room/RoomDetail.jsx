@@ -6,7 +6,7 @@ import { IoLocationSharp, IoPersonCircleOutline } from "react-icons/io5";
 import { PiHouseLineLight, PiStarThin } from "react-icons/pi";
 import { MdOutlinePhone } from "react-icons/md";
 import { CiAt } from "react-icons/ci";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaBolt, FaBroom, FaCar, FaFire, FaLock, FaTint, FaTshirt, FaWhatsapp } from "react-icons/fa";
 import { IconWifi } from '@/presentation/assets/icons/icon-wifi';
 import { Link } from 'react-router-dom';
 import MAP from '@/presentation/assets/img/background-map.png';
@@ -122,12 +122,15 @@ export const RoomDetail = () => {
         {/* Image Gallery */}
         <div className="flex flex-row w-full">
           <Swiper
-            effect={'coverflow'}
+            // effect={'coverflow'}
             grabCursor={true}
-            autoplay={{ delay: 3000 }}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
             slidesPerView={3}
             modules={[EffectCoverflow, Autoplay]}
-            className='flex justify-center items-center'
+            className="flex justify-center items-center"
           >
             {Array.isArray(room.fotos) && room.fotos.length > 0 ? (
               room.fotos.map((foto, index) => (
@@ -140,7 +143,11 @@ export const RoomDetail = () => {
                 </SwiperSlide>
               ))
             ) : (
-              <p>No images available</p>
+              <SwiperSlide>
+                <div className="h-full flex justify-center items-center bg-gray-300">
+                  <p>No imagen</p>
+                </div>
+              </SwiperSlide>
             )}
           </Swiper>
         </div>
@@ -175,7 +182,7 @@ export const RoomDetail = () => {
                     <p>{room.direccion_propiedad}</p>
                   </div>
                   <div>
-                    <span className='text-sm'>{room.rating}</span>
+                    <span className='text-sm'>{room.valoracion}</span>
                     <span className='text-yellow-400'>★</span>
                   </div>
                 </div>
@@ -220,20 +227,61 @@ export const RoomDetail = () => {
               <h2 className="text-xl font-semibold mb-4 w-32">Servicios</h2>
               <span className='block w-[1px] h-full bg-gray-300'></span>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-[14px] w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-[14px] w-full">
               {Array.isArray(room.servicios) && room.servicios.length > 0 ? room.servicios.map(servicio => (
                 <div key={servicio.servicio_id} className="flex items-center gap-2">
-                  <span className="w-8 h-8 flex items-center justify-center">
-                    <IconWifi className="w-4 h-4" />
-                  </span>
-                  <div>
+                  {/* Show icon based on service type */}
+                  {servicio.servicio === 'WiFi' && (
+                    <span className="w-8 h-8 flex items-center justify-center">
+                      <FaWifi className="w-4 h-4" />
+                    </span>
+                  )}
+                  {servicio.servicio === 'Agua' && (
+                    <span className="w-8 h-8 flex items-center justify-center">
+                      <FaTint className="w-4 h-4" />
+                    </span>
+                  )}
+                  {servicio.servicio === 'Luz' && (
+                    <span className="w-8 h-8 flex items-center justify-center">
+                      <FaBolt className="w-4 h-4" />
+                    </span>
+                  )}
+                  {servicio.servicio === 'Seguridad' && (
+                    <span className="w-8 h-8 flex items-center justify-center">
+                      <FaLock className="w-4 h-4" />
+                    </span>
+                  )}
+                  {servicio.servicio === 'Calefacción' && (
+                    <span className="w-8 h-8 flex items-center justify-center">
+                      <FaFire className="w-4 h-4" />
+                    </span>
+                  )}
+                  {servicio.servicio === 'Limpieza' && (
+                    <span className="w-8 h-8 flex items-center justify-center">
+                      <FaBroom className="w-4 h-4" />
+                    </span>
+                  )}
+                  {servicio.servicio === 'Garage' && (
+                    <span className="w-8 h-8 flex items-center justify-center">
+                      <FaCar className="w-4 h-4" />
+                    </span>
+                  )}
+                  {servicio.servicio === 'Lavandería' && (
+                    <span className="w-8 h-8 flex items-center justify-center">
+                      <FaTshirt className="w-4 h-4" /> {/* Icono para Lavandería */}
+                    </span>
+                  )}
+                  {/* Add other service icons here if necessary */}
+
+                  <div >
                     <span className="text-gray-600 font-semibold">{servicio.servicio}:</span>
-                    <span className="text-gray-600"> {servicio.descripcion}</span>
+                    <span className="text-gray-600"> {servicio.descripcion || "Sin descripción"}</span>
                   </div>
                 </div>
-              )) : <p>Aun no agregado</p>}
+              )) : <p>Aún no agregado</p>}
             </div>
           </div>
+
 
           {/* Map */}
           <div className="bg-white rounded-lg p-6 mb-2">
@@ -324,7 +372,7 @@ export const RoomDetail = () => {
               location={similarRoom.direccion_propiedad}
               price={similarRoom.precio}
               periodo={similarRoom.periodo}
-              rating={similarRoom.rating}
+              valoracion={similarRoom.valoracion}
               destacado={similarRoom.destacado}
               amenities={{
                 wifi: similarRoom.servicios && similarRoom.servicios.some(s => s.servicio === 'WiFi'),
