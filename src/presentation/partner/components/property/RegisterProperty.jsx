@@ -4,11 +4,13 @@ import { IoCloseSharp } from 'react-icons/io5';
 import { createProperty } from '@/infrastructure/services/property.service';
 import { useAuth } from '@/presentation/contexts/AuthContext';
 import { Link } from 'react-router-dom';
+import MapSelector from '../MapSelector';
 
 const CLOUDINARY_CLOUD_NAME = 'djasvvxs9'; // reemplaza con tu cloud name real
 const CLOUDINARY_UPLOAD_PRESET = 'cgfucclq'; // tu upload preset sin firma
 
 const RegisterProperty = ({ onClose, hasProperties }) => {
+  const [coords, setCoords] = useState(null);
   const [step, setStep] = useState(1);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [address, setAddress] = useState('');
@@ -86,6 +88,8 @@ const RegisterProperty = ({ onClose, hasProperties }) => {
         foto: uploadedUrls[0] || null,
         foto_2: uploadedUrls[1] || null,
         foto_3: uploadedUrls[2] || null,
+        latitud: coords?.lat || null,
+        longitud: coords?.lng || null,
         nombre_partner: user?.nombre || user?.name || localStorage.getItem('userName'),
         apellido_partner: user?.apellido_pa || user?.apellido || localStorage.getItem('userLastName'),
       };
@@ -103,8 +107,12 @@ const RegisterProperty = ({ onClose, hasProperties }) => {
 
   const MapStep = () => (
     <div className="flex flex-col items-center">
-      <img src="@/presentation/assets/img/background-map.png" alt="Mapa" className="w-full max-w-xl rounded mb-2" />
-      <div className="text-center text-sm text-gray-600">(lat: -11.9120, lng: -76.625 )</div>
+      <MapSelector selectedCoords={coords} onSelect={(coords) => setCoords(coords)} />
+      {coords && (
+        <div className="mt-2 text-sm text-gray-700">
+          Coordenadas seleccionadas: lat: {coords.lat}, lng: {coords.lng}
+        </div>
+      )}
     </div>
   );
 
