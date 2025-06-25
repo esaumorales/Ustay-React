@@ -9,13 +9,13 @@ import { CiAt } from "react-icons/ci";
 import { FaBolt, FaBroom, FaCar, FaFire, FaLock, FaTint, FaTshirt, FaWhatsapp } from "react-icons/fa";
 import { IconWifi } from '@/presentation/assets/icons/icon-wifi';
 import { Link } from 'react-router-dom';
-import MAP from '@/presentation/assets/img/background-map.png';
 import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectCoverflow } from 'swiper/modules';
 import WideRoomCard from './WideRoomCard';
 import ROOM from '@/presentation/assets/img/room.png';
 import Alert from '@/presentation/components/common/Alert';
+import MapSelector from '@/presentation/partner/components/MapSelector';
 
 const SPECS = [
   {
@@ -283,13 +283,21 @@ export const RoomDetail = () => {
           </div>
 
 
-          {/* Map */}
+          {/* Mapa */}
           <div className="bg-white rounded-lg p-6 mb-2">
             <h2 className="text-xl font-semibold mb-4">Ubicación</h2>
-            <div className="h-64 bg-gray-200 rounded-lg">
-              <img src={MAP} alt="" className='w-full h-full object-cover rounded-xl' />
-            </div>
+            {room.latitud && room.longitud ? (
+              <MapSelector
+                selectedCoords={{ lat: parseFloat(room.latitud), lng: parseFloat(room.longitud) }}
+                readOnly={true}
+              />
+            ) : (
+              <div className="h-64 flex items-center justify-center bg-gray-200 rounded-lg">
+                <p>No se especificó ubicación</p>
+              </div>
+            )}
           </div>
+
 
           {/* House Rules */}
           <div className="bg-white rounded-lg p-6 mb-8">

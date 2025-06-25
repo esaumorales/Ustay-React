@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { updateProperty, getPropertyById } from '@/infrastructure/services/property.service';
 import { useNavigate, useParams } from 'react-router-dom';
 import Alert from '@/presentation/components/common/Alert';
+import MapSelector from '../MapSelector';
 
 const CLOUDINARY_CLOUD_NAME = 'djasvvxs9'; // cloud name real
 const CLOUDINARY_UPLOAD_PRESET = 'cgfucclq'; // upload preset sin firma
@@ -11,6 +12,7 @@ const EditProperty = ({ property: propFromProps = {}, onClose, onSuccess }) => {
   const [property, setProperty] = useState(propFromProps);
 
   // Estados para los inputs (inicializados vacíos para evitar bloqueo)
+  const [coords, setCoords] = useState(null);
   const [direccion, setDireccion] = useState('');
   const [referencia, setReferencia] = useState('');
   const [n_pisos, setNPisos] = useState(1);
@@ -39,6 +41,9 @@ const EditProperty = ({ property: propFromProps = {}, onClose, onSuccess }) => {
       if (!referencia) setReferencia(property.referencia || '');
       if (!n_pisos || n_pisos === 1) setNPisos(property.n_pisos || 1);
       if (!reglas) setReglas(property.reglas || '');
+      if (property.latitud && property.longitud && !coords) {
+        setCoords({ lat: parseFloat(property.latitud), lng: parseFloat(property.longitud) });
+      }
       if (imagenes.length === 0) setImagenes([property.foto, property.foto_2, property.foto_3].filter(Boolean));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -86,6 +91,8 @@ const EditProperty = ({ property: propFromProps = {}, onClose, onSuccess }) => {
         referencia,
         n_pisos: parseInt(n_pisos),
         reglas,
+        latitud: coords?.lat || null,
+        longitud: coords?.lng || null,
         foto: uploadedUrls[0] || imagenes[0] || null,
         foto_2: uploadedUrls[1] || imagenes[1] || null,
         foto_3: uploadedUrls[2] || imagenes[2] || null,
@@ -141,7 +148,7 @@ const EditProperty = ({ property: propFromProps = {}, onClose, onSuccess }) => {
               {[...imagenes, ...nuevasImagenes].map((img, idx) => (
                 <div key={idx} className="flex items-center border rounded px-3 py-2 bg-gray-50">
                   <span className="mr-2 text-gray-500">
-                    <svg width="20" height="20" fill="none" stroke="currentColor"><rect width="18" height="14" x="1" y="3" rx="2" strokeWidth="2"/><circle cx="6" cy="8" r="1.5"/><path d="M1 13l4-4a2 2 0 0 1 2.8 0l4.2 4.2"/></svg>
+                    <svg width="20" height="20" fill="none" stroke="currentColor"><rect width="18" height="14" x="1" y="3" rx="2" strokeWidth="2" /><circle cx="6" cy="8" r="1.5" /><path d="M1 13l4-4a2 2 0 0 1 2.8 0l4.2 4.2" /></svg>
                   </span>
                   <span className="flex-1 truncate">{typeof img === 'string' ? img.split('/').pop() : img.name}</span>
                   <button
@@ -149,7 +156,7 @@ const EditProperty = ({ property: propFromProps = {}, onClose, onSuccess }) => {
                     className="mx-2 text-gray-500 hover:text-gray-700"
                     onClick={() => window.open(typeof img === 'string' ? img : URL.createObjectURL(img), '_blank')}
                   >
-                    <svg width="20" height="20" fill="none" stroke="currentColor"><circle cx="10" cy="10" r="8" strokeWidth="2"/><circle cx="10" cy="10" r="3" strokeWidth="2"/><path d="M10 2v2m0 12v2m8-8h-2M4 10H2"/></svg>
+                    <svg width="20" height="20" fill="none" stroke="currentColor"><circle cx="10" cy="10" r="8" strokeWidth="2" /><circle cx="10" cy="10" r="3" strokeWidth="2" /><path d="M10 2v2m0 12v2m8-8h-2M4 10H2" /></svg>
                   </button>
                   <button
                     type="button"
@@ -197,10 +204,16 @@ const EditProperty = ({ property: propFromProps = {}, onClose, onSuccess }) => {
           </div>
           <div>
             <label className="block mb-1 font-semibold">Mapa</label>
-            <div className="w-full h-64 bg-gray-200 flex items-center justify-center rounded">
-              {/* Aquí puedes integrar un mapa real con las coordenadas de la propiedad */}
-              <span>Mapa de la ubicación (solo lectura)</span>
+            <div>
+              <label className="block mb-1 font-semibold">Ubicación en el mapa</label>
+              <MapSelector selectedCoords={coords} onSelect={setCoords} />
+              {coords && (
+                <div className="text-sm mt-1 text-gray-700">
+                  Coordenadas: lat {coords.lat.toFixed(6)}, lng {coords.lng.toFixed(6)}
+                </div>
+              )}
             </div>
+
           </div>
           {error && <div className="text-red-500">{error}</div>}
         </form>
