@@ -22,16 +22,16 @@ export class AuthService {
 
       if (!response.ok) throw new Error('Error al obtener el perfil del usuario');
 
-      const userData = await response.json();
+      const userData = await response.json().catch(() => null);
+      if (!userData) throw new Error('Respuesta no válida del servidor');
 
-      if (userData) {
-        localStorage.setItem('user', JSON.stringify(userData));
-        localStorage.setItem('userId', userData.id || userData.usuario_id);
+      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('userId', userData.usuario_id || userData.id);
+      if (userData.foto_google) {
         localStorage.setItem('fotoGoogle', userData.foto_google);
-        return userData;
       }
 
-      return null;
+      return userData;
     } catch (error) {
       console.error('Error al manejar el callback de Google:', error);
       throw error;
@@ -51,21 +51,21 @@ export class AuthService {
         body: JSON.stringify(formattedCredentials),
       });
 
+      let data = await response.json().catch(() => null);
       if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.message || 'Error en la autenticación');
+        throw new Error(data?.message || 'Error en la autenticación');
       }
 
-      const data = await response.json();
       const token = data.token;
-      const userId = data.usuario.id || data.usuario.usuario_id;
+      const userId = data.usuario.usuario_id || data.usuario.id;
 
       localStorage.setItem('token', token);
       localStorage.setItem('userId', userId);
+      localStorage.setItem('user', JSON.stringify(data.usuario));
 
       return data;
     } catch (error) {
-      console.error('Error detallado:', error);
+      console.error('Error detallado en login:', error);
       throw error;
     }
   }
@@ -87,20 +87,18 @@ export class AuthService {
         body: JSON.stringify(formattedUserData),
       });
 
-      const data = await response.json();
-
+      const data = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error(data.message || 'Error en el registro');
+        throw new Error(data?.message || 'Error en el registro');
       }
 
-      // No guardamos el token aquí porque primero necesitamos verificar el correo
       return {
         success: true,
         message: data.message,
         email: formattedUserData.correo_electronico,
       };
     } catch (error) {
-      console.error('Error detallado:', error);
+      console.error('Error detallado en register:', error);
       throw error;
     }
   }
@@ -116,22 +114,20 @@ export class AuthService {
         }),
       });
 
-      const data = await response.json();
-
+      const data = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error(data.message || 'Error en la verificación del correo');
+        throw new Error(data?.message || 'Error en la verificación del correo');
       }
 
-      // Guardar token y datos del usuario después de la verificación exitosa
       if (data.token) {
         localStorage.setItem('token', data.token);
-        localStorage.setItem('userId', data.usuario.id || data.usuario.usuario_id);
+        localStorage.setItem('userId', data.usuario.usuario_id || data.usuario.id);
         localStorage.setItem('user', JSON.stringify(data.usuario));
       }
 
       return data;
     } catch (error) {
-      console.error('Error en la verificación:', error);
+      console.error('Error en la verificación del correo:', error);
       throw error;
     }
   }
@@ -145,15 +141,14 @@ export class AuthService {
         },
       });
 
-      const data = await response.json();
-
+      const data = await response.json().catch(() => null);
       if (!response.ok) {
-        throw new Error(data.message || 'Error al obtener el perfil');
+        throw new Error(data?.message || 'Error al obtener el perfil');
       }
 
       return data;
     } catch (error) {
-      console.error('Error detallado:', error);
+      console.error('Error al obtener el perfil del usuario:', error);
       throw error;
     }
   }

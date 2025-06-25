@@ -22,6 +22,8 @@ import Support from '@/presentation/partner/content/SupportContent'
 import EditProperty from '@/presentation/partner/components/property/EditProperty';
 import EditRoom from './presentation/partner/components/room/EditRoom';
 import AscendPartner from './presentation/components/AscendPartner';
+import RoomDetail from './presentation/partner/components/room/RoomDetail';
+import PropertyRoomDetail from './presentation/partner/components/property/PropertyRoomDetail';
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -66,6 +68,9 @@ function AppContent() {
             <Route path="/IMS/property" element={<Property />} />
             <Route path="/IMS/property/editar-propiedad/:id" element={<EditProperty />} />
             <Route path="/IMS/room/editar-cuarto/:id" element={<EditRoom />} />
+            <Route path='/IMS/room/:id' element={<RoomDetail />} ></Route>
+            <Route path='/IMS/property/:id' element={<PropertyRoomDetail />} ></Route>
+            <Route path='/IMS/property/uuid/:uuid' element={<PropertyRoomDetail />} />
             <Route path="/IMS/room" element={<Room />} />
             <Route path="/IMS/promotion" element={<Promotion />} />
             <Route path="/IMS/security" element={<Security />} />

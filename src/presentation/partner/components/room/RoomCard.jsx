@@ -37,13 +37,13 @@ const RoomCard = ({
     periodo = "Mensual",
     estado = "Disponible",
     onDeleted,
-    roomData // Para pasar todos los datos originales si es necesario
+    roomData
 }) => {
     const [loading, setLoading] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
 
-    const [room] = useState({ // [room , setRoom]
+    const [room] = useState({
         id,
         foto,
         nombre,
@@ -58,7 +58,7 @@ const RoomCard = ({
     const navigate = useNavigate();
 
     const handleDelete = async (e) => {
-        e.preventDefault(); // Prevenir el comportamiento predeterminado del formulario (en caso de estar dentro de uno)
+        e.stopPropagation();
         setShowConfirm(false);
         setLoading(true);
         try {
@@ -73,8 +73,15 @@ const RoomCard = ({
         }
     };
 
+    const goToDetail = () => {
+        if (!loading) navigate(`/IMS/room/${room.id}`);
+    };
+
     return (
-        <div className="bg-white rounded-lg overflow-hidden w-80 min-w-[20rem] max-w-[20rem] m-auto opacity-100 mb-4">
+        <div
+            onClick={goToDetail}
+            className="bg-white shadow-sm overflow-hidden w-80 min-w-[20rem] max-w-[20rem] m-auto opacity-100 mb-4 cursor-pointer hover:shadow-md transition"
+        >
             {showAlert && (
                 <Alert
                     message="Cuarto eliminado correctamente"
@@ -82,6 +89,7 @@ const RoomCard = ({
                     type="success"
                 />
             )}
+
             {showConfirm && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
                     <div className="bg-white p-6 rounded shadow-lg text-center">
@@ -96,7 +104,10 @@ const RoomCard = ({
                             </button>
                             <button
                                 className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
-                                onClick={() => setShowConfirm(false)}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setShowConfirm(false);
+                                }}
                                 disabled={loading}
                             >
                                 Cancelar
@@ -105,12 +116,14 @@ const RoomCard = ({
                     </div>
                 </div>
             )}
+
             <img
                 src={room.foto || "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"}
                 alt={room.description || "Cuarto"}
                 className="w-full h-40 object-cover"
             />
-            <div className="p-4">
+
+            <div className="p-4 ">
                 <div className="font-semibold text-lg mb-1 flex justify-center">{getShortDescription(room.nombre)}</div>
                 <div className="text-sm mb-1">
                     <span className="font-semibold">Tipo:</span> {room.tipo_cuarto}
@@ -126,22 +139,24 @@ const RoomCard = ({
                         <button
                             className="border px-2 py-1 rounded hover:bg-gray-100"
                             title="Editar"
-                            onClick={() => navigate(`/IMS/room/editar-cuarto/${room.id}`)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/IMS/room/editar-cuarto/${room.id}`);
+                            }}
                             disabled={loading}
                         >
-                            <span role="img" aria-label="edit">
-                                <MdOutlineModeEdit />
-                            </span>
+                            <MdOutlineModeEdit />
                         </button>
                         <button
                             className="border px-2 py-1 rounded hover:bg-gray-100"
                             title="Eliminar"
-                            onClick={() => setShowConfirm(true)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setShowConfirm(true);
+                            }}
                             disabled={loading}
                         >
-                            <span role="img" aria-label="delete">
-                                <PiTrash />
-                            </span>
+                            <PiTrash />
                         </button>
                     </div>
                     <div>
@@ -156,7 +171,7 @@ const RoomCard = ({
                 <hr className="my-2 text-gray-500" />
                 <div className={`mt-2 text-sm font-semibold flex justify-center gap-2 ${statusStyles[room.estado] || "text-gray-600"}`}>
                     <span className="text-gray-800">Estado:</span>
-                    <span> {room.estado}</span>
+                    <span>{room.estado}</span>
                 </div>
             </div>
         </div>
