@@ -100,3 +100,48 @@ export const activarPromocion = async ({ usuario_id, cuarto_id, plan_id }) => {
 
   return response.json();
 };
+
+export const cancelarPromocion = async (promocion_id) => {
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('No autorizado');
+
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  };
+
+  const response = await fetch(`${API_URL}/puntos/cancelar-promocion`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ promocion_id }), // 👈 Asegúrate que va así
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Error al cancelar promoción');
+  }
+
+  return response.json();
+};
+
+export const getHistorialPromocionByCuarto = async (cuarto_id) => {
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('No autorizado');
+
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  };
+
+  const response = await fetch(`${API_URL}/puntos/historial/cuarto/${cuarto_id}`, {
+    method: 'GET',
+    headers,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Error al obtener historial');
+  }
+
+  return response.json(); // { historial: [...] }
+};

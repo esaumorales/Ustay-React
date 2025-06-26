@@ -3,7 +3,7 @@ import { DateTime } from 'luxon'
 import { FaRegCreditCard, FaHistory, FaQuestionCircle, FaArrowRight, FaTimes } from 'react-icons/fa'
 import { fetchPuntosHistorial, fetchUserPoints, recargarPuntos } from '@/infrastructure/services/puntos.service'
 import Modal from '../components/Modal'
-
+import RecargaHistorialModal from './RecargaHistorialModal'
 const PointsHeader = () => {
   const [mostrarDeposito, setMostrarDeposito] = useState(false)
   const [mostrarHistorial, setMostrarHistorial] = useState(false)
@@ -73,7 +73,7 @@ const PointsHeader = () => {
       const { fecha_recarga } = await recargarPuntos({
         usuario_id,
         monto_soles,
-        puntos_obtenidos
+        puntos_obtenidos,
       })
 
       if (fecha_recarga) {
@@ -174,7 +174,8 @@ const PointsHeader = () => {
         </div>
       </div>
 
-      {mostrarHistorial && (
+      {/* Modal original simple */}
+      {mostrarHistorial && historial.length <= 8 && (
         <Modal title="Historial de Recargas" onClose={() => setMostrarHistorial(false)}>
           {cargandoHistorial ? (
             <p className="text-center py-4">Cargando...</p>
@@ -200,6 +201,15 @@ const PointsHeader = () => {
             </ul>
           )}
         </Modal>
+      )}
+
+      {/* Modal nuevo con paginación si hay más de 8 recargas */}
+      {mostrarHistorial && historial.length > 8 && (
+        <RecargaHistorialModal
+          visible={mostrarHistorial}
+          onClose={() => setMostrarHistorial(false)}
+          historial={historial}
+        />
       )}
     </div>
   )
