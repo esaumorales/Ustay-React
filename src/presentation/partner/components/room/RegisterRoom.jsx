@@ -5,7 +5,7 @@ import { FaBolt, FaTint, FaWifi, FaLock, FaFire, FaBroom, FaCar } from 'react-ic
 const CLOUDINARY_UPLOAD_PRESET = 'cgfucclq';
 const CLOUDINARY_CLOUD_NAME = 'djasvvxs9';
 
-const RegisterRoom = () => {
+const RegisterRoom = ({ propiedadId}) => {
     const [step, setStep] = useState(1);
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [title, setTitle] = useState('');
@@ -87,27 +87,25 @@ const RegisterRoom = () => {
       
           // Datos para enviar al backend (ajustados al formato esperado)
           const cuartoData = {
-            propiedad_id: 3, // Reemplazar con el valor dinámico si es necesario
+            propiedad_id: propiedadId, 
             tipo_cuarto_id: parseInt(roomType),
             precio: precio,
             nombre: title,
             dimensiones: dimensions,
             n_piso: parseInt(floor),
             n_cuarto: parseInt(roomNumber),
-            periodo: periodo, // Enviar el string (ej: "Mensual"), no el ID
+            periodo: periodo, 
             descripcion: description,
             disponibilidad: 1,
             informacion_adicional: extraInfo,
             fotos: imageUrls,
-            servicios: services, // Enviar como arreglo de strings: ["luz", "agua"]
-            serviceDetails: selectedServiceDetails, // Enviar como objeto: { luz: "Descripción", agua: "..." }
+            servicios: services, 
+            serviceDetails: selectedServiceDetails, 
           };
-      
-          console.log("Datos a enviar al backend:", cuartoData); // Depuración
-      
+            
           // Llamar al backend
           await createRoom(cuartoData);
-          setStep(9); // Éxito
+          setStep(9); 
         } catch (error) {
           console.error('Error al registrar el cuarto:', error);
         } finally {
