@@ -48,8 +48,14 @@ function CompareRoomPage() {
       setLoading(false);
       return;
     }
-    setLoading(true);
-    Promise.all(ids.map(id => fetchRoomById(id).then(data => data.cuarto)))
+      setLoading(true);
+      Promise.all(ids.map(id =>
+        fetchRoomById(id).then(data => ({
+          ...data.cuarto,
+          fotos: data.fotos?.map(f => f.url_imagen) || [],
+          servicios: data.servicios || []
+        }))
+      ))
       .then(setRooms)
       .catch(err => {
         console.error('Error al cargar cuartos para comparar:', err);

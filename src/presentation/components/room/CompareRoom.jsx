@@ -1,14 +1,19 @@
 import React from 'react';
-import { useAuth } from '@/presentation/contexts/AuthContext'; // Asegúrate de importar el hook
+import { useAuth } from '@/presentation/contexts/AuthContext';
 
 const CompareRoom = ({ rooms }) => {
-    const { isAuthenticated } = useAuth(); // Usa el hook para verificar la autenticación
+    const { isAuthenticated } = useAuth();
+
+    console.log(rooms)
 
     if (!isAuthenticated) {
-        return <div className='text-center '> <p>No estás autorizado para ver esta información.</p> <p>Por favor, inicia sesión.</p> </div>;
+        return (
+            <div className='text-center'>
+                <p>No estás autorizado para ver esta información.</p>
+                <p>Por favor, inicia sesión.</p>
+            </div>
+        );
     }
-
-    console.log("Rooms data:", rooms); // Agrega este console.log para ver los datos
 
     if (!rooms || rooms.length === 0) {
         return <div>No hay cuartos seleccionados para comparar.</div>;
@@ -19,38 +24,59 @@ const CompareRoom = ({ rooms }) => {
             <h2 className="text-2xl font-bold mb-6 text-center">Comparar cuartos</h2>
             <table className="min-w-full bg-white rounded-lg shadow mx-auto">
                 <tbody>
+                    {/* FOTOS */}
                     <tr>
                         <th className="text-left p-3 font-semibold w-48">Imágenes</th>
-                        {rooms.map((room, idx) => (
-                            <td key={idx} className="p-3 text-center">
-                                <img src={room.image} alt={room.tipo_cuarto} className="w-full h-40 object-cover rounded mb-4" />
-                            </td>
-                        ))}
+                        {rooms.map((room, idx) => {
+                            const imagen = Array.isArray(room.fotos) && room.fotos.length > 0
+                                ? (typeof room.fotos[0] === 'string' ? room.fotos[0] : room.fotos[0].url_imagen)
+                                : "https://res.cloudinary.com/demo/image/upload/sample.jpg";
+
+                            return (
+                                <td key={idx} className="p-3 text-center">
+                                    <img
+                                        src={imagen}
+                                        alt={room.tipo_cuarto}
+                                        className="w-full h-40 object-cover rounded mb-4"
+                                    />
+                                </td>
+                            );
+                        })}
                     </tr>
+
+                    {/* TITULO */}
                     <tr>
                         <th className="text-left p-3 font-semibold">Título</th>
                         {rooms.map((room, idx) => (
                             <td key={idx} className="p-3 text-center">{room.tipo_cuarto}</td>
                         ))}
                     </tr>
+
+                    {/* DESCRIPCION */}
                     <tr>
                         <th className="text-left p-3 font-semibold">Descripción</th>
                         {rooms.map((room, idx) => (
                             <td key={idx} className="p-3 text-center">{room.descripcion}</td>
                         ))}
                     </tr>
+
+                    {/* UBICACION */}
                     <tr>
                         <th className="text-left p-3 font-semibold">Ubicación</th>
                         {rooms.map((room, idx) => (
                             <td key={idx} className="p-3 text-center">{room.direccion_propiedad}</td>
                         ))}
                     </tr>
+
+                    {/* PRECIO */}
                     <tr>
                         <th className="text-left p-3 font-semibold">Precio</th>
                         {rooms.map((room, idx) => (
                             <td key={idx} className="p-3 text-center">S/. {room.precio}</td>
                         ))}
                     </tr>
+
+                    {/* SERVICIOS */}
                     <tr>
                         <th className="text-left p-3 font-semibold">Servicios</th>
                         {rooms.map((room, idx) => (
@@ -69,6 +95,8 @@ const CompareRoom = ({ rooms }) => {
                             </td>
                         ))}
                     </tr>
+
+                    {/* REGLA DE LA CASA */}
                     <tr>
                         <th className="text-left p-3 font-semibold">Reglas de la casa</th>
                         {rooms.map((room, idx) => (
