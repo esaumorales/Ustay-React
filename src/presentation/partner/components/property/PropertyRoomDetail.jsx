@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getPropertyById } from '@/infrastructure/services/property.service';
 import ROOM from '@/presentation/assets/img/room.png';
-import MAP from '@/presentation/assets/img/background-map.png';
+import MapSelector from '@/presentation/partner/components/MapSelector';
 
 const PropertyRoomDetail = () => {
   const { id } = useParams();
@@ -70,7 +70,13 @@ const PropertyRoomDetail = () => {
 
           {/* Mapa */}
           <div className="mt-6">
-            <img src={MAP} alt="Mapa" className="w-full h-64 object-cover rounded" />
+            <MapSelector
+              selectedCoords={{
+                lat: parseFloat(property.latitud),
+                lng: parseFloat(property.longitud),
+              }}
+              readOnly={true}
+            />
           </div>
 
           {/* Reglas */}

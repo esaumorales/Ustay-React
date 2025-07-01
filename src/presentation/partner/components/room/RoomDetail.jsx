@@ -25,6 +25,7 @@ import 'swiper/css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import WideRoomCard from './WideRoomCard.jsx';
+import MapSelector from '../MapSelector.jsx';
 
 /* ---------- Specs helpers ---------- */
 const SPECS = [
@@ -245,7 +246,13 @@ const RoomDetail = () => {
                     {/* Mapa */}
                     <div className="bg-white rounded-lg p-6 mb-2">
                         <h2 className="text-xl font-semibold mb-4">Ubicación</h2>
-                        <img src={MAP} alt="mapa" className="w-full h-64 object-cover rounded-lg" />
+                        <MapSelector
+                            selectedCoords={{
+                                lat: parseFloat(room.latitud),
+                                lng: parseFloat(room.longitud),
+                            }}
+                            readOnly={true}
+                        />
                     </div>
 
                     {/* Reglas */}
