@@ -27,7 +27,7 @@ export default function Header() {
 
   if (loading) {
     return (
-      <header className="mt-4 px-4 md:px-4 lg:px-8">
+      <header className="mt-4 px-4 md:px-4 lg:px-8 sticky top-0 ">
         <div className="flex justify-between md:justify-between items-center px-16">
           {/* Logo */}
           <div className="flex flex-wrap items-center">
@@ -42,7 +42,7 @@ export default function Header() {
   }
 
   return (
-    <header className="mt-4 px-4 md:px-4 lg:px-8">
+    <header className="mt-4 px-4 md:px-4 lg:px-8 sticky top-4 z-50">
       <div className="flex justify-between md:justify-between items-center px-16">
         {/* Logo */}
         <div className="flex flex-wrap items-center">
