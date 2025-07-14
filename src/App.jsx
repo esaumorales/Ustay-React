@@ -24,6 +24,11 @@ import EditRoom from './presentation/partner/components/room/EditRoom';
 import AscendPartner from './presentation/components/AscendPartner';
 import RoomDetail from './presentation/partner/components/room/RoomDetail';
 import PropertyRoomDetail from './presentation/partner/components/property/PropertyRoomDetail';
+import ProfilePage from './presentation/pages/ProfilePage';
+
+//Profile
+import InformationProfile from './presentation/components/profile/InformationProfile';
+
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -57,9 +62,14 @@ function AppContent() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/favorite" element={<FavoritePage />} />
 
+        {/* Ruta Profile */}
+        <Route path="/profile" element={<ProfilePage />}>
+          <Route path="information" element={<InformationProfile />} />
+        </Route>
+
         {/* Ascend Partner */}
         <Route path="/ascendPartner" element={<AscendPartner />} />
-        
+
 
         {canAccessIMS ? (
           <>
