@@ -12,23 +12,42 @@ export default function InformationProfile() {
         telefono: '',
         dniFrontal: '',
         dniTrasero: '',
-        fechaRegistro: ''
+        fecha_registro: ''
     });
 
+    function formatDateTime(dateString) {
+        if (!dateString) return '';
+
+        const date = new Date(dateString);
+
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // enero = 0
+        const year = date.getFullYear();
+
+        let hours = date.getHours();
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+        const ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12 || 12; 
+
+        const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+        return `${day}/${month}/${year} - ${formattedTime}`;
+    }
     useEffect(() => {
         async function loadProfile() {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) return;
-    
-                const data = await fetchProfile(token);
-                setProfile(data);
+
+                const data = await fetchProfile();
+                setProfile(data.user);
             } catch (error) {
                 console.error('Error al obtener el perfil:', error);
             }
         }
         loadProfile();
     }, []);
+
 
     return (
         <div className='mx-32'>
@@ -97,7 +116,7 @@ export default function InformationProfile() {
 
                 <div>
                     <p className='font-semibold'>Fecha de registro</p>
-                    <span>{profile.fechaRegistro}</span>
+                    <span>{formatDateTime(profile.fecha_registro)}</span>
                 </div>
 
             </div>
