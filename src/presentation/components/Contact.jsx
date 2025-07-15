@@ -2,7 +2,7 @@ import { RightArrowIcon } from '@/presentation/assets/icons/icon-rightArrow';
 import BACKGROUNDPARTNER from '@/presentation/assets/img/background-partner.webp';
 import LOGOMUNI from '@/presentation/assets/img/logo_lurigancho_chosica.webp';
 import LOGOUPEU from '@/presentation/assets/img/logo_upeu.webp';
-import LOGOSUNAT from '@/presentation/assets/img/logo_Sunat.webp';
+import LOGOSUNAT from '@/presentation/assets/img/logo_sunat.webp';
 
 import { Link } from 'react-router-dom';
 
