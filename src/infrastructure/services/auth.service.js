@@ -8,7 +8,17 @@ export class AuthService {
   static async handleGoogleCallback() {
     const params = new URLSearchParams(window.location.search);
     const token = params.get('token');
-    if (!token) return null;
+    const error = params.get('error');
+
+    if (error) {
+      console.error('Error en el callback de Google:', error);
+      throw new Error('Error de autenticación: ' + error);
+    }
+
+    if (!token) {
+      console.error('No se recibió token en el callback de Google');
+      throw new Error('No se recibió token');
+    }
 
     localStorage.setItem('token', token);
 
@@ -20,15 +30,14 @@ export class AuthService {
         },
       });
 
-      if (!response.ok) throw new Error('Error al obtener el perfil del usuario');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.message || 'Error al obtener el perfil del usuario');
+      }
 
-      const userData = await response.json().catch(() => null);
-      if (!userData) throw new Error('Respuesta no válida del servidor');
-
-      localStorage.setItem('user', JSON.stringify(userData));
-      localStorage.setItem('userId', userData.usuario_id || userData.id);
-      if (userData.foto_google) {
-        localStorage.setItem('fotoGoogle', userData.foto_google);
+      const userData = await response.json();
+      if (!userData || !userData.user) {
+        throw new Error('Respuesta no válida del servidor');
       }
 
       return userData;

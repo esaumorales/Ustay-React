@@ -1,6 +1,6 @@
 import React from 'react';
-import {FcGoogle} from 'react-icons/fc';
-import {useModal} from '@/presentation/hooks/useModal'
+import { FcGoogle } from 'react-icons/fc';
+import { useModal } from '@/presentation/hooks/useModal'
 import ModalRecoverPassword from './ModalRecoverPassword';
 import BACKGROUNDMODAL from '@/presentation/assets/img/background-modal.webp';
 import { useState } from 'react';
@@ -17,7 +17,7 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
         e.preventDefault();
         setError('');
         setIsLoading(true);
-        
+
         try {
             await login(credentials);
             onClose();
@@ -46,7 +46,7 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
 
     if (recoverModal.isOpen) {
         return (
-            <ModalRecoverPassword 
+            <ModalRecoverPassword
                 isOpen={recoverModal.isOpen}
                 onClose={() => {
                     recoverModal.closeModal();
@@ -67,7 +67,7 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
                 <div className='w-1/2 hidden md:block relative'>
                     <img src={BACKGROUNDMODAL}
                         alt='fotoModal'
-                        className='w-full h-full object-cover object-center'/>
+                        className='w-full h-full object-cover object-center' />
                 </div>
 
                 <div className='w-full md:w-1/2 p-8'>
@@ -89,33 +89,33 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
 
                     <form onSubmit={handleSubmit} className='space-y-4'>
                         <div>
-                            <input 
+                            <input
                                 type='email'
                                 name='email'
                                 value={credentials.email}
                                 onChange={handleChange}
-                                placeholder='Correo E-mail' 
+                                placeholder='Correo E-mail'
                                 className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500'
                                 required
                             />
                         </div>
                         <div>
-                            <input 
+                            <input
                                 type='password'
                                 name='password'
                                 value={credentials.password}
                                 onChange={handleChange}
-                                placeholder='Contraseña' 
+                                placeholder='Contraseña'
                                 className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500'
                                 required
                             />
                         </div>
                         <div className='flex items-center justify-between'>
                             <label className='flex items-center'>
-                                <input type='checkbox' className='mr-2 accent-blue-500'/>
+                                <input type='checkbox' className='mr-2 accent-blue-500' />
                                 <span className='text-sm text-gray-600'>Recuérdame</span>
                             </label>
-                            <button 
+                            <button
                                 type="button"
                                 onClick={(e) => {
                                     e.preventDefault();
@@ -126,8 +126,8 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
                                 ¿Se te olvidó la contraseña?
                             </button>
                         </div>
-                        <button 
-                            type='submit' 
+                        <button
+                            type='submit'
                             disabled={isLoading}
                             className='w-full bg-[#1a1a1a] text-white py-3 rounded-lg hover:bg-[#333] transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed'
                         >
@@ -143,9 +143,9 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
                         </div>
                         <button
                             className='w-full bg-gray-100 flex items-center justify-center gap-2 py-3 rounded-lg hover:bg-gray-200 transition-colors'
-                            onClick={loginWithGoogle} // Añadir el evento onClick
+                            onClick={loginWithGoogle}
                         >
-                            <FcGoogle size={20}/>
+                            <FcGoogle size={20} />
                             <span className='font-medium'>Google</span>
                         </button>
                     </div>
@@ -154,11 +154,11 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
                         <p className='text-sm text-gray-600'>
                             ¿No tienes una cuenta?{' '}
                             <button onClick={
-                                    () => {
-                                        onClose();
-                                        onSwitchToRegister();
-                                    }
+                                () => {
+                                    onClose();
+                                    onSwitchToRegister();
                                 }
+                            }
                                 className='text-orange-500 hover:underline font-medium'>
                                 Regístrate
                             </button>

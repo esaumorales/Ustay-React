@@ -5,7 +5,7 @@
 //     'Accept': 'application/json'
 // };
 
-export const API_URL = 'https://ustay-backend.up.railway.app';
+export const API_URL = 'https://api.truskis.xyz';
 
 export const headers = {
     'Content-Type': 'application/json',

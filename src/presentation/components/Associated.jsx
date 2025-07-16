@@ -15,9 +15,9 @@ export default function Associated() {
   ];
 
   return (
-    <div className='flex flex-wrap my-12 justify-around'>
+    <div className='flex flex-wrap my-8 justify-around md:my-8 sm:my-8 gap-8'>
       {metrics.map((metric, index) => (
-        <div key={index} className='flex flex-col gap-2 border-t-4 border-t-secondary p-4 rounded-br-2xl rounded-tl-2xl shadow-sm'>
+        <div key={index} className='flex flex-col border-t-4 border-t-secondary p-4 rounded-br-2xl rounded-tl-2xl shadow-sm w-58 text-center'>
           <h1 className='font-semibold text-3xl text-center'>
             {metric.value} {metric.suffix}
           </h1>
