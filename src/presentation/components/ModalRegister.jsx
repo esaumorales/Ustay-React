@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
-import BACKGROUNDMODAL from '@/presentation//assets/img/background-modal.webp';
+import BACKGROUNDMODAL from '@/presentation/assets/img/background-modal.webp';
 import { useAuth } from '@/presentation/contexts/AuthContext';
 import { AuthService } from '@/infrastructure/services/auth.service';
 
@@ -13,7 +13,7 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
     const [step, setStep] = useState(1);
     const [email, setEmail] = useState('');
     const [userData, setUserData] = useState(null);
-    const [code, setCode] = useState(['', '', '', '', '']);
+    const [code, setCode] = useState(['', '', '', '', '', '']);
 
     if (!isOpen) return null;
 
@@ -97,7 +97,7 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
                     {step === 1 ? (
                         <>
                             <h2 className='text-2xl font-semibold mb-4 text-center'>Registrarse con su Correo</h2>
-                            
+
                             {error && (
                                 <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
                                     {error}
@@ -106,70 +106,70 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
 
                             <form onSubmit={handleSubmit} className='space-y-4'>
                                 <div>
-                                    <input 
-                                        type='text' 
+                                    <input
+                                        type='text'
                                         name='nombre'
-                                        placeholder='Nombre' 
+                                        placeholder='Nombre'
                                         required
-                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300' 
+                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300'
                                     />
                                 </div>
                                 <div>
-                                    <input 
-                                        type='text' 
+                                    <input
+                                        type='text'
                                         name='apellido_pa'
-                                        placeholder='Apellido Paterno' 
+                                        placeholder='Apellido Paterno'
                                         required
-                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300' 
+                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300'
                                     />
                                 </div>
                                 <div>
-                                    <input 
-                                        type='text' 
+                                    <input
+                                        type='text'
                                         name='apellido_ma'
-                                        placeholder='Apellido Materno' 
+                                        placeholder='Apellido Materno'
                                         required
-                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300' 
+                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300'
                                     />
                                 </div>
                                 <div>
-                                    <input 
-                                        type='email' 
+                                    <input
+                                        type='email'
                                         name='email'
-                                        placeholder='Correo' 
+                                        placeholder='Correo'
                                         required
-                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300' 
+                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300'
                                     />
                                 </div>
                                 <div>
-                                    <input 
-                                        type='password' 
+                                    <input
+                                        type='password'
                                         name='password'
-                                        placeholder='Contraseña' 
+                                        placeholder='Contraseña'
                                         required
-                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300' 
+                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300'
                                     />
                                 </div>
                                 <div>
-                                    <input 
-                                        type='password' 
+                                    <input
+                                        type='password'
                                         name='confirmPassword'
-                                        placeholder='Repetir contraseña' 
+                                        placeholder='Repetir contraseña'
                                         required
-                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300' 
+                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300'
                                     />
                                 </div>
                                 <div className='flex items-center'>
-                                    <input 
-                                        type='checkbox' 
+                                    <input
+                                        type='checkbox'
                                         className='mr-2'
                                         checked={acceptTerms}
                                         onChange={(e) => setAcceptTerms(e.target.checked)}
                                     />
                                     <span className='text-sm'>Acepto los Términos y Condiciones</span>
                                 </div>
-                                <button 
-                                    type='submit' 
+                                <button
+                                    type='submit'
                                     disabled={isSubmitting}
                                     className='w-full bg-[#1a1a1a] text-white py-2 rounded-lg hover:bg-[#333] transition-colors disabled:opacity-50'
                                 >
@@ -187,7 +187,7 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
                             </div>
 
                             <div className='mt-4'>
-                                <button 
+                                <button
                                     className='w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-200 transition-colors'
                                     onClick={loginWithGoogle}
                                 >
@@ -202,7 +202,7 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
                                 Verificación de código
                             </h2>
                             <p className="text-sm text-gray-500 mb-4 text-center">
-                                Ingrese el código que se envió a su correo
+                                Ingrese el código de 6 dígitos que se envió a su correo
                             </p>
                             <form className="space-y-4" onSubmit={handleVerifyCode}>
                                 <div className="flex justify-center gap-2">
