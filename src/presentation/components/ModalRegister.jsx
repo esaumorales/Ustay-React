@@ -3,7 +3,7 @@ import { FcGoogle } from 'react-icons/fc';
 import BACKGROUNDMODAL from '@/presentation/assets/img/background-modal.webp';
 import { useAuth } from '@/presentation/contexts/AuthContext';
 import { AuthService } from '@/infrastructure/services/auth.service';
-import { useRouter } from 'next/router';
+import { useNavigate } from 'react-router-dom';  // <-- IMPORT CORRECTO
 
 const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
     const { register, login, loginWithGoogle } = useAuth();
@@ -15,7 +15,7 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
     const [email, setEmail] = useState('');
     const [userData, setUserData] = useState(null);
     const [code, setCode] = useState(['', '', '', '', '', '']);
-    const router = useRouter();
+    const navigate = useNavigate();  // <-- USO CORRECTO
 
     if (!isOpen) return null;
 
@@ -80,7 +80,7 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
 
             setMessage('Correo verificado exitosamente. Redirigiendo...');
             onClose();
-            router.push('/home');
+            navigate('/home');  // <-- REDIRECCIÓN CORRECTA EN REACT ROUTER
         } catch (err) {
             setError(err.message || 'Código incorrecto');
         } finally {
