@@ -5,6 +5,7 @@ import ModalRecoverPassword from './ModalRecoverPassword';
 import BACKGROUNDMODAL from '@/presentation/assets/img/background-modal.webp';
 import { useAuth } from '@/presentation/contexts/AuthContext';
 import SuccessAnimation from './common/SuccessAnimation';  // usa tu componente de animación
+import { useNavigate } from 'react-router-dom';
 
 export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
@@ -13,6 +14,7 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
     const [isLoading, setIsLoading] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
     const recoverModal = useModal();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,9 +24,11 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
         try {
             await login(credentials);
             setShowSuccess(true);
+
             setTimeout(() => {
                 onClose();
-            }, 1500);  // tiempo que permanece visible la animación
+                navigate('/home'); // <-- redirige a /home tras la animación
+            }, 1500);
         } catch (error) {
             setError(error.message || 'Error al iniciar sesión. Por favor, verifica tus credenciales.');
         } finally {
