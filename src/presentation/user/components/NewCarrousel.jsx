@@ -1,21 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { AiOutlineEye } from 'react-icons/ai';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { fetchRooms } from '@/infrastructure/services/room.service'; // Importa el servicio
-import { IconBath } from '@/presentation/assets/icons/icon-bath';
-import { IconBed } from '@/presentation/assets/icons/icon-bed';
-import { IconLocation } from '@/presentation/assets/icons/icon-location';
-import { IconParking } from '@/presentation/assets/icons/icon-parking';
-import { IconWifi } from '@/presentation/assets/icons/icon-wifi';
-import ROOM from '@/presentation/assets/img/room.png'; // Imagen por defecto
-
+import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-import { EffectCoverflow, Pagination, Navigation, Autoplay } from 'swiper/modules';
+import { fetchRooms } from '@/infrastructure/services/room.service';
+import ROOM from '@/presentation/assets/img/room.png';
 
-const Carrousel = () => {
+const Carrousel = ({ filters }) => {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
@@ -31,98 +25,54 @@ const Carrousel = () => {
         loadRooms();
     }, []);
 
-    if (!items || !Array.isArray(items) || items.length === 0) {
-        return null;
-    }
+    const filteredItems = items.filter(item => {
+        if (filters.propertyType && item.tipo !== filters.propertyType) return false;
+        if (filters.priceRange === 'low' && item.precio > 300) return false;
+        if (filters.conPension && !item.pension) return false;
+        if (filters.valoracion?.length && !filters.valoracion.includes(item.valoracion)) return false;
+
+        return true;
+    });
+
+    if (!filteredItems.length) return <p className='text-center text-gray-500'>No se encontraron resultados.</p>;
 
     return (
-        <div className='relative max-w-7xl mx-auto px-4 overflow-hidden'>
+        <div className='relative max-w-7xl  py-8'>
             <Swiper
-                effect={'coverflow'}
+                spaceBetween={16}
+                slidesPerView={'auto'}
                 grabCursor={true}
-                centeredSlides={true}
-                loop={true}
-                autoplay={{
-                    delay: 3000,
-                    disableOnInteraction: false,
-                }}
-                slidesPerView={2}
-                coverflowEffect={{
-                    rotate: 0,
-                    stretch: 70,
-                    depth: 100,
-                    modifier: 2.5,
-                    slideShadows: false,
-                }}
-                pagination={{
-                    el: '.swiper-pagination',
-                    clickable: true,
-                    dynamicBullets: true
-                }}
-                modules={[EffectCoverflow, Pagination, Navigation, Autoplay]}
-                className='mySwiper py-8'
+                modules={[Pagination, Navigation, Autoplay]}
+                className='!overflow-visible'
             >
-                {items.map((item) => (
-                    <SwiperSlide key={item.cuarto_id}>
-                        <div className='bg-white border border-gray-200 shadow-lg transition-all duration-500 ease-out transform hover:opacity-100 mx-auto w-100'>
-                            <div className='relative h-80 overflow-hidden'>
+                {filteredItems.map((item) => (
+                    <SwiperSlide key={item.cuarto_id} style={{ width: '18rem' }}>
+                        <div className='rounded-lg shadow hover:shadow-md transition overflow-hidden bg-white'>
+                            <div className='relative h-64'>
                                 <img
-                                    src={item.fotos.length > 0 ? item.fotos[0] : ROOM}  // Si no hay fotos, usa la imagen predeterminada
+                                    src={item.fotos.length > 0 ? item.fotos[0] : ROOM}
                                     alt={`Cuarto ${item.nombre}`}
-                                    className='w-full h-full object-cover transition-transform duration-500 ease-out'
+                                    className='w-full h-full object-cover'
                                 />
-                                <div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent'></div>
+                                <span className='absolute top-2 left-2 bg-yellow-400 text-xs font-bold text-white px-2 py-0.5 rounded'>DESTACADO</span>
                             </div>
 
-                            <div className='p-4 border-b-amber-600 border-b-3'>
-                                <div className='flex justify-between items-start mb-3'>
-                                    <div>
-                                        <h3 className='font-semibold text-lg text-gray-900'>{item.nombre}</h3>
-                                        <p className='text-sm text-gray-600'>{item.descripcion}</p>
+                            <div className='p-4'>
+                                <p className='text-xs text-orange-600 mb-1'>Vicente Gutierrez</p>
+                                <h3 className='text-base font-medium text-gray-900 mb-1'>{item.nombre}</h3>
+                                <div className='flex justify-between'>
+                                    <div className='text-center'>
+                                        <p className='text-gray-900 font-bold text-lg'>S/. {Number(item.precio).toFixed(2)}</p>
                                     </div>
-                                    <div className='text-right'>
-                                        <div className='flex items-baseline gap-0.5'>
-                                            <span className='text-sm font-medium text-gray-600'>S/.</span>
-                                            <span className='font-bold text-2xl text-gray-900'>{item.precio}</span>
-                                        </div>
-                                        <p className='text-xs text-gray-500'>mes</p>
-                                    </div>
-                                </div>
-
-                                <div className='flex justify-between items-center pt-3 border-t border-gray-100'>
-                                    <div className='flex gap-4'>
-                                        <IconWifi className='w-5 h-5 text-gray-500 hover:text-gray-700 transition-colors' />
-                                        <IconParking className='w-5 h-5 text-gray-500 hover:text-gray-700 transition-colors' />
-                                        <IconBed className='w-5 h-5 text-gray-500 hover:text-gray-700 transition-colors' />
-                                        <IconBath className='w-5 h-5 text-gray-500 hover:text-gray-700 transition-colors' />
-                                        <IconLocation className='w-5 h-5 text-gray-500 hover:text-gray-700 transition-colors' />
-                                    </div>
-                                    <button
-                                        className='bg-gray-900 rounded-full p-2 hover:bg-gray-800 transition-all duration-300 hover:scale-110'
-                                        aria-label='Add to favorites'
-                                    >
-                                        <svg
-                                            className='w-4 h-4 text-white'
-                                            fill='none'
-                                            stroke='currentColor'
-                                            viewBox='0 0 24 24'
-                                        >
-                                            <path
-                                                strokeLinecap='round'
-                                                strokeLinejoin='round'
-                                                strokeWidth={2}
-                                                d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'
-                                            />
-                                        </svg>
+                                    <button className='flex items-center gap-1 bg-gray-200 text-black text-sm font-medium rounded-2xl px-3 py-1 hover:bg-gray-300' >
+                                        <AiOutlineEye className='w-5 h-5 text-black' />
+                                        Ver
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </SwiperSlide>
                 ))}
-                <div className='mt-8'>
-                    <div className='swiper-pagination'></div>
-                </div>
             </Swiper>
         </div>
     );

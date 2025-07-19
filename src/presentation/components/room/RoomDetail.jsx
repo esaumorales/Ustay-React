@@ -7,15 +7,14 @@ import { PiHouseLineLight, PiStarThin } from "react-icons/pi";
 import { MdOutlinePhone } from "react-icons/md";
 import { CiAt } from "react-icons/ci";
 import { FaBolt, FaBroom, FaCar, FaFire, FaLock, FaTint, FaTshirt, FaWhatsapp } from "react-icons/fa";
-import { IconWifi } from '@/presentation/assets/icons/icon-wifi';
 import { Link } from 'react-router-dom';
 import 'swiper/css';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, EffectCoverflow } from 'swiper/modules';
 import WideRoomCard from './WideRoomCard';
 import ROOM from '@/presentation/assets/img/room.png';
 import Alert from '@/presentation/components/common/Alert';
 import MapSelector from '@/presentation/partner/components/MapSelector';
+import ImageGallery from '../common/ImageCarousel';
+import { shuffleArray } from '@/presentation/utils/arrayHelpers';
 
 const SPECS = [
   {
@@ -36,6 +35,19 @@ const SPECS = [
   }
 ];
 
+const getAmenitiesFromRoom = (room) => ({
+  wifi: room.servicios?.some(s => s.servicio === 'WiFi') || false,
+  agua: room.servicios?.some(s => s.servicio === 'Agua') || false,
+  luz: room.servicios?.some(s => s.servicio === 'Luz') || false,
+  seguridad: room.servicios?.some(s => s.servicio === 'Seguridad') || false,
+  calefaccion: room.servicios?.some(s => s.servicio === 'Calefacción') || false,
+  limpieza: room.servicios?.some(s => s.servicio === 'Limpieza') || false,
+  garage: room.servicios?.some(s => s.servicio === 'Garage') || false,
+  lavanderia: room.servicios?.some(s => s.servicio === 'Lavandería') || false,
+  parking: room.servicios?.some(s => s.servicio === 'Garage' || s.servicio === 'Parking') || false,
+});
+
+
 export const RoomDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -48,6 +60,7 @@ export const RoomDetail = () => {
 
   useEffect(() => {
     const loadRoom = async () => {
+
       try {
         const roomData = await fetchRoomById(id);
         setRoom({
@@ -57,9 +70,14 @@ export const RoomDetail = () => {
         });
 
         const roomsData = await fetchRooms();
+
         const rooms = roomsData.cuartos;
+
+
+
         if (Array.isArray(rooms)) {
-          setSimilarRooms(rooms.filter(r => r.cuarto_id !== parseInt(id)).slice(0, 6));
+          const shuffled = shuffleArray(rooms.filter(r => r.cuarto_id !== parseInt(id)));
+          setSimilarRooms(shuffled.slice(0, 6));
         } else {
           console.error('Rooms data is not an array:', rooms);
         }
@@ -67,6 +85,7 @@ export const RoomDetail = () => {
         console.error('Error fetching room:', error);
       }
     };
+
 
     const fetchUserFavorites = async () => {
       const userId = localStorage.getItem('userId');
@@ -121,35 +140,9 @@ export const RoomDetail = () => {
       <div className="flex gap-2 mb-8 h-108">
         {/* Image Gallery */}
         <div className="flex flex-row w-full">
-          <Swiper
-            // effect={'coverflow'}
-            grabCursor={true}
-            autoplay={{
-              delay: 3000,
-              disableOnInteraction: false,
-            }}
-            slidesPerView={3}
-            modules={[EffectCoverflow, Autoplay]}
-            className="flex justify-center items-center"
-          >
-            {Array.isArray(room.fotos) && room.fotos.length > 0 ? (
-              room.fotos.map((foto, index) => (
-                <SwiperSlide key={index}>
-                  <img
-                    src={foto.url_imagen}
-                    alt={room.tipo_cuarto}
-                    className="h-full w-full block object-cover"
-                  />
-                </SwiperSlide>
-              ))
-            ) : (
-              <SwiperSlide>
-                <div className="h-full flex justify-center items-center bg-gray-300">
-                  <p>No imagen</p>
-                </div>
-              </SwiperSlide>
-            )}
-          </Swiper>
+          <div className="flex justify-center w-full">
+            <ImageGallery images={room.fotos} />
+          </div>
         </div>
       </div>
 
@@ -375,23 +368,22 @@ export const RoomDetail = () => {
           {similarRooms.map(similarRoom => (
             <WideRoomCard
               key={similarRoom.cuarto_id}
-              image={similarRoom.fotos && similarRoom.fotos.length > 0 ? similarRoom.fotos[0].url_imagen : ROOM} // Default image if none
+              image={
+                similarRoom.fotos && similarRoom.fotos.length > 0
+                  ? (similarRoom.fotos[0].url_imagen || similarRoom.fotos[0].foto || similarRoom.fotos[0])
+                  : ROOM
+              }
               title={similarRoom.nombre}
               location={similarRoom.direccion_propiedad}
               price={similarRoom.precio}
               periodo={similarRoom.periodo}
               valoracion={similarRoom.valoracion}
               destacado={similarRoom.destacado}
-              amenities={{
-                wifi: similarRoom.servicios && similarRoom.servicios.some(s => s.servicio === 'WiFi'),
-                parking: similarRoom.servicios && similarRoom.servicios.some(s => s.servicio === 'Parking'),
-                bed: true,
-                bath: true,
-                location: true
-              }}
+              amenities={getAmenitiesFromRoom(similarRoom)}
               publisher={`${similarRoom.partner ? `${similarRoom.partner.nombre} ${similarRoom.partner.apellido}` : 'Unknown Publisher'}`}
               onClick={() => navigate(`/room/${similarRoom.cuarto_id}`)}
             />
+
           ))}
         </div>
       </div>

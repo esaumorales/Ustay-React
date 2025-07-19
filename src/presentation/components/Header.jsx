@@ -26,8 +26,9 @@ export default function Header() {
   const userInitial = userName ? userName.charAt(0).toUpperCase() : 'U'
 
   if (loading) {
+    console.log('Header render: user', user, 'loginModal.isOpen', loginModal.isOpen);
     return (
-      <header className="mt-4 px-4 md:px-4 lg:px-8 sticky top-0 ">
+      <header className="mt-4 px-4 md:px-4 lg:px-8 sticky top-4 z-40">
         <div className="flex justify-between md:justify-between items-center px-16">
           {/* Logo */}
           <div className="flex flex-wrap items-center">
@@ -72,11 +73,10 @@ export default function Header() {
               to={href}
               aria-label={label}
               key={`header-${name}-1`}
-              className={`px-4 py-1 rounded-2xl ${
-                pathname === href
+              className={`px-4 py-1 rounded-2xl ${pathname === href
                   ? 'text-black bg-white'
                   : 'text-white transition-colors duration-200 hover:text-black hover:bg-white active:scale-95'
-              }`}
+                }`}
             >
               {name}
             </Link>
@@ -226,13 +226,14 @@ export default function Header() {
 
       {/* Modals */}
       <ModalLogin
-        isOpen={loginModal.isOpen}
+        isOpen={loginModal.isOpen && !isAuthenticated}
         onClose={loginModal.closeModal}
         onSwitchToRegister={() => {
-          loginModal.closeModal()
-          registerModal.openModal()
+          loginModal.closeModal();
+          registerModal.openModal();
         }}
       />
+
       <ModalRegister
         isOpen={registerModal.isOpen}
         onClose={registerModal.closeModal}

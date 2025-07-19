@@ -10,7 +10,6 @@ export default function HomePage() {
   useEffect(() => {
     if (location.search.includes('token=')) {
       handleGoogleLogin();
-      // Opcional: limpiar la URL para no mostrar el token
       window.history.replaceState(null, '', '/home');
     }
   }, [location.search, handleGoogleLogin]);
@@ -19,7 +18,6 @@ export default function HomePage() {
     return <p className="text-center mt-10">Cargando usuario...</p>;
   }
 
-  // Mostrar la página para todos, si hay usuario pasa prop, si no null
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-1">

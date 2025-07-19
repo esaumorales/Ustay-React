@@ -1,129 +1,126 @@
 import { useState } from 'react';
+import { Range } from 'react-range';
 
-export const RoomFilters = ({ onFilterChange, zona }) => {
+export const RoomFilters = ({ onFilterChange = () => {}, zona = [] }) => {
     const [filters, setFilters] = useState({
         propertyType: '',
-        priceRange: 0,
+        priceRange: [150, 550],
+        periodo: '',
         zona: [],
         valoracion: [],
     });
 
     const handleFilterChange = (category, value) => {
-        const newFilters = {
-            ...filters,
-            [category]: value,
-        };
+        const newFilters = { ...filters, [category]: value };
         setFilters(newFilters);
         onFilterChange(newFilters);
     };
 
-    const handleZonaChange = (zona) => {
-        const newZona = filters.zona.includes(zona)
-            ? filters.zona.filter((item) => item !== zona)
-            : [...filters.zona, zona]; // Si la zona ya está seleccionada, la eliminamos, sino la agregamos
-
+    const handleZonaChange = (zonaValue) => {
+        const newZona = filters.zona.includes(zonaValue)
+            ? filters.zona.filter(z => z !== zonaValue)
+            : [...filters.zona, zonaValue];
         handleFilterChange('zona', newZona);
     };
 
-    const handleValoracionChange = (valoracion) => {
-        const newValoracion = filters.valoracion.includes(valoracion)
-            ? filters.valoracion.filter((val) => val !== valoracion)
-            : [...filters.valoracion, valoracion];
-
+    const handleValoracionChange = (valor) => {
+        const newValoracion = filters.valoracion.includes(valor)
+            ? filters.valoracion.filter(v => v !== valor)
+            : [...filters.valoracion, valor];
         handleFilterChange('valoracion', newValoracion);
     };
 
     return (
-        <div className="w-full">
-            <div className="space-y-4 lg:space-y-6">
-                {/* Property Type Filter */}
-                <div className="p-4">
-                    <h3 className="font-medium mb-2 text-sm lg:text-base">Tipo de Propiedad</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-1 gap-2">
-                        <label className="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer relative">
-                            <input
-                                type="checkbox"
-                                className="opacity-0 absolute w-0 h-0"
-                                checked={filters.propertyType === 'Cuartos'}
-                                onChange={(e) => handleFilterChange('propertyType', e.target.checked ? 'Cuartos' : '')}
-                            />
-                            <span className={`text-sm ${filters.propertyType === 'Cuartos' ? 'font-semibold' : ''}`}>
-                                Cuartos
-                            </span>
-                        </label>
-
-                        <label className="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer relative">
-                            <input
-                                type="checkbox"
-                                className="opacity-0 absolute w-0 h-0"
-                                checked={filters.propertyType === 'Departamento'}
-                                onChange={(e) => handleFilterChange('propertyType', e.target.checked ? 'Departamento' : '')}
-                            />
-                            <span className={`text-sm ${filters.propertyType === 'Departamento' ? 'font-semibold' : ''}`}>
-                                Departamento
-                            </span>
-                        </label>
-                    </div>
+        <div className="space-y-6">
+            <div>
+                <h3 className="font-bold mb-2">Tipos</h3>
+                <div className="space-y-1">
+                    {['Departamento', 'Minidepartamento', 'Cuartos'].map(tipo => (
+                        <div
+                            key={tipo}
+                            className={`cursor-pointer ${filters.propertyType === tipo ? 'font-semibold' : ''}`}
+                            onClick={() => handleFilterChange('propertyType', filters.propertyType === tipo ? '' : tipo)}
+                        >
+                            {tipo}
+                        </div>
+                    ))}
                 </div>
+            </div>
 
-                {/* Zona Filter */}
-                <div className="p-4">
-                    <h3 className="font-medium mb-2 text-sm lg:text-base">Zona</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-1 gap-2">
-                        {zona && zona.length > 0 ? (
-                            zona.map(({ zona }) => (
-                                <label key={zona} className="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer relative">
-                                    <input
-                                        type="checkbox"
-                                        className="opacity-0 absolute w-0 h-0"
-                                        checked={filters.zona.includes(zona)}
-                                        onChange={() => handleZonaChange(zona)}
-                                    />
-                                    <span className={`text-sm ${filters.zona.includes(zona) ? 'font-semibold' : ''}`}>
-                                        {zona}
-                                    </span>
-                                </label>
-                            ))
-                        ) : (
-                            <div>No hay zonas disponibles</div>
-                        )}
-                    </div>
+            <div>
+                <h3 className="font-bold mb-2">Precios</h3>
+                <Range
+                    step={10}
+                    min={0}
+                    max={1000}
+                    values={filters.priceRange}
+                    onChange={(values) => handleFilterChange('priceRange', values)}
+                    renderTrack={({ props, children }) => (
+                        <div
+                            {...props}
+                            className="h-1 bg-secondary relative mt-4 mb-4"
+                        >
+                            {children}
+                        </div>
+                    )}
+                    renderThumb={({ props, index, isDragged }) => (
+                        <div {...props} className="flex flex-col items-center">
+                            <span className="text-xs font-bold mb-1">{filters.priceRange[index]}</span>
+                            <div
+                                className={`w-1 h-6 ${isDragged ? 'bg-orange-600' : 'bg-orange-500'}`}
+                            />
+                        </div>
+                    )}
+                />
+            </div>
+
+            <div>
+                <h3 className="font-bold mb-2">Periodo</h3>
+                <div className="space-y-1">
+                    {['Semanal', 'Mensual', 'Ciclo'].map(period => (
+                        <div
+                            key={period}
+                            className={`cursor-pointer ${filters.periodo === period ? 'font-semibold' : ''}`}
+                            onClick={() => handleFilterChange('periodo', filters.periodo === period ? '' : period)}
+                        >
+                            {period}
+                        </div>
+                    ))}
                 </div>
+            </div>
 
-                {/* Valoración Filter */}
-                <div className="w-full">
-                    <div className="space-y-4 lg:space-y-6">
-                        {/* Valoración Filter */}
-                        <div className="p-4">
-                            <h3 className="font-medium mb-2 text-sm lg:text-base">Valoración</h3>
-                            <div className="space-y-2">
-                                {[1, 2, 3, 4, 5].map((valoracion) => (
-                                    <label
-                                        key={valoracion}
-                                        className="flex items-center justify-start gap-4 p-2 hover:bg-gray-50 rounded cursor-pointer relative"
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            className="opacity-0 absolute w-0 h-0"
-                                            checked={filters.valoracion.includes(valoracion)}
-                                            onChange={() => handleValoracionChange(valoracion)}
-                                        />
-                                        <div className="flex gap-1">
-                                            {[...Array(valoracion)].map((_, i) => (
-                                                <span
-                                                    key={i}
-                                                    className={`text-yellow-400 ${filters.valoracion.includes(valoracion) ? 'font-semibold' : ''}`}
-                                                    style={{ fontSize: '1.25rem' }}
-                                                >
-                                                    ★
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </label>
+            <div>
+                <h3 className="font-bold mb-2">Zona</h3>
+                <div className="space-y-1">
+                    {zona.length > 0 ? zona.map(({ zona: z }) => (
+                        <div
+                            key={z}
+                            className={`cursor-pointer ${filters.zona.includes(z) ? 'font-semibold' : ''}`}
+                            onClick={() => handleZonaChange(z)}
+                        >
+                            {z}
+                        </div>
+                    )) : <div>No hay zonas disponibles</div>}
+                </div>
+            </div>
+
+            <div>
+                <h3 className="font-bold mb-2">Valoración</h3>
+                <div className="space-y-1">
+                    {[1, 2, 3, 4, 5].map(val => (
+                        <div
+                            key={val}
+                            className="flex items-center gap-2 cursor-pointer"
+                            onClick={() => handleValoracionChange(val)}
+                        >
+                            <span>({val})</span>
+                            <div>
+                                {Array.from({ length: val }).map((_, i) => (
+                                    <span key={i} className="text-secondary">★</span>
                                 ))}
                             </div>
                         </div>
-                    </div>
+                    ))}
                 </div>
             </div>
         </div>

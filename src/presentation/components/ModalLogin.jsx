@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { useModal } from '@/presentation/hooks/useModal';
 import ModalRecoverPassword from './ModalRecoverPassword';
 import BACKGROUNDMODAL from '@/presentation/assets/img/background-modal.webp';
 import { useAuth } from '@/presentation/contexts/AuthContext';
-import SuccessAnimation from './common/SuccessAnimation';  // usa tu componente de animación
+import SuccessAnimation from './common/SuccessAnimation';
 import { useNavigate } from 'react-router-dom';
 
 export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
@@ -12,7 +12,7 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
     const [error, setError] = useState('');
     const { login, loginWithGoogle } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
-    const [showSuccess, setShowSuccess] = useState(false);
+    const [step, setStep] = useState('login');
     const recoverModal = useModal();
     const navigate = useNavigate();
 
@@ -23,18 +23,28 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
 
         try {
             await login(credentials);
-            setShowSuccess(true);
-
-            setTimeout(() => {
-                onClose();
-                navigate('/home'); // <-- redirige a /home tras la animación
-            }, 1500);
+            console.log('Login exitoso, mostrando animación');
+            setStep('success');
         } catch (error) {
             setError(error.message || 'Error al iniciar sesión. Por favor, verifica tus credenciales.');
         } finally {
             setIsLoading(false);
         }
     };
+
+    // Nuevo efecto: cuando step es 'success', espera y luego cierra + navega
+    useEffect(() => {
+        if (step === 'success') {
+            const timer = setTimeout(() => {
+                onClose();    // ahora sí, cierra modal
+                navigate('/home');  // y navega
+            }, 5000); // 2s para que se vea la animación
+
+            return () => clearTimeout(timer);
+        }
+
+    }, [step, navigate, onClose]), console.log('ModalLogin render: ', step);;
+
 
     if (!isOpen) return null;
 
@@ -45,6 +55,7 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
                 onClose={() => {
                     recoverModal.closeModal();
                     onClose();
+                    setStep('login');
                 }}
                 onSwitchToRegister={onSwitchToRegister}
                 onSwitchToLogin={() => recoverModal.closeModal()}
@@ -55,7 +66,6 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
     return (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-[2px] p-4'>
             <div className='bg-white shadow-md w-full max-w-3xl relative flex overflow-hidden'>
-                {/* Lado Izquierdo */}
                 <div className='w-1/2 hidden md:block relative'>
                     <img
                         src={BACKGROUNDMODAL}
@@ -64,17 +74,18 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
                     />
                 </div>
 
-                {/* Lado Derecho */}
-                <div className='w-full md:w-1/2 p-8'>
-                    {showSuccess ? (
-                        <SuccessAnimation message="Inicio de sesión verificada" />
+                <div className='w-full md:w-1/2 p-8 relative'>
+                    {step === 'success' ? (
+                        <>
+                            <p>ESTOY EN STEP SUCCESS</p>
+                            <SuccessAnimation message="¡Inicio de sesión exitoso!" />
+                        </>
                     ) : (
                         <>
                             <div className='flex justify-between items-center mb-6'>
                                 <h1 className='text-xl font-semibold'>Iniciar Sesión</h1>
-                                <button onClick={onClose}
-                                    className='text-gray-400 hover:text-gray-600'>
-                                    ✕
+                                <button onClick={() => { onClose(); setStep('login'); }}
+                                    className='text-gray-400 hover:text-gray-600'>✕
                                 </button>
                             </div>
 
@@ -151,6 +162,7 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
                                         onClick={() => {
                                             onClose();
                                             onSwitchToRegister();
+                                            setStep('login');
                                         }}
                                         className='text-orange-500 hover:underline font-medium'
                                     >

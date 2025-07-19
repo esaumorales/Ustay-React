@@ -52,8 +52,15 @@ export function AuthProvider({ children }) {
         }
       } catch (error) {
         console.error('Error al cargar perfil:', error);
-        if (isSubscribed) logout();
-      } finally {
+        if (isSubscribed) {
+          // Solo desloguea si el usuario ya estaba autenticado antes
+          if (user) {
+            console.warn('Deslogueando porque falló la carga de perfil en sesión activa');
+            logout();
+        }
+        }
+      }
+      finally {
         if (isSubscribed) setLoading(false);
       }
     };
