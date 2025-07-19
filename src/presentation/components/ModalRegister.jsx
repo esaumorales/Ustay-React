@@ -3,9 +3,10 @@ import { FcGoogle } from 'react-icons/fc';
 import BACKGROUNDMODAL from '@/presentation/assets/img/background-modal.webp';
 import { useAuth } from '@/presentation/contexts/AuthContext';
 import { AuthService } from '@/infrastructure/services/auth.service';
+import { useRouter } from 'next/router';
 
 const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
-    const { register, loginWithGoogle } = useAuth();
+    const { register, login, loginWithGoogle } = useAuth();
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -14,6 +15,7 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
     const [email, setEmail] = useState('');
     const [userData, setUserData] = useState(null);
     const [code, setCode] = useState(['', '', '', '', '', '']);
+    const router = useRouter();
 
     if (!isOpen) return null;
 
@@ -51,7 +53,7 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
 
         try {
             setIsSubmitting(true);
-            const response = await register(newUserData);
+            await register(newUserData);
             setUserData(newUserData);
             setEmail(newUserData.email);
             setStep(2);
@@ -72,9 +74,13 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
         try {
             const codeStr = code.join('');
             await AuthService.verifyEmail(email, codeStr);
-            setMessage('Correo verificado exitosamente');
+
+            // Inicia sesión automáticamente tras verificar
+            await login({ email: userData.email, password: userData.password });
+
+            setMessage('Correo verificado exitosamente. Redirigiendo...');
             onClose();
-            onSwitchToLogin();
+            router.push('/home');
         } catch (err) {
             setError(err.message || 'Código incorrecto');
         } finally {
@@ -86,7 +92,6 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-[2px] p-4'
             onClick={handleBackdropClick}>
             <div className='bg-white shadow-md w-full max-w-4xl relative flex overflow-hidden'>
-                {/* Left side - Form */}
                 <div className='w-full md:w-1/2 p-6'>
                     <button onClick={onClose}
                         className='absolute top-2 right-2 text-gray-400 hover:text-gray-600'>
@@ -105,60 +110,12 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
                             )}
 
                             <form onSubmit={handleSubmit} className='space-y-4'>
-                                <div>
-                                    <input
-                                        type='text'
-                                        name='nombre'
-                                        placeholder='Nombre'
-                                        required
-                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300'
-                                    />
-                                </div>
-                                <div>
-                                    <input
-                                        type='text'
-                                        name='apellido_pa'
-                                        placeholder='Apellido Paterno'
-                                        required
-                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300'
-                                    />
-                                </div>
-                                <div>
-                                    <input
-                                        type='text'
-                                        name='apellido_ma'
-                                        placeholder='Apellido Materno'
-                                        required
-                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300'
-                                    />
-                                </div>
-                                <div>
-                                    <input
-                                        type='email'
-                                        name='email'
-                                        placeholder='Correo'
-                                        required
-                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300'
-                                    />
-                                </div>
-                                <div>
-                                    <input
-                                        type='password'
-                                        name='password'
-                                        placeholder='Contraseña'
-                                        required
-                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300'
-                                    />
-                                </div>
-                                <div>
-                                    <input
-                                        type='password'
-                                        name='confirmPassword'
-                                        placeholder='Repetir contraseña'
-                                        required
-                                        className='w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-gray-300'
-                                    />
-                                </div>
+                                <input type='text' name='nombre' placeholder='Nombre' required className='w-full px-3 py-2 border border-gray-200 rounded-lg' />
+                                <input type='text' name='apellido_pa' placeholder='Apellido Paterno' required className='w-full px-3 py-2 border border-gray-200 rounded-lg' />
+                                <input type='text' name='apellido_ma' placeholder='Apellido Materno' required className='w-full px-3 py-2 border border-gray-200 rounded-lg' />
+                                <input type='email' name='email' placeholder='Correo' required className='w-full px-3 py-2 border border-gray-200 rounded-lg' />
+                                <input type='password' name='password' placeholder='Contraseña' required className='w-full px-3 py-2 border border-gray-200 rounded-lg' />
+                                <input type='password' name='confirmPassword' placeholder='Repetir contraseña' required className='w-full px-3 py-2 border border-gray-200 rounded-lg' />
                                 <div className='flex items-center'>
                                     <input
                                         type='checkbox'
@@ -171,7 +128,7 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
                                 <button
                                     type='submit'
                                     disabled={isSubmitting}
-                                    className='w-full bg-[#1a1a1a] text-white py-2 rounded-lg hover:bg-[#333] transition-colors disabled:opacity-50'
+                                    className='w-full bg-[#1a1a1a] text-white py-2 rounded-lg hover:bg-[#333] disabled:opacity-50'
                                 >
                                     {isSubmitting ? 'Registrando...' : 'Registrarse'}
                                 </button>
@@ -188,7 +145,7 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
 
                             <div className='mt-4'>
                                 <button
-                                    className='w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-200 transition-colors'
+                                    className='w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-200'
                                     onClick={loginWithGoogle}
                                 >
                                     <FcGoogle size={20} />
@@ -196,11 +153,9 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
                                 </button>
                             </div>
                         </>
-                    ) : step === 2 && (
+                    ) : (
                         <>
-                            <h2 className="text-lg font-medium mb-6 flex justify-center">
-                                Verificación de código
-                            </h2>
+                            <h2 className="text-lg font-medium mb-6 flex justify-center">Verificación de código</h2>
                             <p className="text-sm text-gray-500 mb-4 text-center">
                                 Ingrese el código de 6 dígitos que se envió a su correo
                             </p>
@@ -228,7 +183,7 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
                                 </div>
                                 <button
                                     type="submit"
-                                    className="w-full bg-[#1a1a1a] text-white py-3 rounded-lg hover:bg-[#333] transition-colors font-medium"
+                                    className="w-full bg-[#1a1a1a] text-white py-3 rounded-lg hover:bg-[#333]"
                                     disabled={isSubmitting}
                                 >
                                     {isSubmitting ? 'Verificando...' : 'Verificar'}
@@ -239,11 +194,9 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
                         </>
                     )}
                 </div>
-                {/* Right side - Image */}
+
                 <div className='w-1/2 hidden md:block'>
-                    <img src={BACKGROUNDMODAL}
-                        alt='fotoModal'
-                        className='w-full h-full object-cover' />
+                    <img src={BACKGROUNDMODAL} alt='fotoModal' className='w-full h-full object-cover' />
                 </div>
             </div>
         </div>
