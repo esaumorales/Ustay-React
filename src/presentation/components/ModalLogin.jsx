@@ -4,14 +4,14 @@ import { useModal } from '@/presentation/hooks/useModal';
 import ModalRecoverPassword from './ModalRecoverPassword';
 import BACKGROUNDMODAL from '@/presentation/assets/img/background-modal.webp';
 import { useAuth } from '@/presentation/contexts/AuthContext';
-import SuccessAnimation from './common/SuccessAnimation';  // <-- IMPORTA EL COMPONENTE
+import SuccessAnimation from './SuccessAnimation';  // usa tu componente de animación
 
 export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const { login, loginWithGoogle } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
-    const [showSuccess, setShowSuccess] = useState(false);  // <-- NUEVO estado
+    const [showSuccess, setShowSuccess] = useState(false);
     const recoverModal = useModal();
 
     const handleSubmit = async (e) => {
@@ -21,27 +21,14 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
 
         try {
             await login(credentials);
-            setShowSuccess(true);  // <-- Mostrar animación
+            setShowSuccess(true);
             setTimeout(() => {
                 onClose();
-            }, 1500);  // Cierra el modal tras 1.5s
+            }, 1500);  // tiempo que permanece visible la animación
         } catch (error) {
             setError(error.message || 'Error al iniciar sesión. Por favor, verifica tus credenciales.');
         } finally {
             setIsLoading(false);
-        }
-    };
-
-    const handleChange = (e) => {
-        setCredentials({
-            ...credentials,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    const handleBackdropClick = (e) => {
-        if (e.target === e.currentTarget) {
-            onClose();
         }
     };
 
@@ -62,15 +49,18 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
     }
 
     return (
-        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-[2px] p-4'
-            onClick={handleBackdropClick}>
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-[2px] p-4'>
             <div className='bg-white shadow-md w-full max-w-3xl relative flex overflow-hidden'>
+                {/* Lado Izquierdo */}
                 <div className='w-1/2 hidden md:block relative'>
-                    <img src={BACKGROUNDMODAL}
+                    <img
+                        src={BACKGROUNDMODAL}
                         alt='fotoModal'
-                        className='w-full h-full object-cover object-center' />
+                        className='w-full h-full object-cover object-center'
+                    />
                 </div>
 
+                {/* Lado Derecho */}
                 <div className='w-full md:w-1/2 p-8'>
                     {showSuccess ? (
                         <SuccessAnimation message="Inicio de sesión verificada" />
@@ -97,7 +87,7 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
                                     type='email'
                                     name='email'
                                     value={credentials.email}
-                                    onChange={handleChange}
+                                    onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
                                     placeholder='Correo E-mail'
                                     className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500'
                                     required
@@ -106,11 +96,12 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
                                     type='password'
                                     name='password'
                                     value={credentials.password}
-                                    onChange={handleChange}
+                                    onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
                                     placeholder='Contraseña'
                                     className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500'
                                     required
                                 />
+
                                 <div className='flex items-center justify-between'>
                                     <label className='flex items-center'>
                                         <input type='checkbox' className='mr-2 accent-blue-500' />
@@ -118,15 +109,13 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
                                     </label>
                                     <button
                                         type="button"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            recoverModal.openModal();
-                                        }}
+                                        onClick={() => recoverModal.openModal()}
                                         className='text-orange-500 font-normal'
                                     >
                                         ¿Se te olvidó la contraseña?
                                     </button>
                                 </div>
+
                                 <button
                                     type='submit'
                                     disabled={isLoading}
@@ -154,11 +143,13 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
                             <div className='mt-6 text-center'>
                                 <p className='text-sm text-gray-600'>
                                     ¿No tienes una cuenta?{' '}
-                                    <button onClick={() => {
-                                        onClose();
-                                        onSwitchToRegister();
-                                    }}
-                                        className='text-orange-500 hover:underline font-medium'>
+                                    <button
+                                        onClick={() => {
+                                            onClose();
+                                            onSwitchToRegister();
+                                        }}
+                                        className='text-orange-500 hover:underline font-medium'
+                                    >
                                         Regístrate
                                     </button>
                                 </p>
