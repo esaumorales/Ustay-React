@@ -4,7 +4,7 @@ import { useModal } from '@/presentation/hooks/useModal';
 import ModalRecoverPassword from './ModalRecoverPassword';
 import BACKGROUNDMODAL from '@/presentation/assets/img/background-modal.webp';
 import { useAuth } from '@/presentation/contexts/AuthContext';
-import SuccessAnimation from './SuccessAnimation';  // <-- IMPORTA EL COMPONENTE
+import SuccessAnimation from './common/SuccessAnimation';  // <-- IMPORTA EL COMPONENTE
 
 export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
