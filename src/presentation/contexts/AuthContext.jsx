@@ -59,9 +59,11 @@ export function AuthProvider({ children }) {
     }
   }, [token, user, logout]);
 
-  useEffect(() => {
+useEffect(() => {
+  if (token && !user) {
     loadProfile();
-  }, [token, loadProfile]);
+  }
+}, [token, user, loadProfile]);
 
   const login = useCallback(async (credentials) => {
     try {
@@ -111,13 +113,13 @@ export function AuthProvider({ children }) {
       const response = await AuthService.handleGoogleCallback();
       if (response) {
         const { token: googleToken, usuario: userData } = response;
-
+  
         if (googleToken) {
           setToken(googleToken);
           localStorage.setItem('token', googleToken);
           await loadProfile(googleToken);
         }
-
+  
         if (userData) {
           setUser(userData);
           setIsAuthenticated(true);
@@ -131,6 +133,8 @@ export function AuthProvider({ children }) {
       console.error('Error durante el login con Google:', error);
     }
   }, [loadProfile]);
+  
+  
 
   return (
     <AuthContext.Provider
