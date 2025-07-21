@@ -128,19 +128,29 @@ export function AuthProvider({ children }) {
 
   const handleGoogleLogin = useCallback(async () => {
     try {
-      const userData = await AuthService.handleGoogleCallback();
-      if (userData) {
-        setUser(userData);
-        setIsAuthenticated(true);
-        localStorage.setItem('user', JSON.stringify(userData));
-        if (userData.usuario_id || userData.id) {
-          localStorage.setItem('userId', userData.usuario_id || userData.id);
+      const response = await AuthService.handleGoogleCallback();
+      if (response) {
+        const { token: googleToken, usuario: userData } = response;
+  
+        if (googleToken) {
+          setToken(googleToken);
+          localStorage.setItem('token', googleToken);
+        }
+  
+        if (userData) {
+          setUser(userData);
+          setIsAuthenticated(true);
+          localStorage.setItem('user', JSON.stringify(userData));
+          if (userData.usuario_id || userData.id) {
+            localStorage.setItem('userId', userData.usuario_id || userData.id);
+          }
         }
       }
     } catch (error) {
       console.error('Error durante el login con Google:', error);
     }
   }, []);
+  
 
   return (
     <AuthContext.Provider
