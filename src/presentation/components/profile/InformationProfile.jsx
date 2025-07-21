@@ -28,7 +28,7 @@ export default function InformationProfile() {
         const minutes = date.getMinutes().toString().padStart(2, '0');
         const seconds = date.getSeconds().toString().padStart(2, '0');
         const ampm = hours >= 12 ? 'pm' : 'am';
-        hours = hours % 12 || 12; 
+        hours = hours % 12 || 12;
 
         const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
         return `${day}/${month}/${year} - ${formattedTime}`;
@@ -54,6 +54,19 @@ export default function InformationProfile() {
             <h1 className='font-bold text-lg mb-4'>Información de perfil</h1>
 
             <div className='space-y-6'>
+                <div className='flex flex-col border-b pb-2'>
+                    <div className='flex **:gap-1 text-primary cursor-pointer items-center justify-end'>
+                        <MdEdit />
+                        <span>Editar</span>
+                    </div>
+                    <div className='flex justify-center '>
+                        <img
+                            src={profile.foto_google}
+                            alt="Avatar"
+                            className="w-24 h-24 rounded-full object-cover "
+                        />
+                    </div>
+                </div>
                 <div className='flex justify-between items-center border-b pb-2'>
                     <div>
                         <p className='font-semibold'>Nombres</p>

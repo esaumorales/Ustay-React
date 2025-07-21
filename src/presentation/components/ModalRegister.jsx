@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import BACKGROUNDMODAL from '@/presentation/assets/img/background-modal.webp';
 import { useAuth } from '@/presentation/contexts/AuthContext';
 import { AuthService } from '@/infrastructure/services/auth.service';
-import { useNavigate } from 'react-router-dom';  // <-- IMPORT CORRECTO
+import { useNavigate } from 'react-router-dom';
+import SuccessAnimation from './common/SuccessAnimation';
 
 const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
     const { register, login, loginWithGoogle } = useAuth();
@@ -15,9 +16,7 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
     const [email, setEmail] = useState('');
     const [userData, setUserData] = useState(null);
     const [code, setCode] = useState(['', '', '', '', '', '']);
-    const navigate = useNavigate();  // <-- USO CORRECTO
-
-    if (!isOpen) return null;
+    const navigate = useNavigate();
 
     const handleBackdropClick = (e) => {
         if (e.target === e.currentTarget) {
@@ -75,18 +74,38 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
             const codeStr = code.join('');
             await AuthService.verifyEmail(email, codeStr);
 
-            // Inicia sesión automáticamente tras verificar
             await login({ email: userData.email, password: userData.password });
 
             setMessage('Correo verificado exitosamente. Redirigiendo...');
-            onClose();
-            navigate('/home');  // <-- REDIRECCIÓN CORRECTA EN REACT ROUTER
+            setStep('success');
         } catch (err) {
             setError(err.message || 'Código incorrecto');
         } finally {
             setIsSubmitting(false);
         }
     };
+
+    const handleGoogleRegister = async () => {
+        try {
+            await loginWithGoogle();
+            setStep('success');
+        } catch (err) {
+            setError('Error al registrar con Google', err);
+        }
+    };
+
+    useEffect(() => {
+        if (step === 'success') {
+            const timer = setTimeout(() => {
+                onClose();
+                navigate('/home');
+            }, 2000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [step, onClose, navigate]);
+
+    if (!isOpen) return null;
 
     return (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-[2px] p-4'
@@ -97,16 +116,16 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
                         className='absolute top-2 right-2 text-gray-400 hover:text-gray-600'>
                         ✕
                     </button>
-                    <h1 className='font-semibold'>Registrarse</h1>
 
-                    {step === 1 ? (
+                    {step === 'success' ? (
+                        <SuccessAnimation message="¡Registro exitoso!" />
+                    ) : step === 1 ? (
                         <>
+                            <h1 className='font-semibold'>Registrarse</h1>
                             <h2 className='text-2xl font-semibold mb-4 text-center'>Registrarse con su Correo</h2>
 
                             {error && (
-                                <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
-                                    {error}
-                                </div>
+                                <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">{error}</div>
                             )}
 
                             <form onSubmit={handleSubmit} className='space-y-4'>
@@ -146,7 +165,7 @@ const ModalRegister = ({ isOpen, onClose, onSwitchToLogin }) => {
                             <div className='mt-4'>
                                 <button
                                     className='w-full flex items-center justify-center gap-2 border border-gray-300 py-2 rounded-lg hover:bg-gray-200'
-                                    onClick={loginWithGoogle}
+                                    onClick={handleGoogleRegister}
                                 >
                                     <FcGoogle size={20} />
                                     Acceder con Google
