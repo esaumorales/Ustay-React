@@ -14,7 +14,7 @@ const ModalRecoverPassword = ({
 
     const [step, setStep] = useState(1); 
     const [email, setEmail] = useState('');
-    const [code, setCode] = useState(['', '', '', '', '']);
+    const [code, setCode] = useState(['', '', '', '', '', '']);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');

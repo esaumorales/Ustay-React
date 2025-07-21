@@ -127,9 +127,10 @@ export function AuthProvider({ children }) {
           if (userData.usuario_id || userData.id) {
             localStorage.setItem('userId', userData.usuario_id || userData.id);
           }
-        } else {
-          await loadProfile(googleToken);
         }
+
+        // Cargar el perfil completo para asegurarse que el user está actualizado
+        await loadProfile(googleToken);
       }
     } catch (error) {
       console.error('Error durante el login con Google:', error);
