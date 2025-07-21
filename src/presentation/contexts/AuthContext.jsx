@@ -18,84 +18,7 @@ export function AuthProvider({ children }) {
 
   const [token, setToken] = useState(() => localStorage.getItem('token'));
   const [isAuthenticated, setIsAuthenticated] = useState(() => !!token);
-  const [loading, setLoading] = useState(true); // Estado para controlar carga del perfil
-
-  useEffect(() => {
-    let isSubscribed = true;
-
-    const loadProfile = async () => {
-      setLoading(true);
-      if (!token) {
-        if (isSubscribed) {
-          setUser(null);
-          setIsAuthenticated(false);
-          setLoading(false);
-        }
-        return;
-      }
-
-      try {
-        const response = await AuthService.getProfile(token);
-        if (!isSubscribed) return;
-
-        const userData = response.user || response.usuario || response;
-
-        if (userData) {
-          setUser(userData);
-          setIsAuthenticated(true);
-          localStorage.setItem('user', JSON.stringify(userData));
-          if (userData.usuario_id || userData.id) {
-            localStorage.setItem('userId', userData.usuario_id || userData.id);
-          }
-        } else {
-          throw new Error('Datos de usuario no válidos');
-        }
-      } catch (error) {
-        console.error('Error al cargar perfil:', error);
-        if (isSubscribed) {
-          // Solo desloguea si el usuario ya estaba autenticado antes
-          if (user) {
-            console.warn('Deslogueando porque falló la carga de perfil en sesión activa');
-            logout();
-        }
-        }
-      }
-      finally {
-        if (isSubscribed) setLoading(false);
-      }
-    };
-
-    loadProfile();
-
-    return () => {
-      isSubscribed = false;
-    };
-  }, [token]);
-
-  const login = useCallback(async (credentials) => {
-    try {
-      const response = await AuthService.login(credentials);
-
-      if (!response || !response.token || !response.usuario) {
-        throw new Error('Respuesta inválida del servidor');
-      }
-
-      const userData = response.usuario;
-      setToken(response.token);
-      setUser(userData);
-      setIsAuthenticated(true);
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('user', JSON.stringify(userData));
-      if (userData.id || userData.usuario_id) {
-        localStorage.setItem('userId', userData.id || userData.usuario_id);
-      }
-
-      return response;
-    } catch (error) {
-      console.error('Error durante el login:', error);
-      throw error;
-    }
-  }, []);
+  const [loading, setLoading] = useState(true);
 
   const logout = useCallback(() => {
     setUser(null);
@@ -107,6 +30,60 @@ export function AuthProvider({ children }) {
     navigate('/home');
   }, [navigate]);
 
+  const loadProfile = useCallback(async (currentToken = token) => {
+    setLoading(true);
+    if (!currentToken) {
+      setUser(null);
+      setIsAuthenticated(false);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await AuthService.getProfile(currentToken);
+      const userData = response.user || response.usuario || response;
+
+      if (userData) {
+        setUser(userData);
+        setIsAuthenticated(true);
+        localStorage.setItem('user', JSON.stringify(userData));
+        if (userData.usuario_id || userData.id) {
+          localStorage.setItem('userId', userData.usuario_id || userData.id);
+        }
+      }
+    } catch (error) {
+      console.error('Error al cargar perfil:', error);
+      if (user) logout();
+    } finally {
+      setLoading(false);
+    }
+  }, [token, user, logout]);
+
+  useEffect(() => {
+    loadProfile();
+  }, [token, loadProfile]);
+
+  const login = useCallback(async (credentials) => {
+    try {
+      const response = await AuthService.login(credentials);
+
+      if (!response || !response.token || !response.usuario) {
+        throw new Error('Respuesta inválida del servidor');
+      }
+
+      const userData = response.usuario;
+      setToken(response.token);
+      localStorage.setItem('token', response.token);
+
+      await loadProfile(response.token);
+
+      return response;
+    } catch (error) {
+      console.error('Error durante el login:', error);
+      throw error;
+    }
+  }, [loadProfile]);
+
   const register = useCallback(async (userData) => {
     try {
       if (!userData || !userData.email || !userData.password) {
@@ -114,15 +91,12 @@ export function AuthProvider({ children }) {
       }
 
       const response = await AuthService.register(userData);
-
-      if (!response) {
-        throw new Error('Error en el registro: No se recibió respuesta del servidor');
-      }
+      if (!response) throw new Error('Error en el registro');
 
       return response;
     } catch (error) {
       console.error('Error durante el registro:', error);
-      throw new Error(error.message || 'Error en el registro. Por favor, intenta de nuevo.');
+      throw error;
     }
   }, []);
 
@@ -130,27 +104,18 @@ export function AuthProvider({ children }) {
     try {
       const response = await AuthService.handleGoogleCallback();
       if (response) {
-        const { token: googleToken, usuario: userData } = response;
-  
+        const { token: googleToken } = response;
+
         if (googleToken) {
           setToken(googleToken);
           localStorage.setItem('token', googleToken);
-        }
-  
-        if (userData) {
-          setUser(userData);
-          setIsAuthenticated(true);
-          localStorage.setItem('user', JSON.stringify(userData));
-          if (userData.usuario_id || userData.id) {
-            localStorage.setItem('userId', userData.usuario_id || userData.id);
-          }
+          await loadProfile(googleToken);
         }
       }
     } catch (error) {
       console.error('Error durante el login con Google:', error);
     }
-  }, []);
-  
+  }, [loadProfile]);
 
   return (
     <AuthContext.Provider
@@ -158,7 +123,7 @@ export function AuthProvider({ children }) {
         user,
         isAuthenticated,
         token,
-        loading, // Exportamos loading para que otros componentes lo usen
+        loading,
         login,
         register,
         logout,
