@@ -50,7 +50,7 @@ export default function Quarters() {
           ))}
         </div>
 
-        <div>
+        <div className='overflow-hidden'>
           <Carrousel filters={filters} />
         </div>
       </div>

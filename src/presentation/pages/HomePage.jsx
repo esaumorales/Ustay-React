@@ -9,8 +9,9 @@ export default function HomePage() {
 
   useEffect(() => {
     if (location.search.includes('token=')) {
-      handleGoogleLogin();
-      window.history.replaceState(null, '', '/home');
+      handleGoogleLogin().finally(() => {
+        window.history.replaceState(null, '', '/home');
+      });
     }
   }, [location.search, handleGoogleLogin]);
 
