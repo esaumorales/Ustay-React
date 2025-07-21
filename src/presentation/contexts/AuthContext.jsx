@@ -50,6 +50,8 @@ export function AuthProvider({ children }) {
         if (userData.usuario_id || userData.id) {
           localStorage.setItem('userId', userData.usuario_id || userData.id);
         }
+      } else {
+        throw new Error('Datos de usuario no válidos');
       }
     } catch (error) {
       console.error('Error al cargar perfil:', error);
@@ -75,14 +77,19 @@ export function AuthProvider({ children }) {
       setToken(response.token);
       localStorage.setItem('token', response.token);
 
-      await loadProfile(response.token);
+      setUser(userData);
+      setIsAuthenticated(true);
+      localStorage.setItem('user', JSON.stringify(userData));
+      if (userData.id || userData.usuario_id) {
+        localStorage.setItem('userId', userData.id || userData.usuario_id);
+      }
 
       return response;
     } catch (error) {
       console.error('Error durante el login:', error);
       throw error;
     }
-  }, [loadProfile]);
+  }, []);
 
   const register = useCallback(async (userData) => {
     try {
@@ -104,11 +111,23 @@ export function AuthProvider({ children }) {
     try {
       const response = await AuthService.handleGoogleCallback();
       if (response) {
-        const { token: googleToken } = response;
+        const { token: googleToken, usuario: userData } = response;
 
-        if (googleToken) {
-          setToken(googleToken);
-          localStorage.setItem('token', googleToken);
+        if (!googleToken) {
+          throw new Error('No se recibió token en el callback de Google');
+        }
+
+        setToken(googleToken);
+        localStorage.setItem('token', googleToken);
+
+        if (userData) {
+          setUser(userData);
+          setIsAuthenticated(true);
+          localStorage.setItem('user', JSON.stringify(userData));
+          if (userData.usuario_id || userData.id) {
+            localStorage.setItem('userId', userData.usuario_id || userData.id);
+          }
+        } else {
           await loadProfile(googleToken);
         }
       }
