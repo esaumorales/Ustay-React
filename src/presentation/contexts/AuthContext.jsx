@@ -126,7 +126,7 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  const handleGoogleLogin = useCallback(async () => {
+  const handleGoogleLogin = useCallback(async (onSuccess) => {
     try {
       const response = await AuthService.handleGoogleCallback();
       if (response) {
@@ -146,26 +146,12 @@ export function AuthProvider({ children }) {
           }
         }
   
-        // Cargar el perfil actualizado tras Google login
-        if (googleToken) {
-          await AuthService.getProfile(googleToken)
-            .then(profile => {
-              const refreshedUser = profile.user || profile.usuario || profile;
-              if (refreshedUser) {
-                setUser(refreshedUser);
-                setIsAuthenticated(true);
-                localStorage.setItem('user', JSON.stringify(refreshedUser));
-              }
-            })
-            .catch(err => console.error("Error cargando perfil después de Google Login", err));
-        }
+        if (onSuccess) onSuccess(); // cierra modal u otra acción tras login
       }
     } catch (error) {
       console.error('Error durante el login con Google:', error);
     }
   }, []);
-  
-
 
   return (
     <AuthContext.Provider

@@ -23,7 +23,6 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
 
         try {
             await login(credentials);
-            console.log('Login exitoso, mostrando animación');
             setStep('success');
         } catch (error) {
             setError(error.message || 'Error al iniciar sesión. Por favor, verifica tus credenciales.');
@@ -32,19 +31,26 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
         }
     };
 
-    // Nuevo efecto: cuando step es 'success', espera y luego cierra + navega
+    const handleGoogleSignIn = async () => {
+        try {
+            await loginWithGoogle();
+            setStep('success');
+        } catch (err) {
+            console.error('Error al iniciar sesión con Google:', err);
+            setError('Error al iniciar sesión con Google');
+        }
+    };
+
     useEffect(() => {
         if (step === 'success') {
             const timer = setTimeout(() => {
-                onClose();    // ahora sí, cierra modal
-                navigate('/home');  // y navega
-            }, 5000); // 2s para que se vea la animación
+                onClose();
+                navigate('/home');
+            }, 2000);
 
             return () => clearTimeout(timer);
         }
-
-    }, [step, navigate, onClose]), console.log('ModalLogin render: ', step);;
-
+    }, [step, navigate, onClose]);
 
     if (!isOpen) return null;
 
@@ -76,10 +82,7 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
 
                 <div className='w-full md:w-1/2 p-8 relative'>
                     {step === 'success' ? (
-                        <>
-                            <p>ESTOY EN STEP SUCCESS</p>
-                            <SuccessAnimation message="¡Inicio de sesión exitoso!" />
-                        </>
+                        <SuccessAnimation message="¡Inicio de sesión exitoso!" />
                     ) : (
                         <>
                             <div className='flex justify-between items-center mb-6'>
@@ -148,7 +151,7 @@ export default function ModalLogin({ isOpen, onClose, onSwitchToRegister }) {
                                 </div>
                                 <button
                                     className='w-full bg-gray-100 flex items-center justify-center gap-2 py-3 rounded-lg hover:bg-gray-200 transition-colors'
-                                    onClick={loginWithGoogle}
+                                    onClick={handleGoogleSignIn}
                                 >
                                     <FcGoogle size={20} />
                                     <span className='font-medium'>Google</span>
