@@ -20,6 +20,36 @@ export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(() => !!token);
   const [loading, setLoading] = useState(true); // Estado para controlar carga del perfil
 
+  const loadProfile = useCallback(async (currentToken = token) => {
+    setLoading(true);
+    if (!currentToken) {
+      setUser(null);
+      setIsAuthenticated(false);
+      setLoading(false);
+      return;
+    }
+  
+    try {
+      const response = await AuthService.getProfile(currentToken);
+      const userData = response.user || response.usuario || response;
+  
+      if (userData) {
+        setUser(userData);
+        setIsAuthenticated(true);
+        localStorage.setItem('user', JSON.stringify(userData));
+        if (userData.usuario_id || userData.id) {
+          localStorage.setItem('userId', userData.usuario_id || userData.id);
+        }
+      }
+    } catch (error) {
+      console.error('Error al cargar perfil:', error);
+      if (user) logout();
+    } finally {
+      setLoading(false);
+    }
+  }, [token, user, logout]);
+  
+
   useEffect(() => {
     let isSubscribed = true;
 
@@ -70,7 +100,7 @@ export function AuthProvider({ children }) {
     return () => {
       isSubscribed = false;
     };
-  }, [token]);
+  }, [token, loadProfile]);
 
   const login = useCallback(async (credentials) => {
     try {
@@ -135,6 +165,7 @@ const handleGoogleLogin = useCallback(async () => {
       if (googleToken) {
         setToken(googleToken);
         localStorage.setItem('token', googleToken);
+        await loadProfile(googleToken);
       }
 
       if (userData) {
