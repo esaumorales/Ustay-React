@@ -18,7 +18,17 @@ export function AuthProvider({ children }) {
 
   const [token, setToken] = useState(() => localStorage.getItem('token'));
   const [isAuthenticated, setIsAuthenticated] = useState(() => !!token);
-  const [loading, setLoading] = useState(true); // Estado para controlar carga del perfil
+  const [loading, setLoading] = useState(true);
+
+  const logout = useCallback(() => {
+    setUser(null);
+    setToken(null);
+    setIsAuthenticated(false);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('userId');
+    navigate('/home');
+  }, [navigate]);
 
   const loadProfile = useCallback(async (currentToken = token) => {
     setLoading(true);
@@ -28,11 +38,11 @@ export function AuthProvider({ children }) {
       setLoading(false);
       return;
     }
-  
+
     try {
       const response = await AuthService.getProfile(currentToken);
       const userData = response.user || response.usuario || response;
-  
+
       if (userData) {
         setUser(userData);
         setIsAuthenticated(true);
@@ -48,58 +58,9 @@ export function AuthProvider({ children }) {
       setLoading(false);
     }
   }, [token, user, logout]);
-  
 
   useEffect(() => {
-    let isSubscribed = true;
-
-    const loadProfile = async () => {
-      setLoading(true);
-      if (!token) {
-        if (isSubscribed) {
-          setUser(null);
-          setIsAuthenticated(false);
-          setLoading(false);
-        }
-        return;
-      }
-
-      try {
-        const response = await AuthService.getProfile(token);
-        if (!isSubscribed) return;
-
-        const userData = response.user || response.usuario || response;
-
-        if (userData) {
-          setUser(userData);
-          setIsAuthenticated(true);
-          localStorage.setItem('user', JSON.stringify(userData));
-          if (userData.usuario_id || userData.id) {
-            localStorage.setItem('userId', userData.usuario_id || userData.id);
-          }
-        } else {
-          throw new Error('Datos de usuario no válidos');
-        }
-      } catch (error) {
-        console.error('Error al cargar perfil:', error);
-        if (isSubscribed) {
-          // Solo desloguea si el usuario ya estaba autenticado antes
-          if (user) {
-            console.warn('Deslogueando porque falló la carga de perfil en sesión activa');
-            logout();
-        }
-        }
-      }
-      finally {
-        if (isSubscribed) setLoading(false);
-      }
-    };
-
     loadProfile();
-
-    return () => {
-      isSubscribed = false;
-    };
   }, [token, loadProfile]);
 
   const login = useCallback(async (credentials) => {
@@ -127,16 +88,6 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  const logout = useCallback(() => {
-    setUser(null);
-    setToken(null);
-    setIsAuthenticated(false);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('userId');
-    navigate('/home');
-  }, [navigate]);
-
   const register = useCallback(async (userData) => {
     try {
       if (!userData || !userData.email || !userData.password) {
@@ -144,7 +95,6 @@ export function AuthProvider({ children }) {
       }
 
       const response = await AuthService.register(userData);
-
       if (!response) {
         throw new Error('Error en el registro: No se recibió respuesta del servidor');
       }
@@ -156,32 +106,31 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-const handleGoogleLogin = useCallback(async () => {
-  try {
-    const response = await AuthService.handleGoogleCallback();
-    if (response) {
-      const { token: googleToken, usuario: userData } = response;
+  const handleGoogleLogin = useCallback(async () => {
+    try {
+      const response = await AuthService.handleGoogleCallback();
+      if (response) {
+        const { token: googleToken, usuario: userData } = response;
 
-      if (googleToken) {
-        setToken(googleToken);
-        localStorage.setItem('token', googleToken);
-        await loadProfile(googleToken);
-      }
+        if (googleToken) {
+          setToken(googleToken);
+          localStorage.setItem('token', googleToken);
+          await loadProfile(googleToken);
+        }
 
-      if (userData) {
-        setUser(userData);
-        setIsAuthenticated(true);
-        localStorage.setItem('user', JSON.stringify(userData));
-        if (userData.usuario_id || userData.id) {
-          localStorage.setItem('userId', userData.usuario_id || userData.id);
+        if (userData) {
+          setUser(userData);
+          setIsAuthenticated(true);
+          localStorage.setItem('user', JSON.stringify(userData));
+          if (userData.usuario_id || userData.id) {
+            localStorage.setItem('userId', userData.usuario_id || userData.id);
+          }
         }
       }
+    } catch (error) {
+      console.error('Error durante el login con Google:', error);
     }
-  } catch (error) {
-    console.error('Error durante el login con Google:', error);
-  }
-}, []);
-
+  }, [loadProfile]);
 
   return (
     <AuthContext.Provider
@@ -189,7 +138,7 @@ const handleGoogleLogin = useCallback(async () => {
         user,
         isAuthenticated,
         token,
-        loading, // Exportamos loading para que otros componentes lo usen
+        loading,
         login,
         register,
         logout,
